@@ -78,10 +78,10 @@ int fputc(int ch, FILE *f)
 #endif
 /***********************************************END*******************************************/
 
-uint8_t rData = 0;                // 中断接收字节
-uint8_t USART1_DataBuf[16] = {0}; // 串口接收数据帧
-uint8_t error_frame[16] = {0};    // 错帧内容
-uint8_t frameBuff[16] = {0};      // 帧内容缓存
+uint8_t rData[frameSize] = {0};     // 中断接收字节
+uint8_t USART1_DataFrame[16] = {0}; // 正确帧
+uint8_t error_frame[16] = {0};      // 错误帧
+uint8_t frameBuff[16] = {0};        // 潜在帧
 
 uint8_t circleBuff[buffMaxsize] = {0}; // 读写 环形缓冲区
 uint64_t usart1_rx_datalength = 0;     // 数据长度
@@ -94,6 +94,11 @@ uint64_t verify_err_cnt = 0;
 uint64_t err1 = 0;
 uint64_t err2 = 0;
 uint64_t byteCount = 0;
+
+Var2Data var2data;
+
+float data1;
+float data2;
 
 /* USER CODE END 0 */
 
@@ -139,10 +144,7 @@ void MX_USART1_UART_Init(void)
     Error_Handler();
   }
   /* USER CODE BEGIN USART1_Init 2 */
-  SET_BIT(USART1->ICR, USART_ICR_TCCF);  /* 发送完成清除标志 */
-  SET_BIT(USART1->RQR, USART_RQR_RXFRQ); /* 接收数据刷新请求 */
-  // SET_BIT(USART1->CR1, USART_CR1_PEIE);   /* PE 中断使能 */
-  SET_BIT(USART1->CR1, USART_CR1_RXNEIE); /* RXNE 和 RX FIFO 非空中断使能 */
+  HAL_UART_Receive_IT(&huart1, (uint8_t *)&rData, frameSize); // 开启接收中断
   /* USER CODE END USART1_Init 2 */
 }
 
@@ -222,7 +224,98 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef *uartHandle)
 }
 
 /* USER CODE BEGIN 1 */
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+  // 串口1接口
+  // PA9--->USART1_TX
+  // PA10--->USART1_RX
+  if (huart == &huart1) // 串口1
+  {
+    uint8_t verify_Flag = 0; // 初始化校验位
 
+    if (usart1_rx_datalength < buffMaxsize) // 缓冲区内的数据小于缓冲区大小，则写入1字节数据
+    {
+      for (size_t i = 0; i < frameSize; i++)
+      {
+        circleBuff[w_Ptr] = rData[i];
+        w_Ptr = (w_Ptr + 1) % buffMaxsize; // 根据单次中断接收帧字节数，循环移动写指针
+        usart1_rx_datalength++;            // 每写入1字节数据，缓冲区长度加1
+        byteCount++;                       // 字节获取数
+      }
+    }
+    while (usart1_rx_datalength >= 16) // 缓冲区内数据大于帧字节数，则进行数据提取
+    {
+      verify_Flag = 0; // 初始化校验位
+
+      if ((circleBuff[(r_Ptr + 00) % buffMaxsize] == 0xeb) && // 帧头1
+          (circleBuff[(r_Ptr + 01) % buffMaxsize] == 0x90) && // 帧头2
+          (circleBuff[(r_Ptr + 14) % buffMaxsize] == 0x0d) && // 帧尾1
+          (circleBuff[(r_Ptr + 15) % buffMaxsize] == 0x0a))   // 帧尾2
+      {
+
+        // 计算帧数据的校验位
+        for (uint8_t i = 0; i < 16; i++)
+        {
+          frameBuff[i] = circleBuff[(r_Ptr + i) % buffMaxsize]; // 提取潜在帧 frameBuff
+          if ((i >= 2) && (i <= 12))
+          {
+            verify_Flag = verify_Flag + frameBuff[i]; // 计算帧校验位
+          }
+        }
+
+        if (verify_Flag == frameBuff[13]) // 校验位正确，获取正确帧数据
+        {
+          for (uint8_t i = 0; i < 16; i++)
+          {
+            USART1_DataFrame[i] = frameBuff[i]; // 获取正确帧 USART1_DataFrame
+            r_Ptr = (r_Ptr + 1) % buffMaxsize;  // 循环移动读指针
+            usart1_rx_datalength--;             // 每读取1字节数据，缓冲区数据长度减1
+          }
+
+          // 提取正确帧 数据1
+          var2data.x[3] = USART1_DataFrame[4];
+          var2data.x[2] = USART1_DataFrame[5];
+          var2data.x[1] = USART1_DataFrame[6];
+          var2data.x[0] = USART1_DataFrame[7];
+          data1 = var2data.a;
+
+          // 提取正确帧 数据2
+          var2data.x[3] = USART1_DataFrame[8];
+          var2data.x[2] = USART1_DataFrame[9];
+          var2data.x[1] = USART1_DataFrame[10];
+          var2data.x[0] = USART1_DataFrame[11];
+          data2 = var2data.a;
+
+          framecount = (framecount + 1) % 256; // 收到帧数据循环计数
+          framecount_get++;                    // 收到帧计数
+        }
+        else
+        {
+          verify_err_cnt++; // 校验不通过
+          for (uint8_t i = 0; i < 16; i++)
+          {
+            error_frame[i] = circleBuff[(r_Ptr + i) % buffMaxsize]; // 保存 校验不通过时的 数据内容
+          }
+          err2++;
+          r_Ptr = (r_Ptr + 1) % buffMaxsize; // 帧验证窗口滑移1字节
+          usart1_rx_datalength--;
+        }
+      }
+      else // 未检测到帧头帧尾
+      {
+        for (uint8_t i = 0; i < 16; i++)
+        {
+          error_frame[i] = circleBuff[(r_Ptr + i) % buffMaxsize]; // 保存 未检测到帧头帧尾的 数据内容
+        }
+        err1++;
+        r_Ptr = (r_Ptr + 1) % buffMaxsize;
+        usart1_rx_datalength--;
+      }
+    }
+    memset(rData, '\0', sizeof(rData));                         // 清除接收数据
+    HAL_UART_Receive_IT(&huart1, (uint8_t *)&rData, frameSize); // 重新开启接收中断
+  }
+}
 /* USER CODE END 1 */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
