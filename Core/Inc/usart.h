@@ -58,12 +58,15 @@ extern "C"
   extern float data1;
   extern float data2;
 
-  typedef union _Var2Data
+  typedef union
   {
-    uint8_t x[4];
-    float a;
-    int b;
-  } Var2Data;
+    unsigned char UCharData[8]; // Data 8 Bytes
+    unsigned short UShortVal;   // 2 Bytes
+    unsigned int UIntVal;       // 4 Bytes
+    unsigned long ULongVal;     // 4 Bytes
+    float FloatVal;             // 4 Bytes
+    double DoubleVal;           // 8 Bytes
+  } VAR2DATATYPE;
 
   /* USER CODE END Private defines */
 

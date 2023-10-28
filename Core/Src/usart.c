@@ -95,7 +95,7 @@ uint64_t err1 = 0;
 uint64_t err2 = 0;
 uint64_t byteCount = 0;
 
-Var2Data var2data;
+VAR2DATATYPE var2data;
 
 float data1;
 float data2;
@@ -226,9 +226,6 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef *uartHandle)
 /* USER CODE BEGIN 1 */
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
-  // 串口1接口
-  // PA9--->USART1_TX
-  // PA10--->USART1_RX
   if (huart == &huart1) // 串口1
   {
     uint8_t verify_Flag = 0; // 初始化校验位
@@ -273,18 +270,18 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
           }
 
           // 提取正确帧 数据1
-          var2data.x[3] = USART1_DataFrame[4];
-          var2data.x[2] = USART1_DataFrame[5];
-          var2data.x[1] = USART1_DataFrame[6];
-          var2data.x[0] = USART1_DataFrame[7];
-          data1 = var2data.a;
+          var2data.UCharData[3] = USART1_DataFrame[4];
+          var2data.UCharData[2] = USART1_DataFrame[5];
+          var2data.UCharData[1] = USART1_DataFrame[6];
+          var2data.UCharData[0] = USART1_DataFrame[7];
+          data1 = var2data.FloatVal;
 
           // 提取正确帧 数据2
-          var2data.x[3] = USART1_DataFrame[8];
-          var2data.x[2] = USART1_DataFrame[9];
-          var2data.x[1] = USART1_DataFrame[10];
-          var2data.x[0] = USART1_DataFrame[11];
-          data2 = var2data.a;
+          var2data.UCharData[3] = USART1_DataFrame[8];
+          var2data.UCharData[2] = USART1_DataFrame[9];
+          var2data.UCharData[1] = USART1_DataFrame[10];
+          var2data.UCharData[0] = USART1_DataFrame[11];
+          data2 = var2data.FloatVal;
 
           framecount = (framecount + 1) % 256; // 收到帧数据循环计数
           framecount_get++;                    // 收到帧计数
