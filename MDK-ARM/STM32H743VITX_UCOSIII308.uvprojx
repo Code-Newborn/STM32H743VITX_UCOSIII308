@@ -339,7 +339,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32H743xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32H7xx/Include;../Drivers/CMSIS/Include;..\uCOS-III\uC-CPU\ARM-Cortex-M\ARMv7-M\ARM;..\uCOS-III\uC-CPU\Cfg\Template;..\uCOS-III\uC-CPU\Template;..\uCOS-III\uC-CPU;..\uCOS-III\uC-LIB;..\uCOS-III\uC-LIB\Cfg\Template;..\uCOS-III\uC-LIB\Ports\ARM-Cortex-M4\RealView;..\uCOS-III\uCOS-III\Source;..\uCOS-III\uCOS-III\Ports\ARM-Cortex-M\ARMv7-M\ARM;..\uCOS-III\uCOS-III\Cfg\Template</IncludePath>
+              <IncludePath>../Core/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32H7xx/Include;../Drivers/CMSIS/Include;..\Core;..\Core\Bsp;..\uCOS-III\uC-CPU\ARM-Cortex-M\ARMv7-M\ARM;..\uCOS-III\uC-CPU\Cfg\Template;..\uCOS-III\uC-CPU\Template;..\uCOS-III\uC-CPU;..\uCOS-III\uC-LIB;..\uCOS-III\uC-LIB\Cfg\Template;..\uCOS-III\uC-LIB\Ports\ARM-Cortex-M4\RealView;..\uCOS-III\uCOS-III\Source;..\uCOS-III\uCOS-III\Ports\ARM-Cortex-M\ARMv7-M\ARM;..\uCOS-III\uCOS-III\Cfg\Template</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -417,6 +417,16 @@
               <FileName>stm32h7xx_hal_msp.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Core/Src/stm32h7xx_hal_msp.c</FilePath>
+            </File>
+            <File>
+              <FileName>includes.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Core\includes.h</FilePath>
+            </File>
+            <File>
+              <FileName>app_cfg.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Core\app_cfg.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -727,6 +737,16 @@
               <FileName>bsp_int.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\Core\Bsp\bsp_int.h</FilePath>
+            </File>
+            <File>
+              <FileName>bsp.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Bsp\bsp.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Core\Bsp\bsp.h</FilePath>
             </File>
           </Files>
         </Group>
