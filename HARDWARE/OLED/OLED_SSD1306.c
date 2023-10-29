@@ -264,7 +264,7 @@ uint32_t OLED_Pow(uint8_t m, uint8_t n)
 
 ////显示2个数字
 ////x,y :起点坐标
-////len :数字的位数
+////len :数字的位数，不足补零
 ////size:字体大小
 void OLED_ShowNum(uint8_t x, uint8_t y, uint32_t num, uint8_t len, uint8_t size1)
 {
@@ -279,6 +279,48 @@ void OLED_ShowNum(uint8_t x, uint8_t y, uint32_t num, uint8_t len, uint8_t size1
 		else
 		{
 			OLED_ShowChar(x + (size1 / 2) * t, y, temp + '0', size1);
+		}
+	}
+}
+
+////显示特殊字符
+////x,y :起点坐标
+////len :数字的位数，不足补零
+////size:字符大小
+void OLED_Show_DHT11(uint8_t x, uint8_t y, uint32_t num, uint8_t size1)
+{
+	uint8_t i, m, n = 0, temp, chr1;
+	uint8_t x0 = x, y0 = y;
+	uint8_t size3 = size1 / 8;
+	while (size3--)
+	{
+		chr1 = num * size1 / 8 + n;
+		n++;
+		for (i = 0; i < size1; i++)
+		{
+			if (size1 == 16)
+			{
+				temp = DHT11Char[chr1][i];
+			} // 调用16*16字体
+			else
+				return;
+
+			for (m = 0; m < 8; m++)
+			{
+				if (temp & 0x01)
+					OLED_DrawPoint(x, y);
+				else
+					OLED_ClearPoint(x, y);
+				temp >>= 1;
+				y++;
+			}
+			x++;
+			if ((x - x0) == size1)
+			{
+				x = x0;
+				y0 = y0 + 8;
+			}
+			y = y0;
 		}
 	}
 }

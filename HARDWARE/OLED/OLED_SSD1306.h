@@ -46,4 +46,6 @@ void OLED_WR_BP(uint8_t x, uint8_t y);
 void OLED_ShowPicture(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1, uint8_t BMP[]);
 void OLED_Init(void);
 
+void OLED_Show_DHT11(uint8_t x, uint8_t y, uint32_t num, uint8_t size1);
+
 #endif

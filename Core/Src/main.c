@@ -20,6 +20,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "spi.h"
+#include "tim.h"
 #include "usart.h"
 #include "gpio.h"
 
@@ -29,6 +30,7 @@
 #include "delay.h"
 #include "OLED_SSD1306.h"
 #include "OLED_SSD1306_BMP.h"
+#include "DHT11.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -93,17 +95,9 @@ int main(void)
   MX_GPIO_Init();
   MX_USART1_UART_Init();
   MX_SPI1_Init();
+  MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
-  // uint8_t t;
   OLED_Init(); // OLED初始化
-  OLED_Clear();
-  OLED_ShowChinese(0, 0, 0, 16);
-  OLED_ShowChinese(34, 0, 1, 16);
-  OLED_ShowChinese(68, 0, 2, 16);
-  OLED_ShowChinese(0, 32, 3, 32);
-  OLED_ShowChinese(34, 32, 4, 32);
-  OLED_ShowChinese(68, 32, 5, 32);
-  OLED_Refresh();
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -115,55 +109,31 @@ int main(void)
     /* USER CODE BEGIN 3 */
 
     // =============== 灯LED翻转闪烁 ===============
-    HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
-    HAL_Delay(200);
+    // HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
+    // HAL_Delay(200);
 
-    // =============== 显示屏OLED 显示 BEGIN===============
-    // OLED_ShowPicture(0, 0, 128, 8, BMP1);
-    // HAL_Delay(1000);
-    // OLED_ShowPicture(0, 0, 128, 8, BMP2);
+    // =============== DHT11温湿度传感器 读取 BEGIN ===============
     // OLED_Clear();
-    // OLED_ShowChinese(0, 0, 0, 16);  // 中
-    // OLED_ShowChinese(18, 0, 1, 16); // 景
-    // OLED_ShowChinese(36, 0, 2, 16); // 园
-    // OLED_ShowChinese(54, 0, 3, 16); // 电
-    // OLED_ShowChinese(72, 0, 4, 16); // 子
-    // OLED_ShowChinese(90, 0, 5, 16); // 科
-    // OLED_Refresh();
-    // HAL_Delay(1000);
-    // OLED_ShowChinese(0, 0, 0, 16);   // 中
-    // OLED_ShowChinese(18, 0, 1, 16);  // 景
-    // OLED_ShowChinese(36, 0, 2, 16);  // 园
-    // OLED_ShowChinese(54, 0, 3, 16);  // 电
-    // OLED_ShowChinese(72, 0, 4, 16);  // 子
-    // OLED_ShowChinese(90, 0, 5, 16);  // 科
-    // OLED_ShowChinese(108, 0, 6, 16); // 技
-    // OLED_ShowString(8, 16, "ZHONGJINGYUAN", 16);
-    // OLED_ShowString(20, 32, "2014/05/01", 16);
-    // OLED_ShowString(0, 48, "ASCII:", 16);
-    // OLED_ShowString(63, 48, "CODE:", 16);
-    // OLED_ShowChar(48, 48, t, 16); // 显示ASCII字符
-    // t++;
-    // if (t > '~')
-    //   t = ' ';
-    // OLED_ShowNum(103, 48, t, 3, 16);
-    // OLED_Refresh();
-    // HAL_Delay(2000);
-    // OLED_Clear();
-    // OLED_ShowChinese(0, 0, 0, 16);   // 16*16 中
-    // OLED_ShowChinese(16, 0, 0, 24);  // 24*24 中
-    // OLED_ShowChinese(24, 20, 0, 32); // 32*32 中
-    // OLED_ShowChinese(64, 0, 0, 64);  // 64*64 中
-    // OLED_Refresh();
-    // HAL_Delay(2000);
-    // OLED_Clear();
-    // OLED_ShowString(0, 0, "ABC", 12);  // 6*12 “ABC”
-    // OLED_ShowString(0, 12, "ABC", 16); // 8*16 “ABC”
-    // OLED_ShowString(0, 28, "ABC", 24); // 12*24 “ABC”
-    // OLED_Refresh();
-    // HAL_Delay(2000);
-    // OLED_ScrollDisplay(11, 4);
-    // =============== 显示屏OLED 显示 END ===============
+    DHT11(); // 获取温湿度
+
+    OLED_Show_DHT11(0, 16, 0, 16);             // "温"
+    OLED_Show_DHT11(16, 16, 2, 16);            // "度"
+    OLED_ShowString(32, 16, ":", 16);          // ":"
+    OLED_ShowNum(48, 16, temp, 2, 16);         // 温度整数部分
+    OLED_ShowString(64, 16, ".", 16);          // "."
+    OLED_ShowNum(80, 16, temp_decimal, 1, 16); // 温度小数部分
+    OLED_Show_DHT11(96, 16, 3, 16);            // "℃"
+
+    OLED_Show_DHT11(0, 32, 1, 16);             // "湿"
+    OLED_Show_DHT11(16, 32, 2, 16);            // "度"
+    OLED_ShowString(32, 32, ":", 16);          // ":"
+    OLED_ShowNum(48, 32, humi, 2, 16);         // 湿度整数部分
+    OLED_ShowString(64, 32, ".", 16);          // "."
+    OLED_ShowNum(80, 32, humi_decimal, 1, 16); // 湿度小数部分
+    OLED_Show_DHT11(96, 32, 4, 16);            // "RH"
+
+    OLED_Refresh();
+    // =============== DHT11温湿度传感器 读取 END ===============
   }
   /* USER CODE END 3 */
 }
