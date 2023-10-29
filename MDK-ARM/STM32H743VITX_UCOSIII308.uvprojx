@@ -696,6 +696,41 @@
           </Files>
         </Group>
         <Group>
+          <GroupName>Bsp</GroupName>
+          <Files>
+            <File>
+              <FileName>bsp_cpu.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Bsp\bsp_cpu.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_os.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Bsp\bsp_os.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_os.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Core\Bsp\bsp_os.h</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_clk.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Bsp\bsp_clk.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_clk.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Core\Bsp\bsp_clk.h</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_int.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Core\Bsp\bsp_int.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
           <GroupName>::CMSIS</GroupName>
         </Group>
       </Groups>
