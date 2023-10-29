@@ -31,8 +31,8 @@ extern "C"
 /* Includes ------------------------------------------------------------------*/
 #include "stm32h7xx_hal.h"
 
-  /* Private includes ----------------------------------------------------------*/
-  /* USER CODE BEGIN Includes */
+/* Private includes ----------------------------------------------------------*/
+/* USER CODE BEGIN Includes */
 #include "string.h"
   /* USER CODE END Includes */
 
@@ -61,6 +61,8 @@ extern "C"
 /* Private defines -----------------------------------------------------------*/
 #define LED_Pin GPIO_PIN_1
 #define LED_GPIO_Port GPIOA
+#define DHT11_DQ_Pin GPIO_PIN_1
+#define DHT11_DQ_GPIO_Port GPIOB
   /* USER CODE BEGIN Private defines */
   extern uint8_t Pin_state;
   /* USER CODE END Private defines */
