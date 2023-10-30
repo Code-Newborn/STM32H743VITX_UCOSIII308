@@ -521,6 +521,9 @@
           </Files>
         </Group>
         <Group>
+          <GroupName>HARDWARE</GroupName>
+        </Group>
+        <Group>
           <GroupName>::CMSIS</GroupName>
         </Group>
       </Groups>
