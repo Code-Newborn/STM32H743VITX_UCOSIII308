@@ -22,6 +22,8 @@
 
 /* USER CODE BEGIN 0 */
 #include "stdio.h"
+
+uint64_t ByteCount = 0;
 /******************************************************************************************/
 /* 加入以下代码, 支持printf函数, 而不需要选择use MicroLIB */
 
@@ -77,6 +79,7 @@ int fputc(int ch, FILE *f)
 
 #endif
 /***********************************************END*******************************************/
+uint8_t rData_last = 0; // 中断接收字节
 
 uint8_t rData = 0;                // 中断接收字节
 uint8_t USART1_DataBuf[16] = {0}; // 串口接收数据帧
@@ -139,10 +142,9 @@ void MX_USART1_UART_Init(void)
     Error_Handler();
   }
   /* USER CODE BEGIN USART1_Init 2 */
-  SET_BIT(USART1->ICR, USART_ICR_TCCF);  /* 发送完成清除标志 */
-  SET_BIT(USART1->RQR, USART_RQR_RXFRQ); /* 接收数据刷新请求 */
-  // SET_BIT(USART1->CR1, USART_CR1_PEIE);   /* PE 中断使能 */
-  SET_BIT(USART1->CR1, USART_CR1_RXNEIE); /* RXNE 和 RX FIFO 非空中断使能 */
+
+  HAL_UART_Receive_IT(&huart1, (uint8_t *)&rData, 1);
+
   /* USER CODE END USART1_Init 2 */
 }
 
@@ -222,7 +224,18 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef *uartHandle)
 }
 
 /* USER CODE BEGIN 1 */
-
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+  if (huart == &huart1)
+  {
+    uint8_t ch;
+    ch = READ_REG(huart1.Instance->RDR);
+    if (ch != rData_last)
+      ByteCount++;
+    rData_last = ch;
+  }
+  HAL_UART_Receive_IT(&huart1, (uint8_t *)&rData, 1);
+}
 /* USER CODE END 1 */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
