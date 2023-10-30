@@ -339,7 +339,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32H743xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32H7xx/Include;../Drivers/CMSIS/Include;..\Core;..\Core\Bsp;..\uCOS-III\uC-CPU\ARM-Cortex-M\ARMv7-M\ARM;..\uCOS-III\uC-CPU\Cfg\Template;..\uCOS-III\uC-CPU\Template;..\uCOS-III\uC-CPU;..\uCOS-III\uC-LIB;..\uCOS-III\uC-LIB\Cfg\Template;..\uCOS-III\uC-LIB\Ports\ARM-Cortex-M4\RealView;..\uCOS-III\uCOS-III\Source;..\uCOS-III\uCOS-III\Ports\ARM-Cortex-M\ARMv7-M\ARM;..\uCOS-III\uCOS-III\Cfg\Template</IncludePath>
+              <IncludePath>../Core/Inc; ../Drivers/STM32H7xx_HAL_Driver/Inc; ../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy; ../Drivers/CMSIS/Device/ST/STM32H7xx/Include; ../Drivers/CMSIS/Include; ..\Core; ..\Core\Bsp; ..\uCOS-III\uC-CPU\ARM-Cortex-M\ARMv7-M\ARM; ..\uCOS-III\uC-CPU\Cfg\Template; ..\uCOS-III\uC-CPU\Template; ..\uCOS-III\uC-CPU; ..\uCOS-III\uC-LIB; ..\uCOS-III\uC-LIB\Cfg\Template; ..\uCOS-III\uC-LIB\Ports\ARM-Cortex-M4\RealView; ..\uCOS-III\uCOS-III\Source; ..\uCOS-III\uCOS-III\Ports\ARM-Cortex-M\ARMv7-M\ARM; ..\uCOS-III\uCOS-III\Cfg\Template; ..\HARDWARE\KEY; ..\HARDWARE\LED; ..\HARDWARE\Delay; ..\HARDWARE\Sys</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -394,6 +394,21 @@
           <GroupName>Application/User/Core</GroupName>
           <Files>
             <File>
+              <FileName>includes.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Core\includes.h</FilePath>
+            </File>
+            <File>
+              <FileName>app_cfg.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Core\app_cfg.h</FilePath>
+            </File>
+            <File>
+              <FileName>uC_OS3.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\uC_OS3.c</FilePath>
+            </File>
+            <File>
               <FileName>main.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Core/Src/main.c</FilePath>
@@ -417,16 +432,6 @@
               <FileName>stm32h7xx_hal_msp.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Core/Src/stm32h7xx_hal_msp.c</FilePath>
-            </File>
-            <File>
-              <FileName>includes.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Core\includes.h</FilePath>
-            </File>
-            <File>
-              <FileName>app_cfg.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Core\app_cfg.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -542,6 +547,31 @@
               <FileName>system_stm32h7xx.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Core/Src/system_stm32h7xx.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>HARDWARE</GroupName>
+          <Files>
+            <File>
+              <FileName>key.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\KEY\key.c</FilePath>
+            </File>
+            <File>
+              <FileName>led.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\LED\led.c</FilePath>
+            </File>
+            <File>
+              <FileName>delay.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\Delay\delay.c</FilePath>
+            </File>
+            <File>
+              <FileName>sys.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\Sys\sys.c</FilePath>
             </File>
           </Files>
         </Group>
