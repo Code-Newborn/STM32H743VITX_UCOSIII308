@@ -96,7 +96,7 @@ int main(void)
   /* USER CODE END 2 */
 
   /* Infinite loop */
-  uc_os3();
+  uc_os3(); // 初始化实时操作系统
   return (0);
 }
 

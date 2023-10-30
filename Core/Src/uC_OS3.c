@@ -7,18 +7,20 @@
 #include "os.h"
 #include "cpu.h"
 #include "includes.h"
-/******************************************************************************************************/
-/*uC/OS-III配置*/
 
+/*函数声明*********************************************************************************************/
 static OS_SEM AppPrintfSemp; /* 用于printf互斥 */
 static void App_Printf(CPU_CHAR *format, ...);
 static void DispTaskInfo(void);
+
+/******************************************************************************************************/
+/*uC/OS-III配置*/
 
 /* START_TASK 初始任务 配置
  * 包括: 任务优先级 任务栈大小 任务控制块 任务栈 任务函数
  */
 #define START_TASK_PRIO 2
-#define START_TASK_STACK_SIZE 512
+#define START_TASK_STACK_SIZE 256
 CPU_STK start_task_stack[START_TASK_STACK_SIZE];
 OS_TCB start_task_tcb;
 void start_task(void *p_arg);
@@ -37,18 +39,18 @@ void statisticInfo_task(void *p_arg);
  */
 #define TASK1_PRIO 3
 #define TASK1_STACK_SIZE 256
-CPU_STK SetLed_task1_stack[TASK1_STACK_SIZE];
+CPU_STK LedTask1_stack[TASK1_STACK_SIZE];
 OS_TCB task1_tcb;
-void SetLed(void *p_arg);
+void LedTask1(void *p_arg);
 
 /* TASK2 任务 配置
  * 包括: 任务优先级 任务栈大小 任务控制块 任务栈 任务函数
  */
 #define TASK2_PRIO 5
 #define TASK2_STACK_SIZE 256
-CPU_STK ScanKey_task2_stack[TASK2_STACK_SIZE];
+CPU_STK PrintTask2_stack[TASK2_STACK_SIZE];
 OS_TCB task2_tcb;
-void Task2(void *p_arg);
+void PrintTask2(void *p_arg);
 
 // VAR2DATATYPE Var2DataType;
 
@@ -85,11 +87,11 @@ void start_task(void *p_arg)
 
     (void)p_arg;
 
-    HAL_ResumeTick();
+    HAL_ResumeTick(); // 恢复系统滴答计时器
 
     CPU_Init(); /* 此函数要优先调用，因为外设驱动中使用的us和ms延迟是基于此函数的 */
-    // bsp_Init();
-    BSP_OS_TickEnable();
+
+    BSP_OS_TickEnable(); // 启动 OS 中断时钟
 
 #if OS_CFG_STAT_TASK_EN > 0u
     OSStatTaskCPUUsageInit(&err);
@@ -99,22 +101,22 @@ void start_task(void *p_arg)
     CPU_IntDisMeasMaxCurReset();
 #endif
 
-    /**************创建MsgPro任务 浮点数串口打印及闪灯*********************/
-    OSTaskCreate((OS_TCB *)&task2_tcb,
-                 (CPU_CHAR *)"Task2",
-                 (OS_TASK_PTR)Task2,
+    /**************创建 LedTask1 任务 浮点数串口打印c和d 闪灯*********************/
+    OSTaskCreate((OS_TCB *)&task1_tcb,
+                 (CPU_CHAR *)"LedTask1",
+                 (OS_TASK_PTR)LedTask1,
                  (void *)0,
-                 (OS_PRIO)TASK2_PRIO,
-                 (CPU_STK *)&ScanKey_task2_stack[0],
-                 (CPU_STK_SIZE)TASK2_STACK_SIZE / 10,
-                 (CPU_STK_SIZE)TASK2_STACK_SIZE,
+                 (OS_PRIO)TASK1_PRIO,
+                 (CPU_STK *)&LedTask1_stack[0],
+                 (CPU_STK_SIZE)TASK1_STACK_SIZE / 10,
+                 (CPU_STK_SIZE)TASK1_STACK_SIZE,
                  (OS_MSG_QTY)0,
                  (OS_TICK)0,
                  (void *)0,
                  (OS_OPT)(OS_OPT_TASK_STK_CHK | OS_OPT_TASK_STK_CLR),
                  (OS_ERR *)&err);
 
-    /**************创建USER IF任务 按键消息打印CPU使用信息处理*********************/
+    /**************创建statisticInfo任务 按键打印 CPU/堆栈 使用信息*********************/
     OSTaskCreate((OS_TCB *)&statisticInfo_task_tcb,
                  (CPU_CHAR *)"statisticInfo_task",
                  (OS_TASK_PTR)statisticInfo_task,
@@ -129,15 +131,15 @@ void start_task(void *p_arg)
                  (OS_OPT)(OS_OPT_TASK_STK_CHK | OS_OPT_TASK_STK_CLR),
                  (OS_ERR *)&err);
 
-    /**************创建COM任务 浮点数串口打印及闪灯*********************/
-    OSTaskCreate((OS_TCB *)&task1_tcb,
-                 (CPU_CHAR *)"SetLed",
-                 (OS_TASK_PTR)SetLed,
+    /**************创建 PrintTask2 任务 浮点数串口打印a和b*********************/
+    OSTaskCreate((OS_TCB *)&task2_tcb,
+                 (CPU_CHAR *)"PrintTask2",
+                 (OS_TASK_PTR)PrintTask2,
                  (void *)0,
-                 (OS_PRIO)TASK1_PRIO,
-                 (CPU_STK *)&SetLed_task1_stack[0],
-                 (CPU_STK_SIZE)TASK1_STACK_SIZE / 10,
-                 (CPU_STK_SIZE)TASK1_STACK_SIZE,
+                 (OS_PRIO)TASK2_PRIO,
+                 (CPU_STK *)&PrintTask2_stack[0],
+                 (CPU_STK_SIZE)TASK2_STACK_SIZE / 10,
+                 (CPU_STK_SIZE)TASK2_STACK_SIZE,
                  (OS_MSG_QTY)0,
                  (OS_TICK)0,
                  (void *)0,
@@ -150,12 +152,13 @@ void start_task(void *p_arg)
                 (OS_SEM_CTR)1,
                 (OS_ERR *)&err);
 
-    while (1)
-    {
-        /* 需要周期性处理的程序，对应裸机工程调用的SysTick_ISR */
-        // bsp_ProPer1ms();
-        OSTimeDly(1, OS_OPT_TIME_PERIODIC, &err);
-    }
+    // 将启动任务作为需要周期性处理程序的载体
+    // while (1)
+    // {
+    //     /* 需要周期性处理的程序，对应裸机工程调用的SysTick_ISR */
+    //     bsp_ProPer1ms();
+    //     OSTimeDly(1, OS_OPT_TIME_PERIODIC, &err);
+    // }
 }
 
 void statisticInfo_task(void *p_arg)
@@ -166,8 +169,7 @@ void statisticInfo_task(void *p_arg)
 
     while (1)
     {
-        key = KEY_Scan(0);
-
+        key = KEY_Scan(0); // 检测按键输入
         switch (key)
         {
         case KEY1_PRES: /* K1键按下 打印任务执行情况 */
@@ -183,7 +185,7 @@ void statisticInfo_task(void *p_arg)
     }
 }
 
-void SetLed(void *p_arg)
+void LedTask1(void *p_arg)
 {
     OS_ERR err;
     double f_c = 1.1;
@@ -203,7 +205,7 @@ void SetLed(void *p_arg)
 }
 
 /* 检测按键输入，挂起和恢复任务 */
-void Task2(void *p_arg)
+void PrintTask2(void *p_arg)
 {
     OS_ERR err;
     double f_a = 1.1;
@@ -235,7 +237,6 @@ static void DispTaskInfo(void)
 
     /* 打印标题 */
     App_Printf("===============================================================\r\n");
-    App_Printf(" 优先级 使用栈 剩余栈 百分比 利用率   任务名\r\n");
     App_Printf("  Prio   Used  Free   Per    CPU     Taskname\r\n");
 
     /* 遍历任务控制块列表(TCB list)，打印所有的任务的优先级和名称 */
