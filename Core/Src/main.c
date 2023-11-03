@@ -19,11 +19,13 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "spi.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "max7219_matrix.h"
+#include "delay.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -85,8 +87,11 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_SPI2_Init();
   /* USER CODE BEGIN 2 */
-
+  delay_init(400);
+  MAX7219_MatrixInit(&hspi2, SPI2_CS_GPIO_Port, SPI2_CS_Pin);
+  MAX7219_MatrixUpdate();
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -96,8 +101,49 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
-    HAL_Delay(200);
+    /* TIME */
+    MAX7219_MatrixSetRow64(0, CHR('B'));
+    MAX7219_MatrixSetRow64(1, CHR('O'));
+    MAX7219_MatrixSetRow64(2, CHR('M'));
+    MAX7219_MatrixSetRow64(3, CHR('B'));
+    MAX7219_MatrixUpdate();
+    HAL_Delay(3000);
+
+    for (int i = 1000; i >= 0; i--)
+    {
+      int temp = (i / 1000) % 10;
+      MAX7219_MatrixSetRow64(0, numbers[temp]);
+      temp = (i / 100) % 10;
+      MAX7219_MatrixSetRow64(1, numbers[temp]);
+      temp = (i / 10) % 10;
+      MAX7219_MatrixSetRow64(2, numbers[temp]);
+      temp = i % 10;
+      MAX7219_MatrixSetRow64(3, numbers[temp]);
+      MAX7219_MatrixUpdate();
+      HAL_Delay(10);
+    }
+
+    MAX7219_MatrixSetRow64(0, CHR('B'));
+    MAX7219_MatrixSetRow64(1, CHR('A'));
+    MAX7219_MatrixSetRow64(2, CHR('N'));
+    MAX7219_MatrixSetRow64(3, CHR('G'));
+    MAX7219_MatrixUpdate();
+    HAL_Delay(3000);
+
+    for (int i = 0; i < 24; i++)
+    {
+      MAX7219_MatrixLShift(1);
+      MAX7219_MatrixUpdate();
+      HAL_Delay(100);
+    }
+
+    for (int i = 0; i < 24; i++)
+    {
+      MAX7219_MatrixRShift(1);
+      MAX7219_MatrixUpdate();
+      HAL_Delay(100);
+    }
+    HAL_Delay(3000);
   }
   /* USER CODE END 3 */
 }
@@ -132,7 +178,7 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.PLL.PLLM = 4;
   RCC_OscInitStruct.PLL.PLLN = 50;
   RCC_OscInitStruct.PLL.PLLP = 2;
-  RCC_OscInitStruct.PLL.PLLQ = 2;
+  RCC_OscInitStruct.PLL.PLLQ = 4;
   RCC_OscInitStruct.PLL.PLLR = 2;
   RCC_OscInitStruct.PLL.PLLRGE = RCC_PLL1VCIRANGE_3;
   RCC_OscInitStruct.PLL.PLLVCOSEL = RCC_PLL1VCOWIDE;
