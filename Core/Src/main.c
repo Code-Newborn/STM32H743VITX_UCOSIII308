@@ -19,11 +19,12 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "tim.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "DigitalServo.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -85,7 +86,13 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
+
+  HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);
+
+  SetServo_Angle(0); // 位置回零
+  HAL_Delay(1000);
 
   /* USER CODE END 2 */
 
@@ -93,11 +100,20 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+    // SetServo_Angle(0);// 0度位置
+    // HAL_Delay(2000);
+    // SetServo_Angle(90);// 90度位置
+    // HAL_Delay(2000);
+    // SetServo_Angle(180);// 180度位置
+    // HAL_Delay(2000);
+
+    SetServo_Angle_WithVel(90, 1); // 速度1，运动至90度
+    SetServo_Angle_WithVel(0, 1);  // 速度1，运动至0度
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
-    HAL_Delay(200);
+    // HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
+    // HAL_Delay(200);
   }
   /* USER CODE END 3 */
 }
