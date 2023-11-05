@@ -1,27 +1,11 @@
 #include "DHT11.h"
-#include "tim.h"
 #include "gpio.h"
+#include "delay.h"
 
 uint8_t humi = 0;
 uint8_t temp = 0;
 uint8_t temp_decimal = 0;
 uint8_t humi_decimal = 0;
-
-/**
- * @brief  定时器延时us，Prescaler -> 200-1 系统时钟200MHz
- * @param  nus:
- * @retval None
- */
-void Tims_delay_us(uint16_t nus)
-{
-	__HAL_TIM_SET_COUNTER(&htim2, 0);
-	__HAL_TIM_ENABLE(&htim2);
-	while (__HAL_TIM_GET_COUNTER(&htim2) < nus)
-	{
-		uint64_t test = __HAL_TIM_GET_COUNTER(&htim2);
-	}
-	__HAL_TIM_DISABLE(&htim2);
-}
 
 /**
  * @brief  设置引脚模式 PB1	---> DHT11_DQ
@@ -58,7 +42,7 @@ void DHT11_Rst(void)
 	HAL_GPIO_WritePin(DHT11_DQ_GPIO_Port, DHT11_DQ_Pin, GPIO_PIN_RESET); // 拉低DQ
 	HAL_Delay(20);														 // 拉低至少18ms
 	HAL_GPIO_WritePin(DHT11_DQ_GPIO_Port, DHT11_DQ_Pin, GPIO_PIN_SET);	 // 拉高DQ
-	Tims_delay_us(30);													 // 拉高20~40us
+	delay_us(30);														 // 拉高20~40us
 }
 
 // 等待DHT11的回应
@@ -71,7 +55,7 @@ uint8_t DHT11_Check(void)
 	while (DHT11_READ_IO && retry < 100) // DHT11会拉低40~80us
 	{
 		retry++;
-		Tims_delay_us(1);
+		delay_us(1);
 	};
 	if (retry >= 100)
 		return 1;
@@ -80,7 +64,7 @@ uint8_t DHT11_Check(void)
 	while (!DHT11_READ_IO && retry < 100) // DHT11拉低后会再次拉高40~80us
 	{
 		retry++;
-		Tims_delay_us(1);
+		delay_us(1);
 	};
 	if (retry >= 100)
 		return 1;
@@ -94,15 +78,15 @@ uint8_t DHT11_Read_Bit(void)
 	while (DHT11_READ_IO && retry < 100) // 等待变为低电平
 	{
 		retry++;
-		Tims_delay_us(1);
+		delay_us(1);
 	}
 	retry = 0;
 	while (!DHT11_READ_IO && retry < 100) // 等待变高电平
 	{
 		retry++;
-		Tims_delay_us(1);
+		delay_us(1);
 	}
-	Tims_delay_us(40); // 等待40us
+	delay_us(40); // 等待40us
 	if (DHT11_READ_IO)
 		return 1;
 	else
