@@ -58,7 +58,7 @@ void PrintTask2(void *p_arg);
 /* OLED_TASK 任务 配置
  * 包括: 任务优先级 任务栈大小 任务控制块 任务栈 任务函数
  */
-#define OLED_TASK_PRIO 7
+#define OLED_TASK_PRIO 6
 #define OLED_TASK_STACK_SIZE 256
 CPU_STK OledTask_stack[OLED_TASK_STACK_SIZE];
 OS_TCB oled_task_tcb;
@@ -213,6 +213,18 @@ void statisticInfo_task(void *p_arg)
         {
         case KEY1_PRES: /* K1键按下 打印任务执行情况 */
             DispTaskInfo();
+
+            if (BackGround != 0)
+            {
+                BackGround -= 1;
+                OLED_WR_Byte(0xA6, OLED_CMD); // OLED正相显示
+            }
+            else
+            {
+                BackGround += 1;
+                OLED_WR_Byte(0xA7, OLED_CMD); // OLED反相显示
+            }
+
             break;
         case KEY2_PRES: /* K2键按下 不处理 */
             break;
@@ -224,6 +236,7 @@ void statisticInfo_task(void *p_arg)
     }
 }
 
+/* 灯光闪烁任务函数，打印 */
 void LedTask1(void *p_arg)
 {
     OS_ERR err;
@@ -243,7 +256,7 @@ void LedTask1(void *p_arg)
     }
 }
 
-/* 检测按键输入，挂起和恢复任务 */
+/* 打印任务函数 */
 void PrintTask2(void *p_arg)
 {
     OS_ERR err;

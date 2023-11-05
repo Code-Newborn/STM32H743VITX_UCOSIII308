@@ -4,6 +4,8 @@
 #include "delay.h"
 #include "spi.h"
 
+uint8_t BackGround = 0; // OLED背景色显示
+
 uint8_t OLED_GRAM[144][8]; // 图形显示数据
 
 // 反显函数

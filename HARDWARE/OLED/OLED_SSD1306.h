@@ -4,6 +4,8 @@
 #include "stdint.h"
 #include "stdlib.h"
 
+extern uint8_t BackGround;
+
 //-----------------测试LED端口定义----------------
 
 // #define OLED_SCLK_Clr() HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET) // CLK
