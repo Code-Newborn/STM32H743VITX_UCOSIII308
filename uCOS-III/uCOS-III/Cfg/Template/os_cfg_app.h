@@ -32,49 +32,44 @@
 *                                                      CONSTANTS
 **************************************************************************************************************************
 */
-                                                                /* ------------------ MISCELLANEOUS ------------------- */
-                                                                /* Stack size of ISR stack (number of CPU_STK elements) */
-#define  OS_CFG_ISR_STK_SIZE                             512u
-                                                                /* Maximum number of messages                           */
-#define  OS_CFG_MSG_POOL_SIZE                             32u
-                                                                /* Stack limit position in percentage to empty          */
-#define  OS_CFG_TASK_STK_LIMIT_PCT_EMPTY                  10u
+/* ------------------ MISCELLANEOUS ------------------- */
+/* Stack size of ISR stack (number of CPU_STK elements) */
+#define OS_CFG_ISR_STK_SIZE 512u
+/* Maximum number of messages                           */
+#define OS_CFG_MSG_POOL_SIZE 32u
+/* Stack limit position in percentage to empty          */
+#define OS_CFG_TASK_STK_LIMIT_PCT_EMPTY 10u
 
+/* -------------------- IDLE TASK --------------------- */
+/* Stack size (number of CPU_STK elements)              */
+#define OS_CFG_IDLE_TASK_STK_SIZE 128u
 
-                                                                /* -------------------- IDLE TASK --------------------- */
-                                                                /* Stack size (number of CPU_STK elements)              */
-#define  OS_CFG_IDLE_TASK_STK_SIZE                        128u
+/* ------------------ STATISTIC TASK ------------------ */
+/* Priority                                             */
+#define OS_CFG_STAT_TASK_PRIO ((OS_PRIO)(OS_CFG_PRIO_MAX - 2u))
+/* Rate of execution (1 to 10 Hz)                       */
+#define OS_CFG_STAT_TASK_RATE_HZ 10u
+/* Stack size (number of CPU_STK elements)              */
+#define OS_CFG_STAT_TASK_STK_SIZE 256u
 
+/* ---------------------- TICKS ----------------------- */
+/* Tick rate in Hertz (10 to 1000 Hz)                   */
+#define OS_CFG_TICK_RATE_HZ 1000u
 
-                                                                /* ------------------ STATISTIC TASK ------------------ */
-                                                                /* Priority                                             */
-#define  OS_CFG_STAT_TASK_PRIO  ((OS_PRIO)(OS_CFG_PRIO_MAX-2u))
-                                                                /* Rate of execution (1 to 10 Hz)                       */
-#define  OS_CFG_STAT_TASK_RATE_HZ                         10u
-                                                                /* Stack size (number of CPU_STK elements)              */
-#define  OS_CFG_STAT_TASK_STK_SIZE                       256u
+/* --------------------- TIMERS ----------------------- */
+/* Priority of 'Timer Task'                             */
+#define OS_CFG_TMR_TASK_PRIO ((OS_PRIO)(OS_CFG_PRIO_MAX - 3u))
+/* Stack size (number of CPU_STK elements)              */
+#define OS_CFG_TMR_TASK_STK_SIZE 128u
 
-
-                                                                /* ---------------------- TICKS ----------------------- */
-                                                                /* Tick rate in Hertz (10 to 1000 Hz)                   */
-#define  OS_CFG_TICK_RATE_HZ                            1000u
-
-
-                                                                /* --------------------- TIMERS ----------------------- */
-                                                                /* Priority of 'Timer Task'                             */
-#define  OS_CFG_TMR_TASK_PRIO   ((OS_PRIO)(OS_CFG_PRIO_MAX-3u))
-                                                                /* Stack size (number of CPU_STK elements)              */
-#define  OS_CFG_TMR_TASK_STK_SIZE                        128u
-
-                                                                /* DEPRECATED - Rate for timers (10 Hz Typ.)            */
-                                                                /* The timer task now calculates its timeouts based     */
-                                                                /* on the timers in the list. It no longer runs at a    */
-                                                                /* static frequency.                                    */
-                                                                /* This define is included for compatibility reasons.   */
-                                                                /* It will determine the period of a timer tick.        */
-                                                                /* We recommend setting it to OS_CFG_TICK_RATE_HZ       */
-                                                                /* for new projects.                                    */
-#define  OS_CFG_TMR_TASK_RATE_HZ                          10u
-
+/* DEPRECATED - Rate for timers (10 Hz Typ.)            */
+/* The timer task now calculates its timeouts based     */
+/* on the timers in the list. It no longer runs at a    */
+/* static frequency.                                    */
+/* This define is included for compatibility reasons.   */
+/* It will determine the period of a timer tick.        */
+/* We recommend setting it to OS_CFG_TICK_RATE_HZ       */
+/* for new projects.                                    */
+#define OS_CFG_TMR_TASK_RATE_HZ 10u
 
 #endif

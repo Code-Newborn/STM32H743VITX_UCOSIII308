@@ -3,6 +3,9 @@
 #include "led.h"
 #include "key.h"
 
+#include "DHT11.h"
+#include "OLED_SSD1306.h"
+
 /*uC/OS-III*********************************************************************************************/
 #include "os.h"
 #include "cpu.h"
@@ -19,7 +22,7 @@ static void DispTaskInfo(void);
 /* START_TASK 初始任务 配置
  * 包括: 任务优先级 任务栈大小 任务控制块 任务栈 任务函数
  */
-#define START_TASK_PRIO 2
+#define START_TASK_PRIO 3
 #define START_TASK_STACK_SIZE 256
 CPU_STK start_task_stack[START_TASK_STACK_SIZE];
 OS_TCB start_task_tcb;
@@ -37,7 +40,7 @@ void statisticInfo_task(void *p_arg);
 /* TASK1 任务 配置
  * 包括: 任务优先级 任务栈大小 任务控制块 任务栈 任务函数
  */
-#define TASK1_PRIO 3
+#define TASK1_PRIO 5
 #define TASK1_STACK_SIZE 256
 CPU_STK LedTask1_stack[TASK1_STACK_SIZE];
 OS_TCB task1_tcb;
@@ -46,11 +49,20 @@ void LedTask1(void *p_arg);
 /* TASK2 任务 配置
  * 包括: 任务优先级 任务栈大小 任务控制块 任务栈 任务函数
  */
-#define TASK2_PRIO 5
+#define TASK2_PRIO 6
 #define TASK2_STACK_SIZE 256
 CPU_STK PrintTask2_stack[TASK2_STACK_SIZE];
 OS_TCB task2_tcb;
 void PrintTask2(void *p_arg);
+
+/* OLED_TASK 任务 配置
+ * 包括: 任务优先级 任务栈大小 任务控制块 任务栈 任务函数
+ */
+#define OLED_TASK_PRIO 7
+#define OLED_TASK_STACK_SIZE 256
+CPU_STK OledTask_stack[OLED_TASK_STACK_SIZE];
+OS_TCB oled_task_tcb;
+void OledTask(void *p_arg);
 
 // VAR2DATATYPE Var2DataType;
 
@@ -85,6 +97,8 @@ void start_task(void *p_arg)
 {
     OS_ERR err;
 
+    // CPU_SR_ALLOC();
+
     (void)p_arg;
 
     HAL_ResumeTick(); // 恢复系统滴答计时器
@@ -92,6 +106,8 @@ void start_task(void *p_arg)
     CPU_Init(); /* 此函数要优先调用，因为外设驱动中使用的us和ms延迟是基于此函数的 */
 
     BSP_OS_TickEnable(); // 启动 OS 中断时钟
+
+    OLED_Init();
 
 #if OS_CFG_STAT_TASK_EN > 0u
     OSStatTaskCPUUsageInit(&err);
@@ -101,6 +117,12 @@ void start_task(void *p_arg)
     CPU_IntDisMeasMaxCurReset();
 #endif
 
+#if OS_CFG_SCHED_ROUND_ROBIN_EN // 解决同优先级程序执行问题
+    // 使能时间片轮转调度功能,时间片长度为1个系统时钟节拍，既1*5=5ms
+    OSSchedRoundRobinCfg(DEF_ENABLED, 1, &err);
+#endif
+
+    // CPU_CRITICAL_ENTER(); // 进入临界区
     /**************创建 LedTask1 任务 浮点数串口打印c和d 闪灯*********************/
     OSTaskCreate((OS_TCB *)&task1_tcb,
                  (CPU_CHAR *)"LedTask1",
@@ -146,7 +168,22 @@ void start_task(void *p_arg)
                  (OS_OPT)(OS_OPT_TASK_STK_CHK | OS_OPT_TASK_STK_CLR),
                  (OS_ERR *)&err);
 
-    /* 创建任务间通信机制 */
+    /**************创建 OledTask 任务 浮点数串口打印a和b*********************/
+    OSTaskCreate((OS_TCB *)&oled_task_tcb,
+                 (CPU_CHAR *)"OledTask",
+                 (OS_TASK_PTR)OledTask,
+                 (void *)0,
+                 (OS_PRIO)OLED_TASK_PRIO,
+                 (CPU_STK *)&OledTask_stack[0],
+                 (CPU_STK_SIZE)OLED_TASK_STACK_SIZE / 10,
+                 (CPU_STK_SIZE)OLED_TASK_STACK_SIZE,
+                 (OS_MSG_QTY)0,
+                 (OS_TICK)0,
+                 (void *)0,
+                 (OS_OPT)(OS_OPT_TASK_STK_CHK | OS_OPT_TASK_STK_CLR),
+                 (OS_ERR *)&err);
+
+    /* 创建任务间通信机制，避免打印冲突 */
     OSSemCreate((OS_SEM *)&AppPrintfSemp,
                 (CPU_CHAR *)"AppPrintfSemp",
                 (OS_SEM_CTR)1,
@@ -159,6 +196,8 @@ void start_task(void *p_arg)
     //     bsp_ProPer1ms();
     //     OSTimeDly(1, OS_OPT_TIME_PERIODIC, &err);
     // }
+
+    // CPU_CRITICAL_EXIT(); // 退出临界区
 }
 
 void statisticInfo_task(void *p_arg)
@@ -222,9 +261,38 @@ void PrintTask2(void *p_arg)
     }
 }
 
+/* Oled 显示任务 */
+void OledTask(void *p_arg)
+{
+    OS_ERR err;
+    while (1)
+    {
+        DHT11(); // 获取温湿度
+
+        OLED_Show_DHT11(0, 16, 0, 16);             // "温"
+        OLED_Show_DHT11(16, 16, 2, 16);            // "度"
+        OLED_ShowString(32, 16, ":", 16);          // ":"
+        OLED_ShowNum(48, 16, temp, 2, 16);         // 温度整数部分
+        OLED_ShowString(64, 16, ".", 16);          // "."
+        OLED_ShowNum(80, 16, temp_decimal, 1, 16); // 温度小数部分
+        OLED_Show_DHT11(96, 16, 3, 16);            // "℃"
+
+        OLED_Show_DHT11(0, 32, 1, 16);             // "湿"
+        OLED_Show_DHT11(16, 32, 2, 16);            // "度"
+        OLED_ShowString(32, 32, ":", 16);          // ":"
+        OLED_ShowNum(48, 32, humi, 2, 16);         // 湿度整数部分
+        OLED_ShowString(64, 32, ".", 16);          // "."
+        OLED_ShowNum(80, 32, humi_decimal, 1, 16); // 湿度小数部分
+        OLED_Show_DHT11(96, 32, 4, 16);            // "RH"
+
+        OLED_Refresh();
+
+        OSTimeDly(100, OS_OPT_TIME_DLY, &err); // 相对延时 延时100个时钟节拍
+    }
+}
+
 OS_CPU_USAGE k1;
 unsigned short k2;
-
 static void DispTaskInfo(void)
 {
     OS_TCB *p_tcb; /* 定义一个任务控制块指针, TCB = TASK CONTROL BLOCK */

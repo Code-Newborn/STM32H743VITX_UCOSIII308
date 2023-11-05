@@ -141,31 +141,16 @@ void delay_ms(uint16_t nms)
  */
 void delay_us(uint32_t nus)
 {
-    uint32_t ticks;
-    uint32_t told, tnow, tcnt = 0;
-    uint32_t reload = SysTick->LOAD; /* LOAD的值 */
-    ticks = nus * g_fac_us;          /* 需要的节拍数 */
-    told = SysTick->VAL;             /* 刚进入时的计数器值 */
-    while (1)
+    uint32_t temp;
+    SysTick->LOAD = nus * g_fac_us;           // 时间加载
+    SysTick->VAL = 0x00;                      // 清空计数器
+    SysTick->CTRL |= SysTick_CTRL_ENABLE_Msk; // 开始倒数
+    do
     {
-        tnow = SysTick->VAL;
-        if (tnow != told)
-        {
-            if (tnow < told)
-            {
-                tcnt += told - tnow; /* 这里注意一下SYSTICK是一个递减的计数器就可以了 */
-            }
-            else
-            {
-                tcnt += reload - tnow + told;
-            }
-            told = tnow;
-            if (tcnt >= ticks)
-            {
-                break; /* 时间超过/等于要延迟的时间,则退出 */
-            }
-        }
-    }
+        temp = SysTick->CTRL;
+    } while ((temp & 0x01) && !(temp & (1 << 16))); // 等待时间到达
+    SysTick->CTRL &= ~SysTick_CTRL_ENABLE_Msk;      // 关闭计数器
+    SysTick->VAL = 0X00;                            // 清空计数器
 }
 
 /**
@@ -189,6 +174,7 @@ void delay_ms(uint16_t nms)
         delay_us(remain * 1000); /* 利用delay_us, 把尾数延时(remain ms)给做了 */
     }
 }
+#endif
 
 /**
  * @brief       HAL库内部函数用到的延时
@@ -200,4 +186,3 @@ void HAL_Delay(uint32_t Delay)
 {
     delay_ms(Delay);
 }
-#endif
