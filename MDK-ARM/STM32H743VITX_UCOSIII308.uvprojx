@@ -339,7 +339,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32H743xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc;..\HARDWARE\DHT11;../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32H7xx/Include;../Drivers/CMSIS/Include</IncludePath>
+              <IncludePath>../Core/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc;..\HARDWARE\DHT11;../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32H7xx/Include;../Drivers/CMSIS/Include;..\HARDWARE\delay</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -547,6 +547,11 @@
               <FileName>DHT11.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\HARDWARE\DHT11\DHT11.c</FilePath>
+            </File>
+            <File>
+              <FileName>delay.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\delay\delay.c</FilePath>
             </File>
           </Files>
         </Group>

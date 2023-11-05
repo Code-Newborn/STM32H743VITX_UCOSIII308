@@ -1,6 +1,7 @@
 #include "DHT11.h"
 #include "tim.h"
 #include "gpio.h"
+#include "delay.h"
 
 uint8_t humi = 0;
 uint8_t temp = 0;
@@ -56,7 +57,7 @@ void DHT11_Rst(void)
 	HAL_GPIO_WritePin(DHT11_DQ_GPIO_Port, DHT11_DQ_Pin, GPIO_PIN_RESET); // 拉低DQ
 	HAL_Delay(20);														 // 拉低至少18ms
 	HAL_GPIO_WritePin(DHT11_DQ_GPIO_Port, DHT11_DQ_Pin, GPIO_PIN_SET);	 // 拉高DQ
-	Tims_delay_us(30);													 // 拉高20~40us
+	delay_us(30);														 // 拉高20~40us
 }
 
 // 等待DHT11的回应
@@ -69,7 +70,7 @@ uint8_t DHT11_Check(void)
 	while (DHT11_READ_IO && retry < 100) // DHT11会拉低40~80us
 	{
 		retry++;
-		Tims_delay_us(1);
+		delay_us(1);
 	};
 	if (retry >= 100)
 		return 1;
@@ -78,7 +79,7 @@ uint8_t DHT11_Check(void)
 	while (!DHT11_READ_IO && retry < 100) // DHT11拉低后会再次拉高40~80us
 	{
 		retry++;
-		Tims_delay_us(1);
+		delay_us(1);
 	};
 	if (retry >= 100)
 		return 1;
@@ -92,15 +93,15 @@ uint8_t DHT11_Read_Bit(void)
 	while (DHT11_READ_IO && retry < 100) // 等待变为低电平
 	{
 		retry++;
-		Tims_delay_us(1);
+		delay_us(1);
 	}
 	retry = 0;
 	while (!DHT11_READ_IO && retry < 100) // 等待变高电平
 	{
 		retry++;
-		Tims_delay_us(1);
+		delay_us(1);
 	}
-	Tims_delay_us(40); // 等待40us
+	delay_us(40); // 等待40us
 	if (DHT11_READ_IO)
 		return 1;
 	else
