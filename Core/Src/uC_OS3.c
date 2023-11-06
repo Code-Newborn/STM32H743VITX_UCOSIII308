@@ -10,6 +10,7 @@
 #include "os.h"
 #include "cpu.h"
 #include "includes.h"
+#include "rtc.h"
 
 /*函数声明*********************************************************************************************/
 static OS_SEM AppPrintfSemp; /* 用于printf互斥 */
@@ -200,6 +201,7 @@ void start_task(void *p_arg)
     // CPU_CRITICAL_EXIT(); // 退出临界区
 }
 
+/* 按键检测任务函数，打印信息 */
 void statisticInfo_task(void *p_arg)
 {
     OS_ERR err;
@@ -249,7 +251,13 @@ void LedTask1(void *p_arg)
     {
         f_c += 0.00000000001;
         f_d -= 0.00000000002;
-        ;
+
+        // 实时时钟使用
+        HAL_RTC_GetTime(&hrtc, &RtcTime, RTC_FORMAT_BIN); // 读出时间值
+        HAL_RTC_GetDate(&hrtc, &RtcDate, RTC_FORMAT_BIN); // 一定要先读时间后读日期
+        App_Printf("RealTime: %04d-%02d-%02d  %02d:%02d:%02d\r\n", 2000 + RtcDate.Year,
+                   RtcDate.Month, RtcDate.Date, RtcTime.Hours, RtcTime.Minutes, RtcTime.Seconds); // 显示日期时间
+
         App_Printf("AppTaskCom: f_c = %.11f, f_d = %.11f\r\n", f_c, f_d);
         HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
         OSTimeDly(250, OS_OPT_TIME_DLY, &err);
