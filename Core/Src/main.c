@@ -19,11 +19,12 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "i2c.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "AS5600.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -85,8 +86,9 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
-
+  AS5600Init();
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -98,6 +100,11 @@ int main(void)
     /* USER CODE BEGIN 3 */
     HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
     HAL_Delay(200);
+
+    angle_raw = AS5600GetRawAngle();
+    angle = AS5600GetAngle(); // 返回转动弧度
+    angle = angle * (180 / PI);
+    HAL_Delay(100);
   }
   /* USER CODE END 3 */
 }
