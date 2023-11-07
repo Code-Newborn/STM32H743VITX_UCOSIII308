@@ -288,6 +288,21 @@ void OledTask(void *p_arg)
     OS_ERR err;
     while (1)
     {
+        HAL_RTC_GetTime(&hrtc, &RtcTime, RTC_FORMAT_BIN); // 读出时间值
+        HAL_RTC_GetDate(&hrtc, &RtcDate, RTC_FORMAT_BIN); // 一定要先读时间后读日期
+        char str[40];
+
+        // sprintf(str, "%04d-%02d-%02d %02d:%02d:%02d",// 格式化日期时间
+        //         2000 + RtcDate.Year,
+        //         RtcDate.Month,
+        //         RtcDate.Date,
+        //         RtcTime.Hours,
+        //         RtcTime.Minutes,
+        //         RtcTime.Seconds);
+        // sprintf(str, "%04d-%02d-%02d", 2000 + RtcDate.Year, RtcDate.Month, RtcDate.Date);      // 格式化日期
+        sprintf(str, "%02d:%02d:%02d", RtcTime.Hours, RtcTime.Minutes, RtcTime.Seconds); // 格式化时间
+        OLED_ShowString(0, 0, str, 16);
+
         DHT11(); // 获取温湿度
 
         OLED_Show_DHT11(0, 16, 0, 16);             // "温"
