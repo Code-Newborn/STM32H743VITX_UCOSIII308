@@ -339,7 +339,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32H743xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;  ../Drivers/STM32H7xx_HAL_Driver/Inc;  ../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy;  ../Drivers/CMSIS/Device/ST/STM32H7xx/Include;  ../Drivers/CMSIS/Include;  ..\Core;  ..\Core\Bsp;  ..\uCOS-III\uC-CPU\ARM-Cortex-M\ARMv7-M\ARM;  ..\uCOS-III\uC-CPU\Cfg\Template;  ..\uCOS-III\uC-CPU\Template;  ..\uCOS-III\uC-CPU;  ..\uCOS-III\uC-LIB;  ..\uCOS-III\uC-LIB\Cfg\Template;  ..\uCOS-III\uC-LIB\Ports\ARM-Cortex-M4\RealView;  ..\uCOS-III\uCOS-III\Source;  ..\uCOS-III\uCOS-III\Ports\ARM-Cortex-M\ARMv7-M\ARM;  ..\uCOS-III\uCOS-III\Cfg\Template;  ..\HARDWARE\KEY;  ..\HARDWARE\LED;  ..\HARDWARE\Delay;  ..\HARDWARE\Sys;  ..\HARDWARE\DHT11;  ..\HARDWARE\OLED</IncludePath>
+              <IncludePath>../Core/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32H7xx/Include;../Drivers/CMSIS/Include;..\Core;..\Core\Bsp;..\uCOS-III\uC-CPU\ARM-Cortex-M\ARMv7-M\ARM;..\uCOS-III\uC-CPU\Cfg\Template;..\uCOS-III\uC-CPU\Template;..\uCOS-III\uC-CPU;..\uCOS-III\uC-LIB;..\uCOS-III\uC-LIB\Cfg\Template;..\uCOS-III\uC-LIB\Ports\ARM-Cortex-M4\RealView;..\uCOS-III\uCOS-III\Source;..\uCOS-III\uCOS-III\Ports\ARM-Cortex-M\ARMv7-M\ARM;..\uCOS-III\uCOS-III\Cfg\Template;..\HARDWARE\KEY;..\HARDWARE\LED;..\HARDWARE\Delay;..\HARDWARE\Sys;..\HARDWARE\DHT11;..\HARDWARE\OLED;..\HARDWARE\AS5600</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -417,6 +417,11 @@
               <FileName>gpio.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Core/Src/gpio.c</FilePath>
+            </File>
+            <File>
+              <FileName>i2c.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../Core/Src/i2c.c</FilePath>
             </File>
             <File>
               <FileName>rtc.c</FileName>
@@ -816,6 +821,11 @@
               <FileName>OLED_SSD1306.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\HARDWARE\OLED\OLED_SSD1306.c</FilePath>
+            </File>
+            <File>
+              <FileName>AS5600.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\AS5600\AS5600.c</FilePath>
             </File>
           </Files>
         </Group>

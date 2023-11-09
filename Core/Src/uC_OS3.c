@@ -5,6 +5,7 @@
 
 #include "DHT11.h"
 #include "OLED_SSD1306.h"
+#include "AS5600.h"
 
 /*uC/OS-III*********************************************************************************************/
 #include "os.h"
@@ -65,6 +66,15 @@ CPU_STK OledTask_stack[OLED_TASK_STACK_SIZE];
 OS_TCB oled_task_tcb;
 void OledTask(void *p_arg);
 
+/* EncoderRead_TASK 任务 配置
+ * 包括: 任务优先级 任务栈大小 任务控制块 任务栈 任务函数
+ */
+#define EncoderRead_TASK_PRIO 7
+#define EncoderRead_TASK_STACK_SIZE 256
+CPU_STK EncoderReadTask_stack[EncoderRead_TASK_STACK_SIZE];
+OS_TCB encoderread_task_tcb;
+void EncoderRead_TASK(void *p_arg);
+
 // VAR2DATATYPE Var2DataType;
 
 void uc_os3(void)
@@ -108,7 +118,8 @@ void start_task(void *p_arg)
 
     BSP_OS_TickEnable(); // 启动 OS 中断时钟
 
-    OLED_Init();
+    OLED_Init();  // OLED初始化
+    AS5600Init(); // 编码器初始化
 
 #if OS_CFG_STAT_TASK_EN > 0u
     OSStatTaskCPUUsageInit(&err);
@@ -184,6 +195,21 @@ void start_task(void *p_arg)
                  (OS_OPT)(OS_OPT_TASK_STK_CHK | OS_OPT_TASK_STK_CLR),
                  (OS_ERR *)&err);
 
+    /**************创建 EncoderRead_Task 任务 读取编码器*********************/
+    OSTaskCreate((OS_TCB *)&encoderread_task_tcb,
+                 (CPU_CHAR *)"EncoderRead_TASK",
+                 (OS_TASK_PTR)EncoderRead_TASK,
+                 (void *)0,
+                 (OS_PRIO)EncoderRead_TASK_PRIO,
+                 (CPU_STK *)&EncoderReadTask_stack[0],
+                 (CPU_STK_SIZE)EncoderRead_TASK_STACK_SIZE / 10,
+                 (CPU_STK_SIZE)EncoderRead_TASK_STACK_SIZE,
+                 (OS_MSG_QTY)0,
+                 (OS_TICK)0,
+                 (void *)0,
+                 (OS_OPT)(OS_OPT_TASK_STK_CHK | OS_OPT_TASK_STK_CLR),
+                 (OS_ERR *)&err);
+
     /* 创建任务间通信机制，避免打印冲突 */
     OSSemCreate((OS_SEM *)&AppPrintfSemp,
                 (CPU_CHAR *)"AppPrintfSemp",
@@ -235,6 +261,23 @@ void statisticInfo_task(void *p_arg)
         }
 
         OSTimeDly(10, OS_OPT_TIME_DLY, &err);
+    }
+}
+
+/* 编码器读取 */
+void EncoderRead_TASK(void *p_arg)
+{
+    OS_ERR err;
+
+    (void)p_arg;
+
+    while (1)
+    {
+        angle_raw = AS5600GetRawAngle();
+        angle = AS5600GetAngle(); // 返回转动弧度
+        angle = angle * (180 / PI);
+        App_Printf("AS5600: Angle = %.3f, RawAngle = %d\r\n", angle, angle_raw);
+        OSTimeDly(5, OS_OPT_TIME_DLY, &err);
     }
 }
 

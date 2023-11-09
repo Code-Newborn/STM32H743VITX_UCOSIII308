@@ -12,7 +12,7 @@ uint8_t KEY_Scan(uint8_t mode)
 {
     static uint8_t key_up = 1; // 按键松开标志
     if (mode == 1)
-        key_up = 1; // 支持连按
+        key_up = 1; // 支持连按：持续指示按键按下
     if (key_up && (KEY1 == 0 || KEY2 == 0))
     {
         delay_ms(10);
@@ -22,7 +22,7 @@ uint8_t KEY_Scan(uint8_t mode)
         else if (KEY2 == 0)
             return KEY2_PRES;
     }
-    else if (KEY1 == 1 && KEY2 == 1)
+    else if (KEY1 == 1 && KEY2 == 1) // 按键均为松开状态
         key_up = 1;
     return 0; // 无按键按下
 }

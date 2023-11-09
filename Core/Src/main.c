@@ -19,6 +19,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "i2c.h"
 #include "rtc.h"
 #include "spi.h"
 #include "usart.h"
@@ -95,6 +96,7 @@ int main(void)
   MX_USART1_UART_Init();
   MX_SPI1_Init();
   MX_RTC_Init();
+  MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
 
   /* 初始化滴答时钟，在启动任务里面开启 */
