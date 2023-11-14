@@ -20,6 +20,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "spi.h"
+#include "tim.h"
 #include "usart.h"
 #include "gpio.h"
 
@@ -29,6 +30,7 @@
 #include "delay.h"
 #include "OLED_SSD1306.h"
 #include "OLED_SSD1306_BMP.h"
+#include "stm32h743_u8g2.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -38,6 +40,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+static u8g2_t u8g2;
 uint8_t Pin_state = 0;
 /* USER CODE END PD */
 
@@ -93,17 +96,12 @@ int main(void)
   MX_GPIO_Init();
   MX_USART1_UART_Init();
   MX_SPI1_Init();
+  MX_TIM1_Init();
   /* USER CODE BEGIN 2 */
-  // uint8_t t;
-  OLED_Init(); // OLED初始化
-  OLED_Clear();
-  OLED_ShowChinese(0, 0, 0, 16);
-  OLED_ShowChinese(34, 0, 1, 16);
-  OLED_ShowChinese(68, 0, 2, 16);
-  OLED_ShowChinese(0, 32, 3, 32);
-  OLED_ShowChinese(34, 32, 4, 32);
-  OLED_ShowChinese(68, 32, 5, 32);
-  OLED_Refresh();
+  delay_init(200); // 初始化延时函数，系统时钟200MHz
+  OLED_Init();     // OLED初始化
+  u8g2Init(&u8g2); // 显示器调用初始化函数
+  int t = 0;
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -114,56 +112,22 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 
-    // =============== 灯LED翻转闪烁 ===============
-    HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
-    HAL_Delay(200);
+    u8g2_ClearBuffer(&u8g2);
+    if (++t >= 32)
+      t = 1;
+    u8g2_DrawCircle(&u8g2, 64, 32, t, U8G2_DRAW_ALL);
+    u8g2_DrawCircle(&u8g2, 32, 32, t, U8G2_DRAW_ALL);
+    u8g2_DrawCircle(&u8g2, 96, 32, t, U8G2_DRAW_ALL);
+    u8g2_SendBuffer(&u8g2);
+    delay_ms(100);
 
-    // =============== 显示屏OLED 显示 BEGIN===============
-    // OLED_ShowPicture(0, 0, 128, 8, BMP1);
-    // HAL_Delay(1000);
-    // OLED_ShowPicture(0, 0, 128, 8, BMP2);
-    // OLED_Clear();
-    // OLED_ShowChinese(0, 0, 0, 16);  // 中
-    // OLED_ShowChinese(18, 0, 1, 16); // 景
-    // OLED_ShowChinese(36, 0, 2, 16); // 园
-    // OLED_ShowChinese(54, 0, 3, 16); // 电
-    // OLED_ShowChinese(72, 0, 4, 16); // 子
-    // OLED_ShowChinese(90, 0, 5, 16); // 科
-    // OLED_Refresh();
-    // HAL_Delay(1000);
-    // OLED_ShowChinese(0, 0, 0, 16);   // 中
-    // OLED_ShowChinese(18, 0, 1, 16);  // 景
-    // OLED_ShowChinese(36, 0, 2, 16);  // 园
-    // OLED_ShowChinese(54, 0, 3, 16);  // 电
-    // OLED_ShowChinese(72, 0, 4, 16);  // 子
-    // OLED_ShowChinese(90, 0, 5, 16);  // 科
-    // OLED_ShowChinese(108, 0, 6, 16); // 技
-    // OLED_ShowString(8, 16, "ZHONGJINGYUAN", 16);
-    // OLED_ShowString(20, 32, "2014/05/01", 16);
-    // OLED_ShowString(0, 48, "ASCII:", 16);
-    // OLED_ShowString(63, 48, "CODE:", 16);
-    // OLED_ShowChar(48, 48, t, 16); // 显示ASCII字符
-    // t++;
-    // if (t > '~')
-    //   t = ' ';
-    // OLED_ShowNum(103, 48, t, 3, 16);
-    // OLED_Refresh();
-    // HAL_Delay(2000);
-    // OLED_Clear();
-    // OLED_ShowChinese(0, 0, 0, 16);   // 16*16 中
-    // OLED_ShowChinese(16, 0, 0, 24);  // 24*24 中
-    // OLED_ShowChinese(24, 20, 0, 32); // 32*32 中
-    // OLED_ShowChinese(64, 0, 0, 64);  // 64*64 中
-    // OLED_Refresh();
-    // HAL_Delay(2000);
-    // OLED_Clear();
-    // OLED_ShowString(0, 0, "ABC", 12);  // 6*12 “ABC”
-    // OLED_ShowString(0, 12, "ABC", 16); // 8*16 “ABC”
-    // OLED_ShowString(0, 28, "ABC", 24); // 12*24 “ABC”
-    // OLED_Refresh();
-    // HAL_Delay(2000);
-    // OLED_ScrollDisplay(11, 4);
-    // =============== 显示屏OLED 显示 END ===============
+    // u8g2_FirstPage(&u8g2);
+    // do
+    // {
+    //   draw(&u8g2);
+    //   HAL_Delay(1000);
+
+    // } while (u8g2_NextPage(&u8g2));
   }
   /* USER CODE END 3 */
 }
