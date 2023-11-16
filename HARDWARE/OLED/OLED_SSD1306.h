@@ -48,4 +48,8 @@ void OLED_Init(void);
 
 void OLED_Show_DHT11(uint8_t x, uint8_t y, uint32_t num, uint8_t size1);
 
+void LCD_Init(void);            // 初始化
+void LCD_Clear(uint16_t Color); // 清屏
+void LCD_Flush(void);
+
 #endif

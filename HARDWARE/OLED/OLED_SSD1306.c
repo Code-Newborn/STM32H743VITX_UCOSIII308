@@ -4,6 +4,12 @@
 #include "delay.h"
 #include "spi.h"
 
+// #include "lcd.h"
+#include "usart.h"
+#include "draw_api.h"
+#include "util.h"
+#include "common.h"
+
 uint8_t OLED_GRAM[144][8]; // 图形显示数据
 
 // 反显函数
@@ -34,6 +40,8 @@ void OLED_DisplayTurn(uint8_t i)
 	}
 }
 
+// cmd = 0 命令模式
+// cmd = 1 数据模式
 void OLED_WR_Byte(uint8_t dat, uint8_t cmd)
 {
 	// uint8_t i;
@@ -504,4 +512,59 @@ void OLED_Init(void)
 
 	OLED_WR_Byte(0xAF, OLED_CMD); // 开启显示
 	OLED_Clear();
+}
+
+// 初始化lcd
+// 该初始化函数可以初始化各种ALIENTEK出品的LCD液晶屏
+// 本函数占用较大flash,用户可以根据自己的实际情况,删掉未用到的LCD初始化代码.以节省空间.
+void LCD_Init(void)
+{
+	InitGraph();
+
+	if (!appConfig.display180)
+	{
+		OLED_WR_Byte(0xA1, 0);
+		OLED_WR_Byte(0xC8, 0);
+	}
+	else
+	{
+		OLED_WR_Byte(0xA0, 0);
+		OLED_WR_Byte(0xC0, 0);
+	}
+}
+
+// 清屏函数
+// color:要清屏的填充色
+void LCD_Clear(uint16_t color)
+{
+	ClearScreen();
+}
+
+void LCD_Flush(void)
+{
+
+	// OLED_FILL(oledBuffer);
+	u8 i, j;
+	unsigned char *p;
+	p = oledBuffer;
+
+	for (i = 0; i < 8; i++)
+	{
+
+		OLED_WR_Byte(0xb0 + i, 0); // page0-page1
+		OLED_WR_Byte(0x00, 0);	   // low column start address
+		OLED_WR_Byte(0x10, 0);
+
+		for (j = 0; j < 128; j++)
+		{
+			if (appConfig.invert)
+			{
+				OLED_WR_Byte(~(*p++), 1);
+			}
+			else
+			{
+				OLED_WR_Byte(*p++, 1);
+			}
+		}
+	}
 }

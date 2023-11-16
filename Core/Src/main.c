@@ -30,6 +30,11 @@
 #include "OLED_SSD1306.h"
 #include "OLED_SSD1306_BMP.h"
 #include "DHT11.h"
+
+#include "draw_api.h"
+#include "test.h"
+#include "OLED_SSD1306.h"
+#include "common.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -95,8 +100,13 @@ int main(void)
   MX_USART1_UART_Init();
   MX_SPI1_Init();
   /* USER CODE BEGIN 2 */
+
   delay_init(400);
   OLED_Init(); // OLED初始化
+
+  buttons_init();
+  OLED_Init(); // 初始化OLED接口
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -106,33 +116,6 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-
-    // =============== 灯LED翻转闪烁 ===============
-    // HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
-    // HAL_Delay(200);
-
-    // =============== DHT11温湿度传感器 读取 BEGIN ===============
-    // OLED_Clear();
-    DHT11(); // 获取温湿度
-
-    OLED_Show_DHT11(0, 16, 0, 16);             // "温"
-    OLED_Show_DHT11(16, 16, 2, 16);            // "度"
-    OLED_ShowString(32, 16, ":", 16);          // ":"
-    OLED_ShowNum(48, 16, temp, 2, 16);         // 温度整数部分
-    OLED_ShowString(64, 16, ".", 16);          // "."
-    OLED_ShowNum(80, 16, temp_decimal, 1, 16); // 温度小数部分
-    OLED_Show_DHT11(96, 16, 3, 16);            // "℃"
-
-    OLED_Show_DHT11(0, 32, 1, 16);             // "湿"
-    OLED_Show_DHT11(16, 32, 2, 16);            // "度"
-    OLED_ShowString(32, 32, ":", 16);          // ":"
-    OLED_ShowNum(48, 32, humi, 2, 16);         // 湿度整数部分
-    OLED_ShowString(64, 32, ".", 16);          // "."
-    OLED_ShowNum(80, 32, humi_decimal, 1, 16); // 湿度小数部分
-    OLED_Show_DHT11(96, 32, 4, 16);            // "RH"
-
-    OLED_Refresh();
-    // =============== DHT11温湿度传感器 读取 END ===============
   }
   /* USER CODE END 3 */
 }
