@@ -635,19 +635,19 @@ void LCD_Flush(void)
 	for (i = 0; i < 8; i++)
 	{
 
-		OLED_WR_Byte(0xb0 + i, 0); // page0-page1
-		OLED_WR_Byte(0x00, 0);	   // low column start address
-		OLED_WR_Byte(0x10, 0);
+		WriteCmd(0xb0 + i); // page0-page1
+		WriteCmd(0x00);		// low column start address
+		WriteCmd(0x10);
 
 		for (j = 0; j < 128; j++)
 		{
 			if (appConfig.invert)
 			{
-				OLED_WR_Byte(~(*p++), 1);
+				WriteDat(~(*p++));
 			}
 			else
 			{
-				OLED_WR_Byte(*p++, 1);
+				WriteDat(*p++);
 			}
 		}
 	}

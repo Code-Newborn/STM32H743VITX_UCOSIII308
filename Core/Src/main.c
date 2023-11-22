@@ -655,12 +655,11 @@ int main(void)
   /* USER CODE BEGIN 2 */
 
   delay_init(400);
-  buttons_init();
+  // buttons_init();
   OLED_Init(); // OLED初始化
-  HAL_TIM_Base_Start_IT(&htim3);
+  // HAL_TIM_Base_Start_IT(&htim3);
 
   // c_setup(); // 初始化
-
   oledBuffer[12] = 0xFF;
   LCD_Flush();
 
