@@ -156,8 +156,8 @@ display_t game1_draw()
 		{ // 小球与砖块的位置关系如果满足
 			if (!blocks[idx] && ballX >= x * 4 && ballX < (x * 4) + 4 && ballY >= (y * 4) + 8 && ballY < (y * 4) + 8 + 4)
 			{
-				buzzer_buzz(100, TONE_2KHZ, VOL_UI, PRIO_UI, NULL); // 蜂鸣器
-				//				led_flash(LED_GREEN, 50, 255);    //灯闪烁
+				// buzzer_buzz(100, TONE_2KHZ, VOL_UI, PRIO_UI, NULL); // 蜂鸣器
+				// led_flash(LED_GREEN, 50, 255); // 灯闪烁
 				blocks[idx] = true;	 // 砖块消失
 				blockCollide = true; // 碰撞标志位置一
 				score++;			 // 得分加一
@@ -186,7 +186,7 @@ display_t game1_draw()
 	if (!gameEnded && ballY >= FRAME_HEIGHT - PLATFORM_HEIGHT && ballY < 240 && ballX >= platformX && ballX <= platformX + PLATFORM_WIDTH)
 	{
 		platformCollision = true;
-		buzzer_buzz(200, TONE_5KHZ, VOL_UI, PRIO_UI, NULL);
+		// buzzer_buzz(200, TONE_5KHZ, VOL_UI, PRIO_UI, NULL);
 		ball.y = FRAME_HEIGHT - PLATFORM_HEIGHT;
 		if (ball.velY > 0)
 			ball.velY = -ball.velY;
@@ -198,12 +198,12 @@ display_t game1_draw()
 	{
 		if (ballY > 240)
 		{
-			buzzer_buzz(200, TONE_2_5KHZ, VOL_UI, PRIO_UI, NULL);
+			// buzzer_buzz(200, TONE_2_5KHZ, VOL_UI, PRIO_UI, NULL);
 			ball.y = 0;
 		}
 		else if (!blockCollide)
 		{
-			buzzer_buzz(200, TONE_2KHZ, VOL_UI, PRIO_UI, NULL);
+			// buzzer_buzz(200, TONE_2KHZ, VOL_UI, PRIO_UI, NULL);
 			ball.y = FRAME_HEIGHT - 1;
 			lives--;
 		}

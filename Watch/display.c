@@ -107,7 +107,8 @@ void display_update()
 		// This is only approximate
 		// millis8_t end = millis() + 1;
 		char buff[5];
-		sprintf_P(buff, PSTR("%u"), (uint)(1000 / fpsms));
+		buff[0] = 10;
+		// sprintf_P(buff, PSTR("%u"), (uint)(1000 / fpsms));
 		//	draw_string(buff,false,107,56);
 		draw_string(buff, false, 100, 56);
 	}

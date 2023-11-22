@@ -9,12 +9,14 @@
 #ifndef BUTTONS_H_
 #define BUTTONS_H_
 #include "typedefs.h"
+#include "gpio.h"
 
 /*下面的方式是通过直接操作库函数方式读取IO*/
 // #define KEY_UP      GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_9)   //back
-#define KEY0 GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_13) // right
-#define KEY1 GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_11) // ok
-#define KEY2 GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_4)  // left
+#define KEY0 HAL_GPIO_ReadPin(KEY_RST_GPIO_Port, KEY_RST_Pin) // right
+#define KEY1 HAL_GPIO_ReadPin(KEY_MID_GPIO_Port, KEY_MID_Pin) // ok
+#define KEY2 HAL_GPIO_ReadPin(KEY_SET_GPIO_Port, KEY_SET_Pin) // left
+
 /*下面方式是通过位带操作方式读取IO*/
 /*
 #define KEY0 		PEin(4)   	//PE4

@@ -340,12 +340,12 @@ static void judgeOverlap(void)
 			else
 				newHighscore = false;
 
-			led_flash(LED_RED, 250, 255);
+			// led_flash(LED_RED, 250, 255);
 			//							buzzer_buzz(250, TONE_2KHZ, VOL_UI, PRIO_UI, NULL);
 		}
 		else
 		{
-			led_flash(LED_GREEN, 30, 255);
+			// led_flash(LED_GREEN, 30, 255);
 			//							buzzer_buzz(100, TONE_2KHZ, VOL_UI, PRIO_UI, NULL);
 		}
 	}

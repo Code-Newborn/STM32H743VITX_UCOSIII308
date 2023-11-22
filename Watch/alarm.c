@@ -97,13 +97,13 @@ void alarm_update()
 				// tune_play(tuneAlarm, VOL_ALARM, PRIO_ALARM);
 				tune_play(STAY, VOL_ALARM, PRIO_ALARM);
 			}
-			LED0 = !LED0;
-			if (!led_flashing())
-			{
-				static led_t ledFlash = LED_GREEN;
-				ledFlash = (ledFlash == LED_GREEN) ? LED_RED : LED_GREEN;
-				led_flash(ledFlash, 150, 255);
-			}
+			// LED0 = !LED0;
+			// if (!led_flashing())
+			// {
+			// 	static led_t ledFlash = LED_GREEN;
+			// 	ledFlash = (ledFlash == LED_GREEN) ? LED_RED : LED_GREEN;
+			// 	led_flash(ledFlash, 150, 255);
+			// }
 		}
 		else if (!alarmNow)
 			stopAlarm();

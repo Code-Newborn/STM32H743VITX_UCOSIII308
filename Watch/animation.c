@@ -82,7 +82,6 @@ void animation_start(void (*animOnComplete)(void), bool goingOffScreen)
 		animationStatus.animOnComplete = animOnComplete;
 		animationStatus.goingOffScreen = goingOffScreen;
 	}
-
 	else
 	{
 		if (animOnComplete != NULL)

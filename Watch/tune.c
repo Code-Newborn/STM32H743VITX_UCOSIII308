@@ -40,7 +40,7 @@ void tune_play(const tune_t *_tune, vol_t _vol, tonePrio_t _prio)
 
 void tune_stop(tonePrio_t _prio)
 {
-	buzzer_buzz(0, TONE_STOP, VOL_OTHER, _prio, NULL);
+	// buzzer_buzz(0, TONE_STOP, VOL_OTHER, _prio, NULL);
 	prio = PRIO_MIN;
 }
 
@@ -54,7 +54,7 @@ static void next()
 	{
 		// Play next tone
 		// 高16位是曲调，低16位是节拍时长
-		buzzer_buzz(len, (data >> 16), vol, prio, next);
+		// buzzer_buzz(len, (data >> 16), vol, prio, next);
 
 		// If tone was TONE_STOP then reset priority
 		if (len == TONE_STOP)

@@ -1,21 +1,21 @@
 /**
- ******************************************************************************
- * @file    spi.c
- * @brief   This file provides code for the configuration
- *          of the SPI instances.
- ******************************************************************************
- * @attention
- *
- * <h2><center>&copy; Copyright (c) 2023 STMicroelectronics.
- * All rights reserved.</center></h2>
- *
- * This software component is licensed by ST under BSD 3-Clause license,
- * the "License"; You may not use this file except in compliance with the
- * License. You may obtain a copy of the License at:
- *                        opensource.org/licenses/BSD-3-Clause
- *
- ******************************************************************************
- */
+  ******************************************************************************
+  * @file    spi.c
+  * @brief   This file provides code for the configuration
+  *          of the SPI instances.
+  ******************************************************************************
+  * @attention
+  *
+  * <h2><center>&copy; Copyright (c) 2023 STMicroelectronics.
+  * All rights reserved.</center></h2>
+  *
+  * This software component is licensed by ST under BSD 3-Clause license,
+  * the "License"; You may not use this file except in compliance with the
+  * License. You may obtain a copy of the License at:
+  *                        opensource.org/licenses/BSD-3-Clause
+  *
+  ******************************************************************************
+  */
 
 /* Includes ------------------------------------------------------------------*/
 #include "spi.h"
@@ -66,20 +66,21 @@ void MX_SPI1_Init(void)
   /* USER CODE BEGIN SPI1_Init 2 */
 
   /* USER CODE END SPI1_Init 2 */
+
 }
 
-void HAL_SPI_MspInit(SPI_HandleTypeDef *spiHandle)
+void HAL_SPI_MspInit(SPI_HandleTypeDef* spiHandle)
 {
 
   GPIO_InitTypeDef GPIO_InitStruct = {0};
   RCC_PeriphCLKInitTypeDef PeriphClkInitStruct = {0};
-  if (spiHandle->Instance == SPI1)
+  if(spiHandle->Instance==SPI1)
   {
-    /* USER CODE BEGIN SPI1_MspInit 0 */
+  /* USER CODE BEGIN SPI1_MspInit 0 */
 
-    /* USER CODE END SPI1_MspInit 0 */
-    /** Initializes the peripherals clock
-     */
+  /* USER CODE END SPI1_MspInit 0 */
+  /** Initializes the peripherals clock
+  */
     PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_SPI1;
     PeriphClkInitStruct.Spi123ClockSelection = RCC_SPI123CLKSOURCE_PLL;
     if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK)
@@ -95,27 +96,27 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef *spiHandle)
     PA5     ------> SPI1_SCK
     PA7     ------> SPI1_MOSI
     */
-    GPIO_InitStruct.Pin = GPIO_PIN_5 | GPIO_PIN_7;
+    GPIO_InitStruct.Pin = GPIO_PIN_5|GPIO_PIN_7;
     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
     GPIO_InitStruct.Pull = GPIO_PULLUP;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
     GPIO_InitStruct.Alternate = GPIO_AF5_SPI1;
     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-    /* USER CODE BEGIN SPI1_MspInit 1 */
+  /* USER CODE BEGIN SPI1_MspInit 1 */
 
-    /* USER CODE END SPI1_MspInit 1 */
+  /* USER CODE END SPI1_MspInit 1 */
   }
 }
 
-void HAL_SPI_MspDeInit(SPI_HandleTypeDef *spiHandle)
+void HAL_SPI_MspDeInit(SPI_HandleTypeDef* spiHandle)
 {
 
-  if (spiHandle->Instance == SPI1)
+  if(spiHandle->Instance==SPI1)
   {
-    /* USER CODE BEGIN SPI1_MspDeInit 0 */
+  /* USER CODE BEGIN SPI1_MspDeInit 0 */
 
-    /* USER CODE END SPI1_MspDeInit 0 */
+  /* USER CODE END SPI1_MspDeInit 0 */
     /* Peripheral clock disable */
     __HAL_RCC_SPI1_CLK_DISABLE();
 
@@ -123,11 +124,11 @@ void HAL_SPI_MspDeInit(SPI_HandleTypeDef *spiHandle)
     PA5     ------> SPI1_SCK
     PA7     ------> SPI1_MOSI
     */
-    HAL_GPIO_DeInit(GPIOA, GPIO_PIN_5 | GPIO_PIN_7);
+    HAL_GPIO_DeInit(GPIOA, GPIO_PIN_5|GPIO_PIN_7);
 
-    /* USER CODE BEGIN SPI1_MspDeInit 1 */
+  /* USER CODE BEGIN SPI1_MspDeInit 1 */
 
-    /* USER CODE END SPI1_MspDeInit 1 */
+  /* USER CODE END SPI1_MspDeInit 1 */
   }
 }
 

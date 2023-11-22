@@ -12,7 +12,7 @@ void DriverInit(void)
 #if (TRANSFER_METHOD == HW_IIC)
 	I2C_Configuration();
 #elif (TRANSFER_METHOD == HW_SPI)
-	SPI_Configuration();
+	// SPI_Configuration();
 #elif (TRANSFER_METHOD == SW_SPI)
 	SW_SPI_Configuration();
 #endif

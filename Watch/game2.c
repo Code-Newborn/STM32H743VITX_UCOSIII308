@@ -228,15 +228,15 @@ static display_t draw()
 							}
 							else
 								newHighscore = false;
-							LED0 = !LED0;
-							led_flash(LED_RED, 250, 255);
-							buzzer_buzz(250, TONE_2KHZ, VOL_UI, PRIO_UI, NULL);
+							// LED0 = !LED0;
+							// led_flash(LED_RED, 250, 255);
+							// buzzer_buzz(250, TONE_2KHZ, VOL_UI, PRIO_UI, NULL);
 						}
 						else
 						{
-							LED0 = !LED0;
-							led_flash(LED_RED, 30, 255);
-							buzzer_buzz(100, TONE_2KHZ, VOL_UI, PRIO_UI, NULL);
+							// LED0 = !LED0;
+							// led_flash(LED_RED, 30, 255);
+							// buzzer_buzz(100, TONE_2KHZ, VOL_UI, PRIO_UI, NULL);
 						}
 					}
 				}

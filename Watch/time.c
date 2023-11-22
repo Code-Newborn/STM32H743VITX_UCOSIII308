@@ -91,7 +91,6 @@ rtcwake_t time_wake()
 	}
 	else
 	{
-
 		return RTCWAKE_NONE;
 	}
 }

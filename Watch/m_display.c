@@ -7,7 +7,8 @@
  */
 
 #include "common.h"
-#include "lcd.h"
+// #include "lcd.h"
+#include "OLED_SSD1306.h"
 #include "led.h"
 
 #define OPTION_COUNT 6

@@ -13,7 +13,7 @@
 
 #define millis() millis_get()
 
-extern millis_t milliseconds;
+extern volatile millis_t milliseconds;
 
 millis_t millis_get(void);
 

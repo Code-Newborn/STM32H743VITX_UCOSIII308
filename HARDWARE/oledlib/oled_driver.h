@@ -57,7 +57,7 @@
 
 void I2C_Configuration(void);
 void I2C_WriteByte(uint8_t addr, uint8_t data);
-void SPI_Configuration(void);
+// void SPI_Configuration(void);
 
 void SW_SPI_Configuration(void);
 

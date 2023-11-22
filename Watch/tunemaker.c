@@ -7,7 +7,8 @@
  */
 
 #include "common.h"
-#include "lcd.h"
+// #include "lcd.h"
+#include "OLED_SSD1306.h"
 #include "delay.h"
 #include "led.h"
 #include "sys.h"
@@ -42,9 +43,6 @@ static bool select(void);
 static display_t draw(void);
 
 void __SysTick(void);
-void OLED_DrawPoint(u8 x, u8 y, u8 t);
-
-void OLED_DrawLine(u16 x1, u16 y1, u16 x2, u16 y2);
 
 extern const uint32_t TUNE[];
 extern const uint32_t STAY[];
@@ -181,7 +179,7 @@ static display_t draw()
 	draw_string_P(PSTR("Rotation"), false, 64, 40);
 
 	chose_tone(0); // 选择歌曲
-	LED0 = !LED0;
+	// LED0 = !LED0;
 
 	return DISPLAY_DONE;
 }
@@ -192,89 +190,6 @@ void __SysTick(void)
 	iAng++;
 	if (iAng == 180)
 		iAng = 0;
-}
-
-// 画点
-// x:0~63
-// y:0~63
-// t:1 填充 0,清空
-void OLED_DrawPoint(u8 x, u8 y, u8 t)
-{
-	// 对应 byte OLED_GRAM[512];	  // x= 64 ,y=8
-	// 变换一哈形式
-	u8 pos, bx, temp = 0;
-	if (x > 63 || y > 63)
-		return; // 超出范围了.
-	pos = y / 8;
-	bx = y % 8;
-	temp = 1 << (bx);
-	if (t)
-		OLED_GRAM[64 * pos + x] |= temp; // 做到的效果是竖着存放 竖着为y ，横着为x
-	else
-		OLED_GRAM[64 * pos + x] &= ~temp;
-
-	// 对应 byte OLED_GRAM[8][64];
-	// 这一段可以使用了，但是有点问题  方向反了。
-	// 需要了解如何把图像x轴镜像
-	//		u8 pos,bx,temp=0;
-	//	if(x>63||y>63)return;//超出范围了.
-	//	pos=7-y/8;
-	//	bx=y%8;
-	//	temp=1<<(7-bx);
-	//	if(t)OLED_GRAM[pos][x]|=temp;
-	//	else OLED_GRAM[pos][x]&=~temp;
-}
-
-// 画线
-// x1,y1:起点坐标
-// x2,y2:终点坐标
-void OLED_DrawLine(u16 x1, u16 y1, u16 x2, u16 y2)
-{
-	u16 t;
-	int xerr = 0, yerr = 0, delta_x, delta_y, distance;
-	int incx, incy, uRow, uCol;
-	delta_x = x2 - x1; // 计算坐标增量
-	delta_y = y2 - y1;
-	uRow = x1;
-	uCol = y1;
-	if (delta_x > 0)
-		incx = 1; // 设置单步方向
-	else if (delta_x == 0)
-		incx = 0; // 垂直线
-	else
-	{
-		incx = -1;
-		delta_x = -delta_x;
-	}
-	if (delta_y > 0)
-		incy = 1;
-	else if (delta_y == 0)
-		incy = 0; // 水平线
-	else
-	{
-		incy = -1;
-		delta_y = -delta_y;
-	}
-	if (delta_x > delta_y)
-		distance = delta_x; // 选取基本增量坐标轴
-	else
-		distance = delta_y;
-	for (t = 0; t <= distance + 1; t++) // 画线输出
-	{
-		OLED_DrawPoint(uRow, uCol, 1); // 画点
-		xerr += delta_x;
-		yerr += delta_y;
-		if (xerr > distance)
-		{
-			xerr -= distance;
-			uRow += incx;
-		}
-		if (yerr > distance)
-		{
-			yerr -= distance;
-			uCol += incy;
-		}
-	}
 }
 
 const uint8_t vertices[1440][3] =

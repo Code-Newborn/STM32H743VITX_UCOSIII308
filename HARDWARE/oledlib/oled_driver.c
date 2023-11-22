@@ -102,14 +102,14 @@ void OLED_FILL(unsigned char BMP[])
 
 #elif (TRANSFER_METHOD == HW_SPI)
 
-#define OLED_RESET_LOW() GPIO_ResetBits(SPI_RES_GPIOX, SPI_RES_PIN) // 低电平复位
-#define OLED_RESET_HIGH() GPIO_SetBits(SPI_RES_GPIOX, SPI_RES_PIN)
+#define OLED_RESET_LOW() HAL_GPIO_WritePin(OLED_RST_GPIO_Port, OLED_RST_Pin, GPIO_PIN_RESET) // 低电平复位
+#define OLED_RESET_HIGH() HAL_GPIO_WritePin(OLED_RST_GPIO_Port, OLED_RST_Pin, GPIO_PIN_SET)
 
-#define OLED_CMD_MODE() GPIO_ResetBits(SPI_DC_GPIOX, SPI_DC_PIN) // 命令模式
-#define OLED_DATA_MODE() GPIO_SetBits(SPI_DC_GPIOX, SPI_DC_PIN)	 // 数据模式
+#define OLED_CMD_MODE() HAL_GPIO_WritePin(OLED_DC_GPIO_Port, OLED_DC_Pin, GPIO_PIN_RESET) // 命令模式
+#define OLED_DATA_MODE() HAL_GPIO_WritePin(OLED_DC_GPIO_Port, OLED_DC_Pin, GPIO_PIN_SET)  // 数据模式
 
-#define OLED_CS_HIGH() GPIO_SetBits(SPI_CS_GPIOX, SPI_CS_Pin_X)
-#define OLED_CS_LOW() GPIO_ResetBits(SPI_CS_GPIOX, SPI_CS_Pin_X)
+#define OLED_CS_HIGH() HAL_GPIO_WritePin(OLED_CS_GPIO_Port, OLED_CS_Pin, GPIO_PIN_RESET)
+#define OLED_CS_LOW() HAL_GPIO_WritePin(OLED_CS_GPIO_Port, OLED_CS_Pin, GPIO_PIN_SET)
 
 // void SPI_Configuration(void)
 // {
@@ -163,36 +163,37 @@ void OLED_FILL(unsigned char BMP[])
 // 	OLED_RESET_HIGH();
 // }
 
-// void SPI_WriterByte(unsigned char dat)
-// {
-// 	while (__HAL_SPI_GET_FLAG(&hspi1, SPI_FLAG_TXE) == RESET)
-// 	{
-// 	};									   // 检查指定的SPI标志位设置与否:发送缓存空标志位
-// 	HAL_SPI_Transmit(&hspi1, dat, 1, 500); // 通过外设SPIx发送一个数据
-// 	while (__HAL_SPI_GET_FLAG(&hspi1, SPI_FLAG_RXNE) == RESET)
-// 	{
-// 	}; // 检查指定的SPI标志位设置与否:接受缓存非空标志位
-// 	HAL_SPI_Receive(&hspi1, )
-// 		SPI_I2S_ReceiveData(SPIX); // 返回通过SPIx最近接收的数据
-// }
+void SPI_WriterByte(unsigned char dat)
+{
 
-// void WriteCmd(unsigned char cmd)
-// {
-// 	OLED_CMD_MODE();
-// 	OLED_CS_LOW();
-// 	SPI_WriterByte(cmd);
-// 	OLED_CS_HIGH();
-// 	OLED_DATA_MODE();
-// }
+	while (__HAL_SPI_GET_FLAG(&hspi1, SPI_FLAG_TXE) == RESET)
+	{
+	};										// 检查指定的SPI标志位设置与否:发送缓存空标志位
+	HAL_SPI_Transmit(&hspi1, dat, 1, 1000); // 通过外设SPIx发送一个数据
 
-// void WriteDat(unsigned char dat)
-// {
-// 	OLED_DATA_MODE();
-// 	OLED_CS_LOW();
-// 	SPI_WriterByte(dat);
-// 	OLED_CS_HIGH();
-// 	OLED_DATA_MODE();
-// }
+	// while (__HAL_SPI_GET_FLAG(&hspi1, SPI_FLAG_RXNE) == RESET)
+	// {
+	// };									   // 检查指定的SPI标志位设置与否:接受缓存非空标志位
+	// HAL_SPI_Receive(&hspi1, dat, 1, 1000); // 返回通过SPIx最近接收的数据
+}
+
+void WriteCmd(unsigned char cmd)
+{
+	OLED_CMD_MODE();
+	OLED_CS_LOW();
+	SPI_WriterByte(cmd);
+	OLED_CS_HIGH();
+	OLED_DATA_MODE();
+}
+
+void WriteDat(unsigned char dat)
+{
+	OLED_DATA_MODE();
+	OLED_CS_LOW();
+	SPI_WriterByte(dat);
+	OLED_CS_HIGH();
+	OLED_DATA_MODE();
+}
 
 void OLED_FILL(unsigned char BMP[])
 {

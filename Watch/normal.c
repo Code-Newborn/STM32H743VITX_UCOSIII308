@@ -37,12 +37,12 @@ static void drawTickerNum(tickerData_t *);
 // 在主界面进入mpu界面
 static bool mpu_show(void)
 {
-	beginAnimation(mpu_open);
+	// beginAnimation(mpu_open);
 	return true;
 }
 static bool wifi_show(void)
 {
-	beginAnimation(wifi_test_open);
+	// beginAnimation(wifi_test_open);
 	return true;
 }
 
