@@ -11,7 +11,7 @@
 #include "common.h"
 #include "typedefs.h"
 
-byte oledBuffer[]; // 图形显示数据
+byte oledBuffer[FRAME_BUFFER_SIZE]; // 图形显示数据
 
 // 反显函数
 void OLED_ColorTurn(uint8_t i)
