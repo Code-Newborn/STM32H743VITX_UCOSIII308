@@ -116,6 +116,7 @@ void buttons_shutdown()
   //  pinMode(BTN_3_P,	OUTPUT);
 }
 
+uint8_t keypressed;
 static void processButtons()
 {
   // Get button pressed states
@@ -152,7 +153,7 @@ static void processButton(s_button *button, BOOL isPressed)
       if (!button->funcDone && button->onPress != NULL && button->onPress())
       {
         button->funcDone = true;
-        tune_play(button->tune, VOL_UI, PRIO_UI);
+        // tune_play(button->tune, VOL_UI, PRIO_UI);
 
         // led_flash(LED_GREEN, LED_FLASH_FAST, LED_BRIGHTNESS_MAX);
         // LED1=!LED1;

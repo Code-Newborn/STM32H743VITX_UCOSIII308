@@ -624,11 +624,11 @@ void LCD_Clear(uint16_t color)
 	ClearScreen();
 }
 
+uint8_t i, j;
 void LCD_Flush(void)
 {
 
 	// OLED_FILL(oledBuffer);
-	uint8_t i, j;
 	unsigned char *p;
 	p = oledBuffer;
 

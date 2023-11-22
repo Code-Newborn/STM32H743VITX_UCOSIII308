@@ -617,7 +617,7 @@ void c_loop()
   pwrmgr_update();
 
   // 显示完成后清除缓冲区
-  memset(&oledBuffer, 0x00, FRAME_BUFFER_SIZE);
+  memset(&oledBuffer, 0xFF, FRAME_BUFFER_SIZE);
 }
 /* USER CODE END 0 */
 
@@ -657,10 +657,12 @@ int main(void)
   delay_init(400);
   buttons_init();
   OLED_Init(); // OLED初始化
-  // __HAL_TIM_CLEAR_IT(&htim3, TIM_IT_UPDATE); // 手动清除中断标志位
   HAL_TIM_Base_Start_IT(&htim3);
 
-  c_setup(); // 初始化
+  // c_setup(); // 初始化
+
+  OLED_DrawLine(8, 16, 64, 8);
+  LCD_Flush();
 
   /* USER CODE END 2 */
 
@@ -671,7 +673,7 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    // c_loop(); // 循环
+    c_loop(); // 循环
   }
   /* USER CODE END 3 */
 }
