@@ -61,7 +61,7 @@ void OLED_WR_Byte(uint8_t dat, uint8_t cmd)
 	// 	OLED_SCLK_Set();
 	// 	dat <<= 1;
 	// }
-	HAL_SPI_Transmit(&hspi1, &dat, 1, 1000);
+	HAL_SPI_Transmit(&hspi1, &dat, 1, 200);
 	OLED_CS_Set();
 	OLED_DC_Set();
 }

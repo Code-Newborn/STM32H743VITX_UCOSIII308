@@ -661,7 +661,7 @@ int main(void)
 
   // c_setup(); // 初始化
 
-  OLED_DrawLine(8, 16, 64, 8);
+  oledBuffer[12] = 0xFF;
   LCD_Flush();
 
   /* USER CODE END 2 */
@@ -673,7 +673,7 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    c_loop(); // 循环
+    // c_loop(); // 循环
   }
   /* USER CODE END 3 */
 }
