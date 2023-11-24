@@ -405,6 +405,7 @@ void OLED_ShowPicture(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1, uint8_t BM
 		OLED_WR_BP(x0, y);
 		for (x = x0; x < x1; x++)
 		{
+			OLED_GRAM[x][y] = BMP[j];
 			OLED_WR_Byte(BMP[j], OLED_DATA);
 			j++;
 		}

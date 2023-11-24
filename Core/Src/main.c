@@ -97,12 +97,14 @@ int main(void)
   // uint8_t t;
   OLED_Init(); // OLED初始化
   OLED_Clear();
-  OLED_ShowChinese(0, 0, 0, 16);
-  OLED_ShowChinese(34, 0, 1, 16);
-  OLED_ShowChinese(68, 0, 2, 16);
-  OLED_ShowChinese(0, 32, 3, 32);
-  OLED_ShowChinese(34, 32, 4, 32);
-  OLED_ShowChinese(68, 32, 5, 32);
+  // OLED_ShowChinese(0, 0, 0, 16);
+  // OLED_ShowChinese(34, 0, 1, 16);
+  // OLED_ShowChinese(68, 0, 2, 16);
+  // OLED_ShowChinese(0, 32, 3, 32);
+  // OLED_ShowChinese(34, 32, 4, 32);
+  // OLED_ShowChinese(68, 32, 5, 32);
+  OLED_ShowPicture(0, 0, 128, 8, BMP_CLEAR);
+  // HAL_Delay(1000);
   OLED_Refresh();
   /* USER CODE END 2 */
 
