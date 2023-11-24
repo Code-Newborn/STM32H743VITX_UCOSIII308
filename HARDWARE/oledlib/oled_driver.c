@@ -316,9 +316,9 @@ void OLED_FILL(unsigned char BMP[])
 
 void OLED_Init(void)
 {
-	OLED_RESET_HIGH(); // 复位
-	HAL_Delay(200);
 	OLED_RESET_LOW();
+	HAL_Delay(200);
+	OLED_RESET_HIGH(); // 复位
 
 	WriteCmd(0xAE); // 关闭显示
 	WriteCmd(0x00); // 为页面寻址模式设置列起始地址 低位
