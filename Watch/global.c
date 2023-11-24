@@ -49,7 +49,6 @@ void global_init()
 
 void global_update()
 {
-
 	// 检测USB连接，并且可以刷新数据，这里我实现不了
 
 	//	static BOOL lastUsbConnected;

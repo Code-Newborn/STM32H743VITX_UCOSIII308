@@ -28,7 +28,7 @@ typedef struct
 s_menuNowSetting setting;
 menu_s menuData;
 static operation_s operation;
-const char menuBack[] PROGMEM = STR_BACK;
+const char menuBack[] = STR_BACK;
 
 static void doBtn(menu_f);
 static void drawTitle(void);
@@ -41,7 +41,6 @@ static void clear(void);
 // 主菜单选择界面
 bool menu_select()
 {
-
 	if (!animation_active() || animation_movingOn())
 	{
 		// 第一次进入主菜单函数，执行mMainOpen();打开主菜单

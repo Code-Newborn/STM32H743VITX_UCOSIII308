@@ -598,9 +598,6 @@ void OLED_DrawLine(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2)
 	}
 }
 
-// 初始化lcd
-// 该初始化函数可以初始化各种ALIENTEK出品的LCD液晶屏
-// 本函数占用较大flash,用户可以根据自己的实际情况,删掉未用到的LCD初始化代码.以节省空间.
 void LCD_Init(void)
 {
 	// InitGraph();

@@ -17,18 +17,18 @@
 #ifndef CONFIG_H_
 #define CONFIG_H_
 
-//#define CPU_DIV clock_div_1
+// #define CPU_DIV clock_div_1
 
 // Hardware version
 // 1 = PCB 1.0 - 1.1
 // 2 = PCB 1.2
 // 3 = PCB 1.3 - 1.4
-#define HW_VERSION	3
+#define HW_VERSION 3
 
 #define USER_NAME "HouAohui"
 
 // Firmware version
-#define FW_VERSION	"  2021/5/29" // maybe use some __DATE__ __TIME__ stuff?
+#define FW_VERSION "  2021/5/29" // maybe use some __DATE__ __TIME__ stuff?
 
 // Language
 // 0 = English
@@ -36,25 +36,20 @@
 // 2 = Russian
 #define LANGUAGE 0
 
+// ç¼–è¯‘é€‰é¡¹
+#define COMPILE_GAME1 1      // æ¸¸æˆBreakout
+#define COMPILE_GAME2 1      // æ¸¸æˆCar dodge
+#define COMPILE_GAME3 1      // æ¸¸æˆFlappy thing (not finished) æœ‰bug  æœªå®Œæˆï¼Œå®åœ¨åšä¸æ¥
+#define COMPILE_ANIMATIONS 1 // åŠ¨ç”»
+#define COMPILE_STOPWATCH 1  // ç§’è¡¨
+#define COMPILE_TORCH 1      // æ‰‹ç”µç­’
+#define COMPILE_TUNEMAKER 1  // 3Dæ»šåŠ¨
 
-// ±àÒëÑ¡Ïî
-#define COMPILE_GAME1      1 // ÓÎÏ·Breakout    
-#define COMPILE_GAME2      1 // ÓÎÏ·Car dodge
-#define COMPILE_GAME3      1 // ÓÎÏ·Flappy thing (not finished) ÓĞbug  Î´Íê³É£¬ÊµÔÚ×ö²»À´
-#define COMPILE_ANIMATIONS 1 //¶¯»­
-#define COMPILE_STOPWATCH  1 //Ãë±í
-#define COMPILE_TORCH      1 //ÊÖµçÍ²
-#define COMPILE_TUNEMAKER  1 //3D¹ö¶¯
+// è¿™ä¸ªä¸¤ä¸ªå¼€å¯åå¯ä»¥ä¸²å£æ‰“å°è°ƒè¯•ä¿¡æ¯
+#define COMPILE_UART 0
+#define DEBUG_MSGS 0
+#define UART_BAUD 115200
 
-
-//Õâ¸öÁ½¸ö¿ªÆôºó¿ÉÒÔ´®¿Ú´òÓ¡µ÷ÊÔĞÅÏ¢
-#define COMPILE_UART       1
-#define DEBUG_MSGS		     0
-#define UART_BAUD          115200
-
-
-
-//#define RTC_SRC   ///ÔÚÎŞÍâ²¿Ê±ÖÓÊ±¼ä Çë×¢ÏúÕâÀï          ÕâÀïÓĞBUG £¬ĞèÒªÅäºÏĞŞ¸Ämillis.cÀïÃæµÄzÖĞ¶Ï¼ÆÊ±Èí¼ş
-
+// #define RTC_SRC   ///åœ¨æ— å¤–éƒ¨æ—¶é’Ÿæ—¶é—´ è¯·æ³¨é”€è¿™é‡Œ
 
 #endif /* CONFIG_H_ */

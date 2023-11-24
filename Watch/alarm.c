@@ -20,7 +20,7 @@ static button_f oldBtn1Func;
 static button_f oldBtn2Func;
 static button_f oldBtn3Func;
 
-static alarm_s eepAlarms[ALARM_COUNT] EEMEM = {{22, 45, 0}, {01, 48, 4}, {7, 45, 63}, {9, 4, 0}, {3, 1, 7}};
+static alarm_s eepAlarms[ALARM_COUNT] = {{22, 45, 0}, {01, 48, 4}, {7, 45, 63}, {9, 4, 0}, {3, 1, 7}};
 
 static bool goingOff(void);
 static void getNextAlarm(void);

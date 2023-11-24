@@ -105,11 +105,11 @@ void mpu_updata(void)
 	{
 		// printf("1");
 		lastUpdate = now;
-		//		if(imu_run)
-		//		{
-		//			mpu_dmp_get_data(&pitch,&roll,&yaw);
-		//			 //printf("pitch:%f,roll:%f,yaw:%f\r\n",pitch,roll,yaw);
-		//		}
+		// if (imu_run)
+		// {
+		// 	mpu_dmp_get_data(&pitch, &roll, &yaw);
+		// 	// printf("pitch:%f,roll:%f,yaw:%f\r\n",pitch,roll,yaw);
+		// }
 	}
 }
 

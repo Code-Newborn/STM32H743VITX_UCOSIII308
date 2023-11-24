@@ -27,13 +27,13 @@ typedef struct
 	float velY;
 } s_ball;
 
-static const byte block[] PROGMEM = {
+static const byte block[] = {
 	0x07,
 	0x07,
 	0x07,
 };
 
-static const byte platform[] PROGMEM = {
+static const byte platform[] = {
 	0x60,
 	0x70,
 	0x50,
@@ -48,7 +48,7 @@ static const byte platform[] PROGMEM = {
 	0x60,
 };
 
-static const byte ballImg[] PROGMEM = {
+static const byte ballImg[] = {
 	0x03,
 	0x03,
 };

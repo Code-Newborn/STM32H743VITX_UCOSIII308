@@ -165,33 +165,24 @@ void OLED_FILL(unsigned char BMP[])
 
 void SPI_WriterByte(unsigned char dat)
 {
-
-	// while (__HAL_SPI_GET_FLAG(&hspi1, SPI_FLAG_TXE) == RESET)
-	// {
-	// };										 // 检查指定的SPI标志位设置与否:发送缓存空标志位
 	HAL_SPI_Transmit(&hspi1, &dat, 1, 1000); // 通过外设SPIx发送一个数据
-
-	// while (__HAL_SPI_GET_FLAG(&hspi1, SPI_FLAG_RXNE) == RESET)
-	// {
-	// };									   // 检查指定的SPI标志位设置与否:接受缓存非空标志位
-	// HAL_SPI_Receive(&hspi1, dat, 1, 1000); // 返回通过SPIx最近接收的数据
 }
 
 void WriteCmd(unsigned char cmd)
 {
 	OLED_CMD_MODE();
-	// OLED_CS_LOW();
+	OLED_CS_LOW();
 	HAL_SPI_Transmit(&hspi1, &cmd, 1, 200); // 通过外设SPIx发送一个数据
-	// OLED_CS_HIGH();
+	OLED_CS_HIGH();
 	OLED_DATA_MODE();
 }
 
 void WriteDat(unsigned char dat)
 {
 	OLED_DATA_MODE();
-	// OLED_CS_LOW();
+	OLED_CS_LOW();
 	HAL_SPI_Transmit(&hspi1, &dat, 1, 200); // 通过外设SPIx发送一个数据
-	// OLED_CS_HIGH();
+	OLED_CS_HIGH();
 	OLED_DATA_MODE();
 }
 

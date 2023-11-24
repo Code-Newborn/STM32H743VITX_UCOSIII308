@@ -34,10 +34,9 @@ static byte bitCount(byte);
 
 void buttons_init()
 {
-  buttons_startup();
+  // buttons_startup(); // 按键引脚配置初始化
 
   // 蜂鸣器的播放曲调
-  //  Assign tunes
   buttons[BTN_1].tune = tuneBtn1;
   buttons[BTN_2].tune = tuneBtn2;
   buttons[BTN_3].tune = tuneBtn3;
@@ -69,7 +68,6 @@ void buttons_update()
 //  Sets button pins to INPUT with PULLUP
 void buttons_startup()
 {
-
   //	GPIO_InitTypeDef  GPIO_InitStructure;
   //  RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA|RCC_AHB1Periph_GPIOE, ENABLE);//使能GPIOA,GPIOE时钟
   //

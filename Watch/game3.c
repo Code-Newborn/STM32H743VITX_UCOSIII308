@@ -43,7 +43,7 @@ static bool gameState = false;
 
 static tube_s tubes[TUBE_COUNT];
 
-static const byte tube_top[] PROGMEM = {
+static const byte tube_top[] = {
 	0xFF,
 	0xD5,
 	0xAB,
@@ -64,7 +64,7 @@ static const byte tube_top[] PROGMEM = {
 	0xFF,
 };
 
-static const byte tube[] PROGMEM = {
+static const byte tube[] = {
 	0xFF,
 	0x55,
 	0xAA,
@@ -83,7 +83,7 @@ static const byte tube[] PROGMEM = {
 	0xFF,
 };
 
-static const byte thingImg[] PROGMEM = {
+static const byte thingImg[] = {
 	0x40,
 	0xF8,
 	0xEC,

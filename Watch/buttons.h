@@ -30,7 +30,11 @@ typedef enum
 	BTN_1 = 0,
 	BTN_2 = 1,
 	BTN_3 = 2,
-	BTN_COUNT = 3 // must be last
+	BTN_4 = 3,
+	BTN_5 = 4,
+	BTN_6 = 5,
+	BTN_7 = 6,
+	BTN_COUNT = 7 // 按键总数，必须放置在最后
 } btn_t;
 
 void buttons_init(void);

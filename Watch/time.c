@@ -15,7 +15,7 @@
 #define FEB_LEAP_YEAR 29
 
 // 月份天数
-static const byte monthDayCount[] PROGMEM = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+static const byte monthDayCount[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
 timeDate_s timeDate;
 // static timestamp_t timestamp;

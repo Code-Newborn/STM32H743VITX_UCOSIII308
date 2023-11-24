@@ -107,8 +107,7 @@ void display_update()
 		// This is only approximate
 		// millis8_t end = millis() + 1;
 		char buff[5];
-		buff[0] = 10;
-		// sprintf_P(buff, PSTR("%u"), (uint)(1000 / fpsms));
+		sprintf_P(buff, PSTR("%u"), (uint)(1000 / fpsms)); // 帧率显示
 		//	draw_string(buff,false,107,56);
 		draw_string(buff, false, 100, 56);
 	}

@@ -34,7 +34,7 @@ typedef struct
 	byte y;
 } s_myCar;
 
-static const byte carImg[] PROGMEM = {
+static const byte carImg[] = {
 	0x40,
 	0xF8,
 	0xEC,
@@ -67,7 +67,7 @@ static const byte carImg[] PROGMEM = {
 	0x0F,
 };
 
-static const byte roadMarking[] PROGMEM = {
+static const byte roadMarking[] = {
 	0x01,
 	0x01,
 	0x01,
