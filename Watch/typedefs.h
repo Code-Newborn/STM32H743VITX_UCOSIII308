@@ -11,6 +11,7 @@
 
 #include <stdbool.h>
 #include <stdint.h>
+#include "util.h"
 
 #if defined(__CC_ARM)
 #pragma anon_unions
@@ -20,7 +21,7 @@ typedef uint8_t byte;
 typedef uint16_t uint;
 typedef uint32_t ulong;
 
-extern byte oledBuffer[];
+extern byte oledBuffer[FRAME_BUFFER_SIZE];
 
 typedef unsigned int millis8_t;
 typedef unsigned int millis_t;

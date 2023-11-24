@@ -50,7 +50,7 @@ void OLED_WR_Byte(uint8_t dat, uint8_t cmd)
 		OLED_DC_Set();
 	else
 		OLED_DC_Clr();
-	OLED_CS_Clr();
+	// OLED_CS_Clr();
 	// for (i = 0; i < 8; i++)
 	// {
 	// 	OLED_SCLK_Clr();
@@ -62,7 +62,7 @@ void OLED_WR_Byte(uint8_t dat, uint8_t cmd)
 	// 	dat <<= 1;
 	// }
 	HAL_SPI_Transmit(&hspi1, &dat, 1, 200);
-	OLED_CS_Set();
+	// OLED_CS_Set();
 	OLED_DC_Set();
 }
 
@@ -627,9 +627,8 @@ void LCD_Clear(uint16_t color)
 uint8_t i, j;
 void LCD_Flush(void)
 {
-
 	// OLED_FILL(oledBuffer);
-	unsigned char *p;
+	uint8_t *p;
 	p = oledBuffer;
 
 	for (i = 0; i < 8; i++)

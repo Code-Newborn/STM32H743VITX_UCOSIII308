@@ -653,7 +653,7 @@ int main(void)
   MX_SPI1_Init();
   MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
-
+  OLED_CS_Clr();
   delay_init(400);
   // buttons_init();
   OLED_Init(); // OLED初始化
@@ -662,6 +662,7 @@ int main(void)
   // c_setup(); // 初始化
   oledBuffer[12] = 0xFF;
   LCD_Flush();
+  HAL_Delay(200);
 
   /* USER CODE END 2 */
 

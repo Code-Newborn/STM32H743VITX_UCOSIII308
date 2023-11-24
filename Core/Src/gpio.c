@@ -77,7 +77,7 @@ void MX_GPIO_Init(void)
      HAL_GPIO_WritePin(GPIOC, OLED_RST_Pin | OLED_DC_Pin, GPIO_PIN_RESET);
 
      /*Configure GPIO pin Output Level */
-     HAL_GPIO_WritePin(OLED_CS_GPIO_Port, OLED_CS_Pin, GPIO_PIN_RESET);
+     HAL_GPIO_WritePin(OLED_CS_GPIO_Port, OLED_CS_Pin, GPIO_PIN_SET);
 
      /*Configure GPIO pin Output Level */
      HAL_GPIO_WritePin(DHT11_DQ_GPIO_Port, DHT11_DQ_Pin, GPIO_PIN_SET);
