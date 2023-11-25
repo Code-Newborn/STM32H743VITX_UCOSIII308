@@ -48,7 +48,7 @@ void display_set(display_f faceFunc)
 {
 	func = faceFunc;
 }
-// 打开watch face 函数
+// 显示 表盘
 void display_load()
 {
 	if (func != NULL)

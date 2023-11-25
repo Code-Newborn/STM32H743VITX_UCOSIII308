@@ -61,13 +61,11 @@ static display_t draw()
 	static byte chargeImagePos = FRAME_HEIGHT;
 #endif
 
-	// Draw date
-	drawDate();
+	drawDate(); // 绘制日期
 
-	// Draw time animated
-	display_t busy;
+	display_t busy; // 绘制忙 标志
 
-	busy = ticker();
+	busy = ticker(); // 秒钟滴答刷新绘制
 
 	// Draw battery icon
 	drawBattery();
@@ -304,8 +302,7 @@ static display_t ticker()
 	data.moving = moving2[1];
 	drawTickerNum(&data);
 
-	// Draw colon for half a second   画半秒的冒号
-	if (milliseconds % 3600 > 1800) // 假装是半秒钟  30ms
+	if (milliseconds % 1000 > 500) // 绘制闪烁的时间冒号
 		draw_bitmap(TIME_POS_X + 46 + 2, TIME_POS_Y, colon, FONT_COLON_WIDTH, FONT_COLON_HEIGHT, NOINVERT, 0);
 
 	// Draw AM/PM character

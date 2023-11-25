@@ -512,13 +512,11 @@ void c_setup()
     printf("begun");
 #endif
 
-    buttons_init();
+    buttons_init(); // 按键初始化
     // Yaogan_Init();
     LCD_Init(); // 初始化OLED接口
-
-    milliseconds = 0;
-
     memset(&oledBuffer, 0x00, FRAME_BUFFER_SIZE);
+    milliseconds = 0;
 
     appconfig_init();
     // led_init();    // 初始化LED
@@ -527,11 +525,11 @@ void c_setup()
 
     alarm_init(); // 无法储存闹钟，每次重启以后需要自定义
     time_init();
-    // rtc_init(); // 初始化外部时钟模块
+    // rtc_init();    // 初始化外部时钟模块
     // pwrmgr_init(); // 初始化电源管理模块
 
     display_set(watchface_normal); // 设置表盘
-    display_load();                // 启动加载
+    display_load();                // 启动加载表盘
 }
 
 void c_loop()
@@ -599,9 +597,8 @@ int main(void)
     /* USER CODE BEGIN 2 */
 
     delay_init(400);               // 延时函数初始化
-    buttons_init();                // 按键初始化
     OLED_Init();                   // OLED初始化
-    HAL_TIM_Base_Start_IT(&htim3); // 时基中断
+    HAL_TIM_Base_Start_IT(&htim3); // 时基中断开启
     c_setup();                     // 初始化
 
     /* USER CODE END 2 */
