@@ -51,7 +51,6 @@ bool menu_select()
 		}
 		else if (menuData.func.btn2 != NULL) // 打开后再次按下确认功能
 		{
-
 			menuData.func.btn2();
 		}
 	}
@@ -80,7 +79,7 @@ display_t menu_draw()
 {
 	display_t busy = DISPLAY_DONE;
 	if (menuData.menuType == MENU_TYPE_STR)
-		menu_drawStr();
+		menu_drawStr(); // 绘制主菜单界面文字
 	else
 		busy = menu_drawIcon();
 
@@ -334,6 +333,7 @@ void setMenuFuncs(menu_f btn1Func, menu_f btn2Func, menu_f btn3Func, itemLoader_
 	menuData.func.loader = loader;
 }
 
+// 下一菜单项
 void nextOption()
 {
 	menuData.selected++;
@@ -343,6 +343,7 @@ void nextOption()
 	checkScroll();
 }
 
+// 上一菜单项
 void prevOption()
 {
 	menuData.selected--;

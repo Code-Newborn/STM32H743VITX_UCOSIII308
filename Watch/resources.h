@@ -37,7 +37,7 @@ extern const byte menu_timedate[];
 extern const byte menu_sleep[];
 extern const byte menu_sound[];
 extern const byte menu_games[];
-//extern const byte menu_calc[];
+// extern const byte menu_calc[];
 extern const byte menu_brightness[][128];
 extern const byte menu_LEDs[][128];
 extern const byte menu_invert[];
@@ -55,10 +55,10 @@ extern const byte battIconLow[];
 extern const byte battIconHigh[];
 extern const byte battIconFull[];
 
-//ÎÒµÄÐÂÔö¼ÓÍ¼±ê
+// æˆ‘çš„æ–°å¢žåŠ å›¾æ ‡
 extern const byte menu_setfps[];
 // Alarm icon
-//extern const byte smallFontAlarm[];
+// extern const byte smallFontAlarm[];
 
 #define SMALLFONT_WIDTH 5
 #define SMALLFONT_HEIGHT 8

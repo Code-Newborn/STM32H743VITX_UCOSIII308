@@ -10,7 +10,7 @@
 
 #define TIME_POS_X 1
 #define TIME_POS_Y 20
-#define TICKER_GAP 4
+#define TICKER_GAP 4 // 数字切换时间隔距离
 
 typedef struct
 {
@@ -50,15 +50,15 @@ static bool wifi_show(void)
 void watchface_normal()
 {
 	display_setDrawFunc(draw);
-	buttons_setFuncs(mpu_show, menu_select, wifi_show);
-	animation_start(NULL, ANIM_MOVE_ON); // 设置打开过度动画，（不执行函数）
+	buttons_setFuncs(mpu_show, menu_select, wifi_show); // 主菜单选择显示（三个主菜单界面）
+	animation_start(NULL, ANIM_MOVE_ON);				// 设置打开过渡动画，（不执行函数）
 }
 
 static display_t draw()
 {
 #if COMPILE_ANIMATIONS
-	static byte usbImagePos = FRAME_HEIGHT;
-	static byte chargeImagePos = FRAME_HEIGHT;
+	static byte usbImagePos_y = FRAME_HEIGHT;
+	static byte chargeImagePos_y = FRAME_HEIGHT;
 #endif
 
 	drawDate(); // 绘制日期
@@ -67,17 +67,15 @@ static display_t draw()
 
 	busy = ticker(); // 秒钟滴答刷新绘制
 
-	// Draw battery icon
-	drawBattery();
+	drawBattery(); // 绘制电源图标（修改缓存）
 
 	byte x = 20;
 
 #if COMPILE_ANIMATIONS
 	//	if(animateIcon(UDADDR != 0, &usbImagePos))
-	if (animateIcon(1, &usbImagePos))
-
+	if (animateIcon(1, &usbImagePos_y))
 	{
-		draw_bitmap(x, usbImagePos, usbIcon, 16, 8, NOINVERT, 0);
+		draw_bitmap(x, usbImagePos_y, usbIcon, 16, 8, NOINVERT, 0);
 		x += 20;
 	}
 #else
@@ -91,10 +89,10 @@ static display_t draw()
 	// Draw charging icon
 #if COMPILE_ANIMATIONS
 	//	if(animateIcon(CHARGING(), &chargeImagePos))
-	if (animateIcon(1, &chargeImagePos))
+	if (animateIcon(1, &chargeImagePos_y))
 
 	{
-		draw_bitmap(x, chargeImagePos, chargeIcon, 8, 8, NOINVERT, 0);
+		draw_bitmap(x, chargeImagePos_y, chargeIcon, 8, 8, NOINVERT, 0);
 		x += 12;
 	}
 #else
@@ -173,10 +171,11 @@ static bool animateIcon(bool active, byte *pos)
 }
 #endif
 
+// 手表滴答显示
 static display_t ticker()
 {
-	static byte yPos;
-	static byte yPos_secs;
+	static byte yPos;	   // 时、分数字刷新相对位置
+	static byte yPos_secs; // 秒数字刷新相对位置
 	static bool moving = false;
 	static bool moving2[5];
 
@@ -185,27 +184,28 @@ static display_t ticker()
 	static byte mins;
 	static byte secs;
 
-	if (appConfig.animations)
+	if (appConfig.animations) // 若开启了动画
 	{
-		if (timeDate.time.secs != secs)
+		if (timeDate.time.secs != secs) // 秒钟发生变换
 		{
 			yPos = 0;
 			yPos_secs = 0;
 			moving = true;
 
-			moving2[0] = div10(timeDate.time.hour) != div10(hour2);
-			moving2[1] = mod10(timeDate.time.hour) != mod10(hour2);
-			moving2[2] = div10(timeDate.time.mins) != div10(mins);
-			moving2[3] = mod10(timeDate.time.mins) != mod10(mins);
-			moving2[4] = div10(timeDate.time.secs) != div10(secs);
+			moving2[0] = div10(timeDate.time.hour) != div10(hour2); // 时钟进10
+			moving2[1] = mod10(timeDate.time.hour) != mod10(hour2); // 时钟进1
+			moving2[2] = div10(timeDate.time.mins) != div10(mins);	// 分钟进10
+			moving2[3] = mod10(timeDate.time.mins) != mod10(mins);	// 分钟进1
+			moving2[4] = div10(timeDate.time.secs) != div10(secs);	// 秒钟进10
 
 			// memcpy(&timeDateLast, &timeDate, sizeof(timeDate_s));
+			// 记录上一时基时刻
 			hour2 = timeDate.time.hour;
 			mins = timeDate.time.mins;
 			secs = timeDate.time.secs;
 		}
 
-		if (moving)
+		if (moving) // 仍处于动画切换过程
 		{
 			if (yPos <= 3)
 				yPos++;
@@ -218,6 +218,7 @@ static display_t ticker()
 			else if (yPos <= 24 + TICKER_GAP)
 				yPos++;
 
+			// 时、分数字移动到位
 			if (yPos >= MIDFONT_HEIGHT + TICKER_GAP)
 				yPos = 255;
 
@@ -228,15 +229,17 @@ static display_t ticker()
 			else if (yPos_secs <= 16 + TICKER_GAP)
 				yPos_secs++;
 
+			// 秒数字移动到位
 			if (yPos_secs >= FONT_SMALL2_HEIGHT + TICKER_GAP)
 				yPos_secs = 255;
 
+			// 时、分、秒数字 是否 都移动到位，若否则重复上述移动规律
 			if (yPos_secs > FONT_SMALL2_HEIGHT + TICKER_GAP && yPos > MIDFONT_HEIGHT + TICKER_GAP)
 			{
 				yPos = 0;
 				yPos_secs = 0;
 				moving = false;
-				memset(moving2, false, sizeof(moving2));
+				memset(moving2, 0x00, sizeof(moving2)); // 清空时分秒变化记录
 			}
 		}
 	}
@@ -245,57 +248,62 @@ static display_t ticker()
 	{
 		yPos = 0;
 		yPos_secs = 0;
-		moving = false;
-		memset(moving2, false, sizeof(moving2));
+		moving = false;							// 无移动过程
+		memset(moving2, 0x00, sizeof(moving2)); // 清除移动步骤
 	}
 
+	// 绘制过程
 	tickerData_t data;
-
-	// Seconds
-	data.x = 104;
-	data.y = 28;
-	data.bitmap = (const byte *)&small2Font;
+	// 秒钟 显示字体、大小、位置
+	data.x = 104; //  秒钟 显示位置 横坐标
+	data.y = 28;  //  秒钟 显示位置 纵坐标
 	data.w = FONT_SMALL2_WIDTH;
 	data.h = FONT_SMALL2_HEIGHT;
+	data.bitmap = (const byte *)&small2Font;
 	data.offsetY = yPos_secs;
+
+	// 秒钟 十位
 	data.val = div10(timeDate.time.secs);
 	data.maxVal = 5;
 	data.moving = moving2[4];
 	drawTickerNum(&data);
 
+	// 秒钟 个位
 	data.x = 116;
 	data.val = mod10(timeDate.time.secs);
 	data.maxVal = 9;
 	data.moving = moving;
 	drawTickerNum(&data);
 
-	// Set new font data for hours and minutes
+	// 分钟、时钟 显示字体、大小、位置
 	data.y = TIME_POS_Y;
 	data.w = MIDFONT_WIDTH;
 	data.h = MIDFONT_HEIGHT;
 	data.bitmap = (const byte *)&midFont;
 	data.offsetY = yPos;
 
-	// Minutes
+	// 分钟 十位
 	data.x = 60;
 	data.val = div10(timeDate.time.mins);
 	data.maxVal = 5;
 	data.moving = moving2[2];
 	drawTickerNum(&data);
 
+	// 分钟 个位
 	data.x = 83;
 	data.val = mod10(timeDate.time.mins);
 	data.maxVal = 9;
 	data.moving = moving2[3];
 	drawTickerNum(&data);
 
-	// Hours
+	// 时钟 十位
 	data.x = 1;
 	data.val = div10(timeDate.time.hour);
 	data.maxVal = 5;
 	data.moving = moving2[0];
 	drawTickerNum(&data);
 
+	// 时钟 个位
 	data.x = 24;
 	data.val = mod10(timeDate.time.hour);
 	data.maxVal = 9;
@@ -311,16 +319,12 @@ static display_t ticker()
 	tmp[1] = 0x00;
 	draw_string(tmp, false, 104, 20);
 
-	//	char buff[12];
-	//	sprintf_P(buff, PSTR("%lu"), time_getTimestamp());
-	//	draw_string(buff, false, 30, 50);
-
 	return (moving ? DISPLAY_BUSY : DISPLAY_DONE);
 }
 
 static void drawTickerNum(tickerData_t *data)
 {
-	byte arraySize = (data->w * data->h) / 8;
+	byte arraySize = (data->w * data->h) / 8; // 每个数字显示所需字节数大小
 	byte yPos = data->offsetY;
 	const byte *bitmap = &data->bitmap[data->val * arraySize];
 	byte x = data->x;

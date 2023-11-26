@@ -11,9 +11,8 @@
 #include "typedefs.h"
 #include <stdio.h>
 
-
-#define ANIM_MOVE_OFF	true    //ANIM_MOVE_ON¶¯»­´ÓÏÂÍùÉÏ  Ïàµ±ÓÚ¹Ø±Õ½çÃæ
-#define ANIM_MOVE_ON	false  //ANIM_MOVE_ON¶¯»­´ÓÉÏÍùÏÂ   Ïàµ±ÓÚ¿ªÆô½çÃæ
+#define ANIM_MOVE_OFF true // ANIM_MOVE_ONåŠ¨ç”»ä»ä¸‹å¾€ä¸Š  ç›¸å½“äºå…³é—­ç•Œé¢
+#define ANIM_MOVE_ON false // ANIM_MOVE_ONåŠ¨ç”»ä»ä¸Šå¾€ä¸‹   ç›¸å½“äºå¼€å¯ç•Œé¢
 
 #if COMPILE_ANIMATIONS
 
@@ -30,7 +29,7 @@ byte animation_offsetY(void);
 #define animation_movingOn() (false)
 #define animation_offsetY() (0)
 
- void animation_start(void (*animOnComplete)(void), bool goingOffScreen);
+void animation_start(void (*animOnComplete)(void), bool goingOffScreen);
 
 #endif
 

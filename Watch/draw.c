@@ -57,43 +57,41 @@ inline static byte readPixels(const byte *loc, bool invert)
 	return pixels;
 }
 
-// Ultra fast bitmap drawing
-// Only downside is that height must be a multiple of 8, otherwise it gets rounded down to the nearest multiple of 8
-// Drawing bitmaps that are completely on-screen and have a Y co-ordinate that is a multiple of 8 results in best performance
-// PS - Sorry about the poorly named variables ;_;
-// 超快位图绘制
-// 唯一的缺点是高度必须是8的倍数，否则将四舍五入到最接近8的倍数
-// 画位图，完全在屏幕上，有一个Y坐标是8的倍数在最佳性能
-// PS -不好意思，变量命名不好;
+/**
+ * @brief     : 超快位图绘制
+ * @msg       : 唯一的缺点是高度必须是8的倍数，否则将四舍五入到最接近8的倍数，
+ * 				画位图，完全在屏幕上，有一个Y坐标是8的倍数在最佳性能
+ * @param      {byte} x 绘制位置 横坐标
+ * @param      {byte} yy
+ * @param      {byte} *bitmap 绘制图片
+ * @param      {byte} w 绘制宽度
+ * @param      {byte} h 绘制高度
+ * @param      {bool} invert
+ * @param      {byte} offsetY
+ * @return     {*}
+ */
 void draw_bitmap(byte x, byte yy, const byte *bitmap, byte w, byte h, bool invert, byte offsetY)
 {
-	// Apply animation offset
 	yy += animation_offsetY();
 
-	//
 	byte y = yy - offsetY;
 
-	//
 	byte h2 = h / 8;
 
-	//
 	byte pixelOffset = (y % 8);
 
 	byte thing3 = (yy + h);
 
-	//
 	LOOP(h2, hh)
 	{
 		//
 		byte hhh = (hh * 8) + y; // Current Y pos (every 8 pixels)
 		byte hhhh = hhh + 8;	 // Y pos at end of pixel column (8 pixels)
 
-		//
 		if (offsetY && (hhhh < yy || hhhh > FRAME_HEIGHT || hhh > thing3))
 			continue;
 
-		//
-		byte offsetMask = 0xFF;
+		byte offsetMask = 0xFF; // 移动遮罩
 		if (offsetY)
 		{
 			if (hhh < yy)
@@ -159,8 +157,8 @@ void draw_bitmap(byte x, byte yy, const byte *bitmap, byte w, byte h, bool inver
 	}
 }
 
-// y must be a multiple of 8
-// height is always 8
+// 纵坐标必须是8的倍数
+// 高始终是8
 void draw_clearArea(byte x, byte y, byte w)
 {
 	uint pos = x + (y / 8) * FRAME_WIDTH;

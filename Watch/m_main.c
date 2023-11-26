@@ -43,21 +43,22 @@ void mMainOpen()
 	beginAnimation(mOpen); // 关闭动画开始，并执行打开主菜单
 }
 
-// 打开主菜单
+// 打开主菜单界面
 static void mOpen()
 {
 	display_setDrawFunc(menu_draw); // 绑定绘制函数为menu_draw
 
 	buttons_setFuncs(menu_up, menu_select, menu_down); // 绑定按键功能函数
 
-	setMenuInfo(OPTION_COUNT, MENU_TYPE_ICON, PSTR(STR_MAINMENU));	 // 获取当前菜单信息（选项个数，菜单类型是文字还是图标）
-	setMenuFuncs(MENUFUNC_NEXT, mSelect, MENUFUNC_PREV, itemLoader); // 绑定菜单的函数,如前进后退选择确认
+	setMenuInfo(OPTION_COUNT, MENU_TYPE_ICON, PSTR(STR_MAINMENU));	 // 获取当前菜单项的信息（选项个数，菜单显示模式是文字还是图标）
+	setMenuFuncs(MENUFUNC_NEXT, mSelect, MENUFUNC_PREV, itemLoader); // 绑定当前菜单项的函数，如前进、后退、选择确认
 
 	setPrevMenuOpen(&prevMenuData, mOpen); // 储存上级菜单
 
 	beginAnimation2(NULL); // 开启过度动画
 }
 
+// 选择确认函数
 static void mSelect()
 {
 	setPrevMenuExit(&prevMenuData); // 储存上一次菜单的选项

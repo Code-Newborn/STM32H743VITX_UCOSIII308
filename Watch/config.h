@@ -36,7 +36,7 @@
 // 2 = Russian
 #define LANGUAGE 0
 
-// 编译选项
+// 编译选项，决定主菜单选项数
 #define COMPILE_GAME1 1      // 游戏Breakout
 #define COMPILE_GAME2 1      // 游戏Car dodge
 #define COMPILE_GAME3 1      // 游戏Flappy thing (not finished) 有bug  未完成，实在做不来

@@ -8,7 +8,7 @@
 
 #include "common.h"
 
-#define OPTION_COUNT 2
+#define OPTION_COUNT 1 // 定时休眠界面 菜单项数
 
 static prev_menu_s prevMenuData;
 
@@ -35,7 +35,6 @@ static void mSelect()
 	bool isExiting = exitSelected();
 
 	if (isExiting)
-
 		appconfig_save();
 
 	setPrevMenuExit(&prevMenuData);
@@ -62,7 +61,6 @@ static void setTimeout()
 
 static void setMenuOptions()
 {
-
 	setMenuOption_P(0, PSTR(STR_TIMEOUT), menu_sleeptimeout, setTimeout);
 }
 
@@ -71,7 +69,7 @@ static display_t mDraw()
 	if (menuData.selected == 0)
 	{
 		char buff[4];
-		sprintf_P(buff, PSTR("%hhuS"), (unsigned char)(appConfig.sleepTimeout * 5));
+		sprintf_P(buff, PSTR("%hhuS"), (unsigned char)(appConfig.sleepTimeout * 5)); // 自动息屏定时 每次增加5秒
 		draw_string(buff, NOINVERT, 56, 40);
 	}
 	return DISPLAY_DONE;
