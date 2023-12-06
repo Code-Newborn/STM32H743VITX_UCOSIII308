@@ -82,9 +82,10 @@ static void batteryCutoff()
 
 bool keep_on = 0;
 
+// 电源管理更新
 void pwrmgr_update()
 {
-	batteryCutoff();
+	batteryCutoff(); // 电源切断
 
 	bool buttonsActive = buttons_isActive() || keep_on;
 
@@ -94,31 +95,31 @@ void pwrmgr_update()
 #if COMPILE_ANIMATIONS
 		if (systemState == SYS_CRTANIM && buttonsActive) // Cancel CRT anim if a button is pressed
 		{
-			display_startCRTAnim(CRTANIM_OPEN);
+			display_startCRTAnim(CRTANIM_OPEN); // 设置开屏
 			systemState = SYS_AWAKE;
 		}
-		else // Idle sleep mode
+		else // 空闲睡眠模式
 #endif
 		{
-			//			if(PRR == (_BV(PRTWI)|_BV(PRTIM0)|_BV(PRTIM1)|_BV(PRSPI)|_BV(PRUSART0)|_BV(PRADC))) // No peripherals are in use other than Timer2
-			//				set_sleep_mode(SLEEP_MODE_PWR_SAVE); // Also disable BOD?
-			//			else
-			//				set_sleep_mode(SLEEP_MODE_IDLE);
+			// if (PRR == (_BV(PRTWI) | _BV(PRTIM0) | _BV(PRTIM1) | _BV(PRSPI) | _BV(PRUSART0) | _BV(PRADC))) // No peripherals are in use other than Timer2
+			// 	set_sleep_mode(SLEEP_MODE_PWR_SAVE);													   // Also disable BOD?
+			// else
+			// 	set_sleep_mode(SLEEP_MODE_IDLE);
 
-			//			debugPin_sleepIdle(HIGH);
-			//			sleep_mode();
-			//			debugPin_sleepIdle(LOW);
+			// debugPin_sleepIdle(HIGH);
+			// sleep_mode();
+			// debugPin_sleepIdle(LOW);
 		}
 	}
-	else
+	else // 按键长时间未按下
 	{
 #if COMPILE_ANIMATIONS
-		if (systemState == SYS_AWAKE) // Begin CRT anim
+		if (systemState == SYS_AWAKE) // 设置关屏
 		{
 			systemState = SYS_CRTANIM;
 			display_startCRTAnim(CRTANIM_CLOSE);
 		}
-		else if (systemState == SYS_CRTANIM)
+		else if (systemState == SYS_CRTANIM) // 处于关屏
 #endif
 		{
 			// Shutdown
@@ -132,7 +133,7 @@ void pwrmgr_update()
 			systemState = SYS_CRTANIM;
 
 			if (time_wake() != RTCWAKE_SYSTEM) // Woken by button press, USB plugged in or by RTC user alarm
-				userWake();
+				userWake();					   // 用户唤醒
 		}
 	}
 }
@@ -146,7 +147,8 @@ static void userWake()
 {
 	userState = USER_ACTIVE;
 	buttons_wake();
-	display_startCRTAnim(CRTANIM_OPEN);
+	display_startCRTAnim(CRTANIM_OPEN); // 设置开屏
+
 	// oled_power(OLED_PWR_ON);
 	// battery_setUpdate(3);
 }

@@ -78,10 +78,10 @@ void appconfig_init()
 
 void appconfig_save()
 {
-
 	// STMFLASH_Write(appConfig_SAVE_ADDR,(u32*)(&appConfig),LENTH(appconfig_s));
 }
 
+// 应用默认配置
 void appconfig_reset()
 {
 	appConfig.sleepTimeout = 1;

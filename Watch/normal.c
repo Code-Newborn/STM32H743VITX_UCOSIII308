@@ -49,8 +49,8 @@ static bool wifi_show(void)
 // watch face
 void watchface_normal()
 {
-	display_setDrawFunc(draw);
-	buttons_setFuncs(mpu_show, menu_select, wifi_show); // 主菜单选择显示（三个主菜单界面）
+	display_setDrawFunc(draw);							// 表盘绘制
+	buttons_setFuncs(mpu_show, menu_select, wifi_show); // 不同按键进入不同主菜单，已注释其中两个
 	animation_start(NULL, ANIM_MOVE_ON);				// 设置打开过渡动画，（不执行函数）
 }
 
@@ -63,11 +63,10 @@ static display_t draw()
 
 	drawDate(); // 绘制日期
 
-	display_t busy; // 绘制忙 标志
-
+	display_t busy;	 // 绘制忙 标志
 	busy = ticker(); // 秒钟滴答刷新绘制
 
-	drawBattery(); // 绘制电源图标（修改缓存）
+	drawBattery(); // 绘制电源图标
 
 	byte x = 20;
 
@@ -90,7 +89,6 @@ static display_t draw()
 #if COMPILE_ANIMATIONS
 	//	if(animateIcon(CHARGING(), &chargeImagePos))
 	if (animateIcon(1, &chargeImagePos_y))
-
 	{
 		draw_bitmap(x, chargeImagePos_y, chargeIcon, 8, 8, NOINVERT, 0);
 		x += 12;
@@ -140,15 +138,15 @@ static display_t draw()
 
 static void drawDate()
 {
-	// Get day string
+	// 获取 星期 字符串
 	char day[BUFFSIZE_STR_DAYS];
 	strcpy(day, days[timeDate.date.day]);
 
-	// Get month string
+	// 获取 月份 字符串
 	char month[BUFFSIZE_STR_MONTHS];
 	strcpy(month, months[timeDate.date.month]);
 
-	// Draw date
+	// 获取 星期、天数、月份、年份 字符串
 	char buff[BUFFSIZE_DATE_FORMAT];
 	sprintf_P(buff, PSTR(DATE_FORMAT), day, timeDate.date.date, month, timeDate.date.year);
 	draw_string(buff, false, 12, 0);
@@ -263,14 +261,14 @@ static display_t ticker()
 	data.offsetY = yPos_secs;
 
 	// 秒钟 十位
-	data.val = div10(timeDate.time.secs);
+	data.val = div10(timeDate.time.secs); // 秒钟十位值
 	data.maxVal = 5;
 	data.moving = moving2[4];
 	drawTickerNum(&data);
 
 	// 秒钟 个位
 	data.x = 116;
-	data.val = mod10(timeDate.time.secs);
+	data.val = mod10(timeDate.time.secs); // 秒钟个位值
 	data.maxVal = 9;
 	data.moving = moving;
 	drawTickerNum(&data);
@@ -335,7 +333,7 @@ static void drawTickerNum(tickerData_t *data)
 	else
 	{
 		byte prev = data->val - 1;
-		if (prev == 255)
+		if (prev == 255) // 前一数字为0
 			prev = data->maxVal;
 
 		draw_bitmap(x, y, bitmap, data->w, data->h, NOINVERT, yPos - data->h - TICKER_GAP);

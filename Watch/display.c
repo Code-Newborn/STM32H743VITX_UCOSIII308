@@ -55,6 +55,7 @@ void display_load()
 		func();
 }
 
+// 存储
 draw_f display_setDrawFunc(draw_f func)
 {
 	draw_f old = drawFunc;
@@ -89,11 +90,10 @@ void display_update()
 	if (drawFunc != NULL && (crt_anim.active || (!crt_anim.active && !crt_anim.closing)))
 		busy = drawFunc();
 
-	// Do CRT animation开屏和关屏动画
+	// 关屏动画
 	if (crt_anim.active)
 		crt_animation();
 
-	//  busy = busy || crt_anim.active || animation_active();
 	if (crt_anim.active || animation_active())
 		busy = DISPLAY_BUSY;
 #else
@@ -108,13 +108,10 @@ void display_update()
 		// millis8_t end = millis() + 1;
 		char buff[5];
 		sprintf_P(buff, PSTR("%u"), (uint)(1000 / fpsms)); // 帧率显示
-		//	draw_string(buff,false,107,56);
 		draw_string(buff, false, 100, 56);
 	}
-	// End drawing, send to OLED
+	// 结束绘制，发送至OLED
 	draw_end();
-
-	//	debugPin_draw(LOW);
 
 	// Decide framerate
 	if (busy == DISPLAY_DONE)
@@ -142,7 +139,7 @@ void display_startCRTAnim(crtAnim_t open)
 		return;
 	}
 
-	if (open == CRTANIM_OPEN)
+	if (open == CRTANIM_OPEN) // 开屏
 	{
 		crt_anim.closing = false;
 		crt_anim.doingLine = true;
@@ -150,7 +147,7 @@ void display_startCRTAnim(crtAnim_t open)
 		crt_anim.lineClosing = false;
 		crt_anim.lineWidth = 0;
 	}
-	else
+	else // 关屏
 	{
 		crt_anim.closing = true;
 		crt_anim.doingLine = false;
@@ -166,21 +163,21 @@ static void crt_animation()
 	byte height = crt_anim.height;
 	byte lineWidth = crt_anim.lineWidth;
 
-	if (!crt_anim.doingLine)
+	if (!crt_anim.doingLine) // 非线条关闭阶段
 	{
-		if (crt_anim.closing)
+		if (crt_anim.closing) // 正在关屏
 			height += 3;
 		else
 			height -= 3;
 
-		if (height >= FRAME_HEIGHT / 2)
+		if (height >= FRAME_HEIGHT / 2) // 高度到位
 		{
 			if (crt_anim.closing)
 			{
 				height = FRAME_HEIGHT / 2;
 				crt_anim.doingLine = true;
 			}
-			else
+			else // 已经关屏
 			{
 				height = 0;
 				crt_anim.active = false;
@@ -188,14 +185,14 @@ static void crt_animation()
 			// crt_anim.closing = !crt_anim.closing;
 		}
 	}
-	else
+	else // 线条关闭阶段中
 	{
-		if (crt_anim.lineClosing)
+		if (crt_anim.lineClosing) // 线条关闭中
 			lineWidth -= 6;
 		else
 			lineWidth += 10;
 
-		if (lineWidth >= FRAME_WIDTH)
+		if (lineWidth >= FRAME_WIDTH) // 线条宽度完全关闭
 		{
 			if (crt_anim.lineClosing)
 				lineWidth = 0;

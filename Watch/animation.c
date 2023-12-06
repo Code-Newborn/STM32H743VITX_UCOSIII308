@@ -25,7 +25,8 @@ void animation_update()
 	if (animationStatus.active)
 	{
 		byte offsetY = animationStatus.offsetY;
-		if (animationStatus.goingOffScreen)
+
+		if (animationStatus.goingOffScreen) // 由上往下↓↓↓
 		{
 			if (offsetY < 4)
 				offsetY += 1;
@@ -42,7 +43,7 @@ void animation_update()
 				offsetY = 0;
 			}
 		}
-		else
+		else // 由下往上↑↑↑
 		{
 			if (offsetY > 255 - 4)
 				offsetY += 1;
@@ -78,7 +79,7 @@ void animation_start(void (*animOnComplete)(void), bool goingOffScreen)
 	if (appConfig.animations)
 	{
 		animationStatus.active = true;
-		animationStatus.offsetY = goingOffScreen ? 0 : 192;
+		animationStatus.offsetY = goingOffScreen ? 0 : 192; // 64*3=192
 		animationStatus.animOnComplete = animOnComplete;
 		animationStatus.goingOffScreen = goingOffScreen;
 	}

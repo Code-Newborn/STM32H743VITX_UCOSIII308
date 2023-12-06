@@ -15,7 +15,7 @@
 #define FEB_LEAP_YEAR 29
 
 // 月份天数
-static const byte monthDayCount[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+static const byte monthDayCount[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
 timeDate_s timeDate;
 // static timestamp_t timestamp;
@@ -84,7 +84,7 @@ rtcwake_t time_wake()
 
 	//	update = false;
 
-	// Check alarms
+	// 检测按键1
 	if (KEY1 == 1)
 	{
 		return RTCWAKE_SYSTEM;
@@ -192,31 +192,31 @@ void time_update()
 	if (!update)
 		return;
 	update = false;
-#ifdef RTC_SRC
+#ifdef RTC_SRC // 外接实时时钟RTC模块
 	getRtcTime();
 
 	if (timeDate.time.secs == 0 && timeDate.time.mins == 0)
 		tune_play(tuneHour, VOL_HOUR, PRIO_HOUR);
 #else
-
-	// Slightly modified code from AVR134
-	if (timeDate.time.secs == 60)
+	if (timeDate.time.secs == 60) // 达到1分钟
 	{
 		timeDate.time.secs = 0;
-		if (++timeDate.time.mins == 60)
+		if (++timeDate.time.mins == 60) // 达到1小时
 		{
 			timeDate.time.mins = 0;
-			if (++timeDate.time.hour == 24) // What about 12 hr?
+			if (++timeDate.time.hour == 24) // 达到24小时
 			{
-				byte numDays = time_monthDayCount(timeDate.date.month, timeDate.date.year);
-
 				timeDate.time.hour = 0;
-				if (++timeDate.date.date == numDays + 1)
+
+				byte numDays = time_monthDayCount(timeDate.date.month, timeDate.date.year); // 当月的天数
+
+				// 跨过月
+				if ((++timeDate.date.date) == (numDays + 1))
 				{
 					timeDate.date.month++;
 					timeDate.date.date = 1;
 				}
-
+				// 跨过年
 				if (timeDate.date.month == 13)
 				{
 					timeDate.date.month = (month_t)1;
@@ -224,17 +224,16 @@ void time_update()
 					if (timeDate.date.year == 100)
 						timeDate.date.year = 0;
 				}
-
+				// 跨过星期
 				if (++timeDate.date.day == 7)
 					timeDate.date.day = (day_t)0;
 			}
 
-			//			tune_play(tuneHour, VOL_HOUR, PRIO_HOUR);
+			// tune_play(tuneHour, VOL_HOUR, PRIO_HOUR);
 		}
 	}
 #endif
-
-	debug_printf("%02hhu:%02hhu:%02hhu\n", timeDate.time.hour, timeDate.time.mins, timeDate.time.secs);
+	// debug_printf("%02hhu:%02hhu:%02hhu\n", timeDate.time.hour, timeDate.time.mins, timeDate.time.secs);
 	// debug_printf("T: %hhuC\n",rtc_temp());
 }
 
@@ -242,9 +241,7 @@ static void getRtcTime()
 {
 
 #ifdef RTC_SRC
-
 	rtc_get(&timeDate);
-
 #else
 
 	timeDate.date.year = '0' - 28;

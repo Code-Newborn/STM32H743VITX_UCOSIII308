@@ -54,13 +54,12 @@ void buttons_update()
 {
   static millis8_t lastUpdate;
 
-  // Update every 10ms
+  // 按键每10ms检测一次
   millis8_t now = millis();
   if ((millis8_t)(now - lastUpdate) >= 10)
   {
-    // printf("1");
     lastUpdate = now;
-    processButtons();
+    processButtons(); // 处理按键
   }
 }
 
@@ -117,37 +116,34 @@ void buttons_shutdown()
 uint8_t keypressed;
 static void processButtons()
 {
-  // Get button pressed states
+  // 获取按键状态
   BOOL isPressed[BTN_COUNT];
-  isPressed[BTN_1] = KEY0; // right一个按下即可
+  isPressed[BTN_1] = KEY0;
   isPressed[BTN_2] = KEY1;
-  isPressed[BTN_3] = KEY2; // left
+  isPressed[BTN_3] = KEY2;
 
-  // Process each button
-
+  // 依次处理每个按键
   LOOPR(BTN_COUNT, i)
   processButton(&buttons[i], !isPressed[i]);
 }
 
 static void processButton(s_button *button, BOOL isPressed)
 {
-  button->counter <<= 1;
+  button->counter <<= 1; // 左移位补零
   if (isPressed)
   {
-    // Set debounce counter bit
-    button->counter |= 1;
+    button->counter |= 1; // 按键按下则置1
 
-    // Are enough bits set to count as pressed?//相当于按键消抖
+    // 8bit中有足够多的1，相当于按键消抖，稳定按下
     if (bitCount(button->counter) >= BTN_IS_PRESSED)
     {
-      // Store time of press
       if (!button->processed)
       {
-        button->pressedTime = millis();
+        button->pressedTime = millis(); // 记录按下的时刻，为息屏提供参考
         button->processed = true;
       }
 
-      // Run function
+      // 按键处理回调函数button->onPress()
       if (!button->funcDone && button->onPress != NULL && button->onPress())
       {
         button->funcDone = true;
@@ -160,7 +156,7 @@ static void processButton(s_button *button, BOOL isPressed)
   }
   else // Not pressed
   {
-    // Has button been not pressed for long enough?
+    // 未达到按下的稳定状态
     if (bitCount(button->counter) <= BTN_NOT_PRESSED)
     {
       button->processed = false;
@@ -169,7 +165,7 @@ static void processButton(s_button *button, BOOL isPressed)
   }
 }
 
-// Count set bits in value
+// 8bit中1的个数
 static byte bitCount(byte val)
 {
   byte count = 0;
@@ -207,13 +203,14 @@ void buttons_setFuncs(button_f btn1, button_f btn2, button_f btn3)
 */
 
 // See if a button has been pressed in the past x milliseconds
+// 检测按键长时间未按下
 bool buttons_isActive()
 {
-  //  // If sleep has been disabled then just say that the buttons are always active
+  // If sleep has been disabled then just say that the buttons are always active
   if (!appConfig.sleepTimeout)
     return true;
 
-  //  // Get timeout val in ms
+  // Get timeout val in ms
   uint timeout = (appConfig.sleepTimeout * 5) * 1000;
   //  uint timeout =  1000;
 
@@ -224,10 +221,10 @@ bool buttons_isActive()
       return true;
   }
 
-  return false;
+  return false; // 长时间未按下
 }
 
-// Set button status to pressed, processed etc but don't run their functions
+// 设置按键被按下，但不运行函数
 void buttons_wake()
 {
   LOOPR(BTN_COUNT, i)

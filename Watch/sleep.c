@@ -69,7 +69,7 @@ static display_t mDraw()
 	if (menuData.selected == 0)
 	{
 		char buff[4];
-		sprintf_P(buff, PSTR("%hhuS"), (unsigned char)(appConfig.sleepTimeout * 5)); // 自动息屏定时 每次增加5秒
+		sprintf_P(buff, PSTR("%hhuS"), (unsigned char)(appConfig.sleepTimeout * 5)); // INFO 设置自动息屏定时 每次增加5秒
 		draw_string(buff, NOINVERT, 56, 40);
 	}
 	return DISPLAY_DONE;

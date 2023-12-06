@@ -512,10 +512,10 @@ void c_setup()
     printf("begun");
 #endif
 
-    buttons_init(); // 按键初始化
     // Yaogan_Init();
-    LCD_Init(); // 初始化OLED接口
-    memset(&oledBuffer, 0x00, FRAME_BUFFER_SIZE);
+    buttons_init();                               // 按键初始化
+    LCD_Init();                                   // 初始化OLED接口
+    memset(&oledBuffer, 0x00, FRAME_BUFFER_SIZE); // 清空显存
     milliseconds = 0;
 
     appconfig_init();
@@ -534,11 +534,11 @@ void c_setup()
 
 void c_loop()
 {
-    time_update();
+    time_update(); // 时间更新
     if (pwrmgr_userActive())
     {
-        // battery_update();
-        buttons_update();
+        // battery_update(); // 检测电量
+        buttons_update(); // 检测按键
     }
 
     // mpu_updata();    // 6轴传感器数据更新
@@ -546,14 +546,14 @@ void c_loop()
     // led_update();    // LED运行参数更新
 
 #if COMPILE_STOPWATCH
-    stopwatch_update(); // 秒表更新
+    stopwatch_update(); // 计时秒表更新
 #endif
     // global_update();
 
     if (pwrmgr_userActive())
     {
-        alarm_update();
-        display_update();
+        alarm_update();   // 闹钟更新
+        display_update(); // 开关屏、菜单切换
     }
 
     pwrmgr_update();

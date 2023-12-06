@@ -65,6 +65,7 @@ static void mSelect()
 	doAction(true);
 }
 
+// 主菜单加载项
 static void itemLoader(byte num)
 {
 	num = 0;

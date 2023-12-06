@@ -166,12 +166,13 @@ typedef void (*itemLoader_f)(byte);
 
 typedef struct
 {
-	menu_f btn1; // make array
+	// 菜单按键功能
+	menu_f btn1;
 	menu_f btn2;
 	menu_f btn3;
 	draw_f draw;
 	itemLoader_f loader;
-} menuFuncs_t;
+} menuFuncs_t; // 菜单功能
 
 typedef struct
 {
@@ -183,7 +184,7 @@ typedef struct
 	menu_type_t menuType;
 	menuFuncs_t func;
 	menu_f prevMenu;
-} menu_s;
+} menu_s; // 菜单实例
 
 typedef struct
 {
@@ -196,7 +197,7 @@ typedef struct
 	bool active;				  // 开关
 	byte offsetY;				  // 反转Y
 	void (*animOnComplete)(void); // 指向的函数
-	bool goingOffScreen;		  // 是否离开屏幕
+	bool goingOffScreen;		  // 动画上下移动方向
 } anim_s;
 
 typedef struct
