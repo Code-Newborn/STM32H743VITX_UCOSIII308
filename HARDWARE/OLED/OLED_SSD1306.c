@@ -16,70 +16,66 @@ byte oledBuffer[FRAME_BUFFER_SIZE]; // 图形显示数据
 // 反显函数
 void OLED_ColorTurn(uint8_t i)
 {
-	if (i == 0)
-	{
-		OLED_WR_Byte(0xA6, OLED_CMD); // 正常显示
-	}
-	if (i == 1)
-	{
-		OLED_WR_Byte(0xA7, OLED_CMD); // 反色显示
-	}
+    if (i == 0) {
+        OLED_WR_Byte(0xA6, OLED_CMD); // 正常显示
+    }
+    if (i == 1) {
+        OLED_WR_Byte(0xA7, OLED_CMD); // 反色显示
+    }
 }
 
 // 屏幕旋转180度
 void OLED_DisplayTurn(uint8_t i)
 {
-	if (i == 0)
-	{
-		OLED_WR_Byte(0xC8, OLED_CMD); // 正常显示
-		OLED_WR_Byte(0xA1, OLED_CMD);
-	}
-	if (i == 1)
-	{
-		OLED_WR_Byte(0xC0, OLED_CMD); // 反转显示
-		OLED_WR_Byte(0xA0, OLED_CMD);
-	}
+    if (i == 0) {
+        OLED_WR_Byte(0xC8, OLED_CMD); // 正常显示
+        OLED_WR_Byte(0xA1, OLED_CMD);
+    }
+    if (i == 1) {
+        OLED_WR_Byte(0xC0, OLED_CMD); // 反转显示
+        OLED_WR_Byte(0xA0, OLED_CMD);
+    }
 }
 
 // cmd = 0 命令模式
 // cmd = 1 数据模式
 void OLED_WR_Byte(uint8_t dat, uint8_t cmd)
 {
-	// uint8_t i;
-	if (cmd)
-		OLED_DC_Set();
-	else
-		OLED_DC_Clr();
-	// OLED_CS_Clr();
-	// for (i = 0; i < 8; i++)
-	// {
-	// 	OLED_SCLK_Clr();
-	// 	if (dat & 0x80)
-	// 		OLED_SDIN_Set();
-	// 	else
-	// 		OLED_SDIN_Clr();
-	// 	OLED_SCLK_Set();
-	// 	dat <<= 1;
-	// }
-	HAL_SPI_Transmit(&hspi1, &dat, 1, 200);
-	// OLED_CS_Set();
-	OLED_DC_Set();
+    // uint8_t i;
+    if (cmd)
+        OLED_DC_Set();
+    else
+        OLED_DC_Clr();
+    // OLED_CS_Clr();
+    // for (i = 0; i < 8; i++)
+    // {
+    // 	OLED_SCLK_Clr();
+    // 	if (dat & 0x80)
+    // 		OLED_SDIN_Set();
+    // 	else
+    // 		OLED_SDIN_Clr();
+    // 	OLED_SCLK_Set();
+    // 	dat <<= 1;
+    // }
+    HAL_SPI_Transmit(&hspi1, &dat, 1, 200);
+    // OLED_CS_Set();
+    OLED_DC_Set();
 }
 
 // 开启OLED显示
 void OLED_DisPlay_On(void)
 {
-	OLED_WR_Byte(0x8D, OLED_CMD); // 电荷泵使能
-	OLED_WR_Byte(0x14, OLED_CMD); // 开启电荷泵
-	OLED_WR_Byte(0xAF, OLED_CMD); // 点亮屏幕
+    OLED_WR_Byte(0x8D, OLED_CMD); // 电荷泵使能
+    OLED_WR_Byte(0x14, OLED_CMD); // 开启电荷泵
+    OLED_WR_Byte(0xAF, OLED_CMD); // 点亮屏幕
 }
 
 // 关闭OLED显示
 void OLED_DisPlay_Off(void)
 {
-	OLED_WR_Byte(0x8D, OLED_CMD); // 电荷泵使能
-	OLED_WR_Byte(0x10, OLED_CMD); // 关闭电荷泵
-	OLED_WR_Byte(0xAF, OLED_CMD); // 关闭屏幕
+    OLED_WR_Byte(0x8D, OLED_CMD); // 电荷泵使能
+    OLED_WR_Byte(0x10, OLED_CMD); // 关闭电荷泵
+    OLED_WR_Byte(0xAF, OLED_CMD); // 关闭屏幕
 }
 
 // 更新显存到OLED
@@ -263,12 +259,11 @@ void OLED_DisPlay_Off(void)
 // m^n
 uint32_t OLED_Pow(uint8_t m, uint8_t n)
 {
-	uint32_t result = 1;
-	while (n--)
-	{
-		result *= m;
-	}
-	return result;
+    uint32_t result = 1;
+    while (n--) {
+        result *= m;
+    }
+    return result;
 }
 
 ////显示2个数字
@@ -435,9 +430,9 @@ uint32_t OLED_Pow(uint8_t m, uint8_t n)
 // 配置写入数据的起始位置
 void OLED_WR_BP(uint8_t x, uint8_t y)
 {
-	OLED_WR_Byte(0xb0 + y, OLED_CMD);				  // 设置行起始地址
-	OLED_WR_Byte(((x & 0xf0) >> 4) | 0x10, OLED_CMD); // 设置低列起始地址
-	OLED_WR_Byte((x & 0x0f) | 0x01, OLED_CMD);		  // 设置高列起始地址
+    OLED_WR_Byte(0xb0 + y, OLED_CMD);                 // 设置行起始地址
+    OLED_WR_Byte(((x & 0xf0) >> 4) | 0x10, OLED_CMD); // 设置低列起始地址
+    OLED_WR_Byte((x & 0x0f) | 0x01, OLED_CMD);        // 设置高列起始地址
 }
 
 // x0,y0：起点坐标
@@ -445,21 +440,19 @@ void OLED_WR_BP(uint8_t x, uint8_t y)
 // BMP[]：要写入的图片数组
 void OLED_ShowPicture(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1, uint8_t BMP[])
 {
-	uint32_t j = 0;
-	uint8_t x = 0, y = 0;
-	if (y % 8 == 0)
-		y = 0;
-	else
-		y += 1;
-	for (y = y0; y < y1; y++)
-	{
-		OLED_WR_BP(x0, y);
-		for (x = x0; x < x1; x++)
-		{
-			OLED_WR_Byte(BMP[j], OLED_DATA);
-			j++;
-		}
-	}
+    uint32_t j = 0;
+    uint8_t x = 0, y = 0;
+    if (y % 8 == 0)
+        y = 0;
+    else
+        y += 1;
+    for (y = y0; y < y1; y++) {
+        OLED_WR_BP(x0, y);
+        for (x = x0; x < x1; x++) {
+            OLED_WR_Byte(BMP[j], OLED_DATA);
+            j++;
+        }
+    }
 }
 // OLED的初始化
 // void OLED_Init(void)
@@ -551,100 +544,88 @@ void OLED_ShowPicture(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1, uint8_t BM
 // x2,y2:终点坐标
 void OLED_DrawLine(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2)
 {
-	u16 t;
-	int xerr = 0, yerr = 0, delta_x, delta_y, distance;
-	int incx, incy, uRow, uCol;
-	delta_x = x2 - x1; // 计算坐标增量
-	delta_y = y2 - y1;
-	uRow = x1;
-	uCol = y1;
-	if (delta_x > 0)
-		incx = 1; // 设置单步方向
-	else if (delta_x == 0)
-		incx = 0; // 垂直线
-	else
-	{
-		incx = -1;
-		delta_x = -delta_x;
-	}
-	if (delta_y > 0)
-		incy = 1;
-	else if (delta_y == 0)
-		incy = 0; // 水平线
-	else
-	{
-		incy = -1;
-		delta_y = -delta_y;
-	}
-	if (delta_x > delta_y)
-		distance = delta_x; // 选取基本增量坐标轴
-	else
-		distance = delta_y;
-	for (t = 0; t <= distance + 1; t++) // 画线输出
-	{
-		SetPointBuffer(uRow, uCol, GetDrawColor()); // 画点
-		xerr += delta_x;
-		yerr += delta_y;
-		if (xerr > distance)
-		{
-			xerr -= distance;
-			uRow += incx;
-		}
-		if (yerr > distance)
-		{
-			yerr -= distance;
-			uCol += incy;
-		}
-	}
+    u16 t;
+    int xerr = 0, yerr = 0, delta_x, delta_y, distance;
+    int incx, incy, uRow, uCol;
+    delta_x = x2 - x1; // 计算坐标增量
+    delta_y = y2 - y1;
+    uRow    = x1;
+    uCol    = y1;
+    if (delta_x > 0)
+        incx = 1; // 设置单步方向
+    else if (delta_x == 0)
+        incx = 0; // 垂直线
+    else {
+        incx    = -1;
+        delta_x = -delta_x;
+    }
+    if (delta_y > 0)
+        incy = 1;
+    else if (delta_y == 0)
+        incy = 0; // 水平线
+    else {
+        incy    = -1;
+        delta_y = -delta_y;
+    }
+    if (delta_x > delta_y)
+        distance = delta_x; // 选取基本增量坐标轴
+    else
+        distance = delta_y;
+    for (t = 0; t <= distance + 1; t++) // 画线输出
+    {
+        SetPointBuffer(uRow, uCol, GetDrawColor()); // 画点
+        xerr += delta_x;
+        yerr += delta_y;
+        if (xerr > distance) {
+            xerr -= distance;
+            uRow += incx;
+        }
+        if (yerr > distance) {
+            yerr -= distance;
+            uCol += incy;
+        }
+    }
 }
 
 void LCD_Init(void)
 {
-	// InitGraph();
+    // InitGraph();
 
-	if (!appConfig.display180)
-	{
-		OLED_WR_Byte(0xA1, 0);
-		OLED_WR_Byte(0xC8, 0);
-	}
-	else
-	{
-		OLED_WR_Byte(0xA0, 0);
-		OLED_WR_Byte(0xC0, 0);
-	}
+    if (!appConfig.display180) {
+        OLED_WR_Byte(0xA1, 0);
+        OLED_WR_Byte(0xC8, 0);
+    } else {
+        OLED_WR_Byte(0xA0, 0);
+        OLED_WR_Byte(0xC0, 0);
+    }
 }
 
 // 清屏函数
 // color:要清屏的填充色
 void LCD_Clear(uint16_t color)
 {
-	ClearScreen();
+    ClearScreen();
 }
 
 uint8_t i, j;
 void LCD_Flush(void)
 {
-	// OLED_FILL(oledBuffer);
-	uint8_t *p;
-	p = oledBuffer;
+    // OLED_FILL(oledBuffer);
+    uint8_t *p;
+    p = oledBuffer;
 
-	for (i = 0; i < 8; i++)
-	{
+    for (i = 0; i < 8; i++) {
 
-		WriteCmd(0xb0 + i); // page0-page1
-		WriteCmd(0x00);		// low column start address
-		WriteCmd(0x10);
+        WriteCmd(0xb0 + i); // page0-page1
+        WriteCmd(0x00);     // low column start address
+        WriteCmd(0x10);
 
-		for (j = 0; j < 128; j++)
-		{
-			if (appConfig.invert)
-			{
-				WriteDat(~(*p++));
-			}
-			else
-			{
-				WriteDat(*p++);
-			}
-		}
-	}
+        for (j = 0; j < 128; j++) {
+            if (appConfig.invert) {
+                WriteDat(~(*p++));
+            } else {
+                WriteDat(*p++);
+            }
+        }
+    }
 }
