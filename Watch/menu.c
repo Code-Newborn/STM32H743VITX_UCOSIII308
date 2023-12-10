@@ -106,6 +106,12 @@ static void menu_drawStr() {
     }
 }
 
+
+/**
+ * @brief     : 绘制图标
+ * @msg       :
+ * @return     {*} 绘制忙标志
+ */
 static display_t menu_drawIcon() {
     static int animX = 64;
 

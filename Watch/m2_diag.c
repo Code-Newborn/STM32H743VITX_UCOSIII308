@@ -26,7 +26,7 @@ static void batteryUpdate(void);
  * @return     {*}
  */
 void mDiagOpen() {
-    // rtc_tempUpdate();//读取内部温度传感器
+    // rtc_tempUpdate();  // 读取内部温度传感器
     //	battery_update();
 
     setMenuInfo(OPTION_COUNT, MENU_TYPE_STR, PSTR(STR_DIAGNOSTICSMENU));
