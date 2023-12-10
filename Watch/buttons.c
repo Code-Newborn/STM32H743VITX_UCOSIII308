@@ -6,22 +6,23 @@
    Web: http://blog.zakkemble.co.uk/diy-digital-wristwatch/
 */
 #include "buttons.h"
+
 #include "common.h"
-#include "sys.h"
 #include "led.h"
+#include "sys.h"
 // #include "yaogan.h"
 
-#define BTN_IS_PRESSED  4
+#define BTN_IS_PRESSED 4
 #define BTN_NOT_PRESSED 4
 
-typedef struct
-{
-    millis_t pressedTime; // Time of press
-    bool processed;       // Time of press has been stored (don't store again until next press)
-    byte counter;         // Debounce counter
-    bool funcDone;        // Function has been ran (don't run again until next press)
-    button_f onPress;     // Function to run when pressed
-    const ulong *tune;    // Tune to play when pressed
+typedef struct {
+    millis_t pressedTime;  // Time of press
+    bool processed;        // Time of press has been stored (don't store again until
+                           // next press)
+    byte counter;          // Debounce counter
+    bool funcDone;         // Function has been ran (don't run again until next press)
+    button_f onPress;      // Function to run when pressed
+    const ulong *tune;     // Tune to play when pressed
 } s_button;
 
 static s_button buttons[BTN_COUNT];
@@ -32,8 +33,7 @@ static byte bitCount(byte);
 
 // EMPTY_INTERRUPT(PCINT0_vect);
 
-void buttons_init()
-{
+void buttons_init() {
     // buttons_startup(); // 按键引脚配置初始化
 
     // 蜂鸣器的播放曲调
@@ -50,30 +50,30 @@ void buttons_init()
     //   BTN_INT_ON();
 }
 
-void buttons_update()
-{
+void buttons_update() {
     static millis8_t lastUpdate;
 
     // 按键每10ms检测一次
     millis8_t now = millis();
     if ((millis8_t)(now - lastUpdate) >= 10) {
         lastUpdate = now;
-        processButtons(); // 处理按键
+        processButtons();  // 处理按键
     }
 }
 
 // 按键初始化函数
 //  Sets button pins to INPUT with PULLUP
-void buttons_startup()
-{
+void buttons_startup() {
     //	GPIO_InitTypeDef  GPIO_InitStructure;
-    //  RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA|RCC_AHB1Periph_GPIOE, ENABLE);//使能GPIOA,GPIOE时钟
+    //  RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA|RCC_AHB1Periph_GPIOE,
+    //  ENABLE);//使能GPIOA,GPIOE时钟
     //
-    //  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2|GPIO_Pin_3|GPIO_Pin_4; //KEY0 KEY1 KEY2对应引脚
-    //  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;//普通输入模式
-    //  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;//100M
-    //  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;//上拉
-    //  GPIO_Init(GPIOE, &GPIO_InitStructure);//初始化GPIOE2,3,4
+    //  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2|GPIO_Pin_3|GPIO_Pin_4; //KEY0
+    //  KEY1 KEY2对应引脚 GPIO_InitStructure.GPIO_Mode =
+    //  GPIO_Mode_IN;//普通输入模式 GPIO_InitStructure.GPIO_Speed =
+    //  GPIO_Speed_100MHz;//100M GPIO_InitStructure.GPIO_PuPd =
+    //  GPIO_PuPd_UP;//上拉 GPIO_Init(GPIOE,
+    //  &GPIO_InitStructure);//初始化GPIOE2,3,4
     //
     //
     //  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0;//WK_UP对应引脚PA0
@@ -82,7 +82,8 @@ void buttons_startup()
 
     // GPIO_InitTypeDef GPIO_InitStructure;
 
-    // RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB | RCC_APB2Periph_GPIOA | RCC_APB2Periph_GPIOC, ENABLE); // 使能PORTA,PORTC时钟
+    // RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB | RCC_APB2Periph_GPIOA |
+    // RCC_APB2Periph_GPIOC, ENABLE); // 使能PORTA,PORTC时钟
 
     // GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4;     // PA4
     // GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU; // 设置成上拉输入
@@ -99,8 +100,7 @@ void buttons_startup()
 
 // Sets button pins to OUTPUT LOW
 // This stops them wasting current through the pull-up resistor when pressed
-void buttons_shutdown()
-{
+void buttons_shutdown() {
     // 配合休眠sleep函数开启后关闭按键，不会做
 
     //  pinPullup(BTN_1_P,	PU_DIS);
@@ -113,8 +113,7 @@ void buttons_shutdown()
 }
 
 uint8_t keypressed;
-static void processButtons()
-{
+static void processButtons() {
     // 获取按键状态
     BOOL isPressed[BTN_COUNT];
     isPressed[BTN_1] = KEY0;
@@ -126,17 +125,16 @@ static void processButtons()
     processButton(&buttons[i], !isPressed[i]);
 }
 
-static void processButton(s_button *button, BOOL isPressed)
-{
-    button->counter <<= 1; // 左移位补零
+static void processButton(s_button *button, BOOL isPressed) {
+    button->counter <<= 1;  // 左移位补零
     if (isPressed) {
-        button->counter |= 1; // 按键按下则置1
+        button->counter |= 1;  // 按键按下则置1
 
         // 8bit中有足够多的1，相当于按键消抖，稳定按下
         if (bitCount(button->counter) >= BTN_IS_PRESSED) {
             if (!button->processed) {
-                button->pressedTime = millis(); // 记录按下的时刻，为息屏提供参考
-                button->processed   = true;
+                button->pressedTime = millis();  // 记录按下的时刻，为息屏提供参考
+                button->processed = true;
             }
 
             // 按键处理回调函数button->onPress()
@@ -148,37 +146,33 @@ static void processButton(s_button *button, BOOL isPressed)
                 // LED1=!LED1;
             }
         }
-    } else // Not pressed
+    } else  // Not pressed
     {
         // 未达到按下的稳定状态
         if (bitCount(button->counter) <= BTN_NOT_PRESSED) {
             button->processed = false;
-            button->funcDone  = false;
+            button->funcDone = false;
         }
     }
 }
 
 // 8bit中1的个数
-static byte bitCount(byte val)
-{
+static byte bitCount(byte val) {
     byte count = 0;
-    for (; val; val >>= 1)
-        count += val & 1;
+    for (; val; val >>= 1) count += val & 1;
     return count;
 }
 
 // 定义一个返回函数指针的函数
 //  Set new function to run when button is pressed and return the old function
-button_f buttons_setFunc(btn_t btn, button_f func)
-{
-    button_f old         = buttons[btn].onPress;
+button_f buttons_setFunc(btn_t btn, button_f func) {
+    button_f old = buttons[btn].onPress;
     buttons[btn].onPress = func;
     return old;
 }
 
 // Set functions to run for each button
-void buttons_setFuncs(button_f btn1, button_f btn2, button_f btn3)
-{
+void buttons_setFuncs(button_f btn1, button_f btn2, button_f btn3) {
     buttons[BTN_1].onPress = btn1;
     buttons[BTN_2].onPress = btn2;
     buttons[BTN_3].onPress = btn3;
@@ -197,34 +191,29 @@ void buttons_setFuncs(button_f btn1, button_f btn2, button_f btn3)
 
 // See if a button has been pressed in the past x milliseconds
 // 检测按键长时间未按下
-bool buttons_isActive()
-{
-    // If sleep has been disabled then just say that the buttons are always active
-    if (!appConfig.sleepTimeout)
-        return true;
+bool buttons_isActive() {
+    // If sleep has been disabled then just say that the buttons are always
+    // active
+    if (!appConfig.sleepTimeout) return true;
 
     // Get timeout val in ms
     uint timeout = (appConfig.sleepTimeout * 5) * 1000;
     //  uint timeout =  1000;
 
     // See if a button has been pressed within that timeout
-    LOOPR(BTN_COUNT, i)
-    {
-        if (millis() - buttons[i].pressedTime < timeout)
-            return true;
+    LOOPR(BTN_COUNT, i) {
+        if (millis() - buttons[i].pressedTime < timeout) return true;
     }
 
-    return false; // 长时间未按下
+    return false;  // 长时间未按下
 }
 
 // 设置按键被按下，但不运行函数
-void buttons_wake()
-{
-    LOOPR(BTN_COUNT, i)
-    {
-        buttons[i].funcDone    = true;
-        buttons[i].processed   = true;
-        buttons[i].counter     = BTN_IS_PRESSED;
+void buttons_wake() {
+    LOOPR(BTN_COUNT, i) {
+        buttons[i].funcDone = true;   // 按键按下
+        buttons[i].processed = true;  // 按键处理
+        buttons[i].counter = BTN_IS_PRESSED;
         buttons[i].pressedTime = millis();
     }
 }

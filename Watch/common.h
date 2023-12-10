@@ -9,15 +9,15 @@
 #ifndef COMMON_H_
 #define COMMON_H_
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
 #include <limits.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 #include "config.h"
-#include "util.h"
-#include "typedefs.h"
 #include "debug.h"
+#include "typedefs.h"
+#include "util.h"
 
 // #include "wdt.h"
 // #include "spi.h"
@@ -30,52 +30,50 @@
 // #include "buzzer.h"
 // #include "led.h"
 // #include "ds3231.h"
-#include "millis.h"
 #include "functions.h"
-#include "alarms.h"
-#include "diag.h"
-#include "m_display.h"
-#include "games.h"
-#include "timedate.h"
-#include "settings.h"
-#include "sleep.h"
-#include "sound.h"
+#include "m1_alarms.h"
+#include "m1_games.h"
+#include "m1_settings.h"
+#include "m1_stopwatch.h"
+#include "m1_torch.h"
+#include "m2_diag.h"
+#include "m2_display.h"
+#include "m2_game1.h"
+#include "m2_game2.h"
+#include "m2_game3.h"
+#include "m2_sleep.h"
+#include "m2_sound.h"
+#include "m2_timedate.h"
 #include "m_main.h"
-#include "game1.h"
-#include "game2.h"
-#include "game3.h"
-#include "stopwatch.h"
-#include "torch.h"
-// #include "screenshot.h"    //输出oledbuff里面的数据
+#include "millis.h"
 #include "normal.h"
 // #include "lowbatt.h"
+#include "m1_tunemaker.h"
 #include "ui.h"
-#include "tunemaker.h"
+// #include "screenshot.h"    //输出oledbuff里面的数据
 
 // #include "system.h"
-#include "global.h"
-#include "display.h"
-#include "time.h"
 #include "alarm.h"
-#include "pwrmgr.h"
 #include "appconfig.h"
+#include "display.h"
+#include "global.h"
+#include "pwrmgr.h"
+#include "time.h"
 // #include "disco.h"
-#include "tune.h"
 #include "animation.h"
 #include "draw.h"
-#include "menu.h"
-
 #include "english.h"
 #include "lang.h"
+#include "menu.h"
+#include "tune.h"
 #include "tunes.h"
 // #include "discos.h"
-#include "resources.h"
-
-#include "mpu6050.h"
-#include "mpuiic.h"
 #include "inv_mpu.h"
 #include "inv_mpu_dmp_motion_driver.h"
+#include "mpu6050.h"
 #include "mpu_task.h"
+#include "mpuiic.h"
+#include "resources.h"
 
 // #include "wait_data_clock.h"
 // #include "wifi_task.h"
