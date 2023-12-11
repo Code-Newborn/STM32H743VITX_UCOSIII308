@@ -72,8 +72,10 @@ void alarm_save( byte num, alarm_s* alarm ) {
     // eepAlarms[num]=*alarm;
     getNextAlarm();
 }
+
 extern const uint32_t STAY[];
-void                  alarm_update() {
+
+void alarm_update() {
     bool wasGoingOff = alarmSetOff;
     bool alarmNow    = goingOff();
     if ( alarmSetOff ) {

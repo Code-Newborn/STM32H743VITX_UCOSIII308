@@ -74,12 +74,10 @@ static void itemLoader( byte num ) {
 #endif
 // 音乐选项
 #if COMPILE_TUNEMAKER
-    setMenuOption_P( num++, PSTR( STR_TUNEMAKER ), menu_tunemaker, tunemakerOpen );
     setMenuOption_P( num++, PSTR( STR_TUNEMAKER ), menu_tunemaker, tunemakerOpen );  // 打开音乐
 #endif
 // 游戏选项
 #if COMPILE_GAME1 || COMPILE_GAME2 || COMPILE_GAME3
-    setMenuOption_P( num++, PSTR( STR_GAMES ), menu_games, mGamesOpen );
     setMenuOption_P( num++, PSTR( STR_GAMES ), menu_games, mGamesOpen );  // 打开游戏
 #endif
     // setMenuOption_P(num++, PSTR(STR_CALCULATORS), menu_calc, calcOpen);

@@ -123,36 +123,39 @@ static display_t draw() {
 
     __SysTick();
 
-    // Get vertices for the current angle
     // 获取当前角度的顶点
     for ( Cntv = 0; Cntv < nvert; ++Cntv ) {
         vert[ Cntv ][ 0 ] = vertices[ iAng * nvert + Cntv ][ 0 ];
         vert[ Cntv ][ 1 ] = vertices[ iAng * nvert + Cntv ][ 1 ];
         vert[ Cntv ][ 2 ] = vertices[ iAng * nvert + Cntv ][ 2 ];
     }
-    // Draw wireframe for each face of the cube
+
     // 为立方体的每个面绘制线框
     // 一个面有四条边，画六个面就是 4x6 =24次就可以完整显示
     for ( Cnt = 0; Cnt < nfaces; ++Cnt ) {
 
+        // 第一条边
         x1 = vert[ faces[ Cnt ][ 0 ] ][ 0 ] - 34;
         y1 = vert[ faces[ Cnt ][ 0 ] ][ 1 ] - 1;
         x2 = vert[ faces[ Cnt ][ 1 ] ][ 0 ] - 34;
         y2 = vert[ faces[ Cnt ][ 1 ] ][ 1 ] - 1;
         OLED_DrawLine( x1, y1, x2, y2 );
 
+        // 第二条边
         x1 = vert[ faces[ Cnt ][ 1 ] ][ 0 ] - 34;
         y1 = vert[ faces[ Cnt ][ 1 ] ][ 1 ] - 1;
         x2 = vert[ faces[ Cnt ][ 2 ] ][ 0 ] - 34;
         y2 = vert[ faces[ Cnt ][ 2 ] ][ 1 ] - 1;
         OLED_DrawLine( x1, y1, x2, y2 );
 
+        // 第三条边
         x1 = vert[ faces[ Cnt ][ 2 ] ][ 0 ] - 34;
         y1 = vert[ faces[ Cnt ][ 2 ] ][ 1 ] - 1;
         x2 = vert[ faces[ Cnt ][ 3 ] ][ 0 ] - 34;
         y2 = vert[ faces[ Cnt ][ 3 ] ][ 1 ] - 1;
         OLED_DrawLine( x1, y1, x2, y2 );
 
+        // 第四条边
         x1 = vert[ faces[ Cnt ][ 3 ] ][ 0 ] - 34;
         y1 = vert[ faces[ Cnt ][ 3 ] ][ 1 ] - 1;
         x2 = vert[ faces[ Cnt ][ 0 ] ][ 0 ] - 34;
@@ -160,10 +163,8 @@ static display_t draw() {
         OLED_DrawLine( x1, y1, x2, y2 );
     }
 
-    // Draw platform
-
-    draw_bitmap( 0, 0, ( const byte* )OLED_GRAM, 64, 64, NOINVERT, 0 );
-    memset( &OLED_GRAM, 0x00, FRAME_BUFFER_SIZE / 2 );
+    draw_bitmap( 0, 0, ( const byte* )OLED_GRAM, 64, 64, NOINVERT, 0 );  // 绘制区域
+    memset( &OLED_GRAM, 0x00, FRAME_BUFFER_SIZE / 2 );                   // 清空显存
     draw_string_P( PSTR( "Cube " ), false, 64, 28 );
     draw_string_P( PSTR( "Rotation" ), false, 64, 40 );
 
