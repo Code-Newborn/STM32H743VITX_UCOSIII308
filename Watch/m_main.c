@@ -40,23 +40,20 @@ static uint8_t getItemCount()
 
 void mMainOpen()
 {
-    buttons_setFuncs(NULL, menu_select, NULL);
-    beginAnimation(mOpen); // 关闭动画开始，并执行打开主菜单
+    buttons_setFuncs(NULL, menu_select, NULL); // 在表盘界面只有确定键绑定功能进入主菜单界面
+    beginAnimation(mOpen);                     // 关闭动画开始，并执行打开主菜单
 }
 
 // 打开主菜单界面
 static void mOpen()
 {
-    display_setDrawFunc(menu_draw); // 绑定绘制函数为menu_draw
-
+    display_setDrawFunc(menu_draw);                    // 绑定绘制函数为menu_draw
     buttons_setFuncs(menu_up, menu_select, menu_down); // 绑定按键功能函数
 
-    setMenuInfo(OPTION_COUNT, MENU_TYPE_ICON, PSTR(STR_MAINMENU));   // 设置当前菜单界面（选项个数，菜单显示模式是文字还是图标）
-    setMenuFuncs(MENUFUNC_NEXT, mSelect, MENUFUNC_PREV, itemLoader); // 绑定当前菜单界面的函数，如前进、后退、选择确认
-
-    setPrevMenuOpen(&prevMenuData, mOpen); // 储存上级菜单
-
-    beginAnimation2(NULL); // 开启过度动画
+    setMenuInfo(OPTION_COUNT, MENU_TYPE_ICON, PSTR(STR_MAINMENU));   // 获取当前菜单项的信息（选项个数，菜单显示模式是文字还是图标）
+    setMenuFuncs(MENUFUNC_NEXT, mSelect, MENUFUNC_PREV, itemLoader); // 绑定当前菜单项的函数，如前进、后退、选择确认
+    setPrevMenuOpen(&prevMenuData, mOpen);                           // 储存上级菜单
+    beginAnimation2(NULL);                                           // 开启过度动画
 }
 
 // 选择确认函数
@@ -66,16 +63,16 @@ static void mSelect()
     doAction(true);
 }
 
-// INFO 主菜单界面加载项设计
+// 主菜单加载项
 static void itemLoader(byte num)
 {
     num = 0;
-    setMenuOption_P(num++, PSTR(STR_ALARMS), menu_alarm, mAlarmsOpen);
+    setMenuOption_P(num++, PSTR(STR_ALARMS), menu_alarm, mAlarmsOpen); // 打开闹钟
 #if COMPILE_TORCH
-    setMenuOption_P(num++, PSTR(STR_FLASHLIGHT), menu_torch, torch_open);
+    setMenuOption_P(num++, PSTR(STR_FLASHLIGHT), menu_torch, torch_open); // 打开手电
 #endif
 #if COMPILE_STOPWATCH
-    setMenuOption_P(num++, PSTR(STR_STOPWATCH), menu_stopwatch, stopwatch_open);
+    setMenuOption_P(num++, PSTR(STR_STOPWATCH), menu_stopwatch, stopwatch_open); // 打开秒表
 #endif
 #if COMPILE_BTRCCAR
     setMenuOption_P(num++, PSTR(STR_BTRCCAR), menu_stopwatch, btrccar_open);
@@ -83,12 +80,14 @@ static void itemLoader(byte num)
 // 音乐选项
 #if COMPILE_TUNEMAKER
     setMenuOption_P(num++, PSTR(STR_TUNEMAKER), menu_tunemaker, tunemakerOpen);
+    setMenuOption_P(num++, PSTR(STR_TUNEMAKER), menu_tunemaker, tunemakerOpen); // 打开音乐
 #endif
 // 游戏选项
 #if COMPILE_GAME1 || COMPILE_GAME2 || COMPILE_GAME3
     setMenuOption_P(num++, PSTR(STR_GAMES), menu_games, mGamesOpen);
+    setMenuOption_P(num++, PSTR(STR_GAMES), menu_games, mGamesOpen); // 打开游戏
 #endif
-    // setMenuOption_P(num++, PSTR(STR_CALCULATORS), menu_calc, calcOpen); // 计算器
+    // setMenuOption_P(num++, PSTR(STR_CALCULATORS), menu_calc, calcOpen);
     setMenuOption_P(num++, PSTR(STR_SETTINGS), menu_settings, mSettingsOpen);
     setMenuOption_P(OPTION_COUNT, PSTR(STR_EXIT), menu_exit, menu_close);
 }

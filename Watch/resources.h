@@ -8,8 +8,8 @@
 
 #ifndef RESOURCES_H_
 #define RESOURCES_H_
-#include "typedefs.h"
 #include "english.h"
+#include "typedefs.h"
 
 extern const byte menu_default[];
 extern const byte menu_alarm[];
@@ -37,6 +37,10 @@ extern const byte menu_timedate[];
 extern const byte menu_sleep[];
 extern const byte menu_sound[];
 extern const byte menu_games[];
+
+extern const byte menu_game1[];
+extern const byte menu_game2[];
+extern const byte menu_game3[];
 // extern const byte menu_calc[];
 extern const byte menu_brightness[][128];
 extern const byte menu_LEDs[][128];

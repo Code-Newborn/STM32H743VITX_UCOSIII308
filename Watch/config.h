@@ -25,10 +25,10 @@
 // 3 = PCB 1.3 - 1.4
 #define HW_VERSION 3
 
-#define USER_NAME  "HouAohui"
+#define USER_NAME  "ChenZhao" // 用户名
 
-// Firmware version
-#define FW_VERSION "  2021/5/29" // maybe use some __DATE__ __TIME__ stuff?
+// Firmware version 固件信息
+#define FW_VERSION "  2023/5/29" // 软件版本日期
 
 // Language
 // 0 = English
@@ -44,8 +44,6 @@
 #define COMPILE_STOPWATCH  1 // 秒表
 #define COMPILE_TORCH      1 // 手电筒
 #define COMPILE_TUNEMAKER  1 // 3D滚动
-#define COMPILE_CALCULATOR 0 // 计算器 未完成
-#define COMPILE_BTRCCAR    0 //
 
 // 这个两个开启后可以串口打印调试信息
 #define COMPILE_UART 0

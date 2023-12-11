@@ -599,11 +599,6 @@
               <FilePath>..\Watch\alarm.c</FilePath>
             </File>
             <File>
-              <FileName>alarms.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Watch\alarms.c</FilePath>
-            </File>
-            <File>
               <FileName>animation.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Watch\animation.c</FilePath>
@@ -619,11 +614,6 @@
               <FilePath>..\Watch\buttons.c</FilePath>
             </File>
             <File>
-              <FileName>diag.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Watch\diag.c</FilePath>
-            </File>
-            <File>
               <FileName>display.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Watch\display.c</FilePath>
@@ -634,34 +624,9 @@
               <FilePath>..\Watch\draw.c</FilePath>
             </File>
             <File>
-              <FileName>game1.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Watch\game1.c</FilePath>
-            </File>
-            <File>
-              <FileName>game2.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Watch\game2.c</FilePath>
-            </File>
-            <File>
-              <FileName>game3.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Watch\game3.c</FilePath>
-            </File>
-            <File>
-              <FileName>games.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Watch\games.c</FilePath>
-            </File>
-            <File>
               <FileName>global.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Watch\global.c</FilePath>
-            </File>
-            <File>
-              <FileName>m_display.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Watch\m_display.c</FilePath>
             </File>
             <File>
               <FileName>m_main.c</FileName>
@@ -694,49 +659,14 @@
               <FilePath>..\Watch\resources.c</FilePath>
             </File>
             <File>
-              <FileName>settings.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Watch\settings.c</FilePath>
-            </File>
-            <File>
-              <FileName>sleep.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Watch\sleep.c</FilePath>
-            </File>
-            <File>
-              <FileName>sound.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Watch\sound.c</FilePath>
-            </File>
-            <File>
-              <FileName>stopwatch.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Watch\stopwatch.c</FilePath>
-            </File>
-            <File>
               <FileName>time.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Watch\time.c</FilePath>
             </File>
             <File>
-              <FileName>timedate.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Watch\timedate.c</FilePath>
-            </File>
-            <File>
-              <FileName>torch.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Watch\torch.c</FilePath>
-            </File>
-            <File>
               <FileName>tune.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Watch\tune.c</FilePath>
-            </File>
-            <File>
-              <FileName>tunemaker.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Watch\tunemaker.c</FilePath>
             </File>
             <File>
               <FileName>tunes.c</FileName>
@@ -747,6 +677,76 @@
               <FileName>ui.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Watch\ui.c</FilePath>
+            </File>
+            <File>
+              <FileName>m1_alarms.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Watch\m1_alarms.c</FilePath>
+            </File>
+            <File>
+              <FileName>m1_games.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Watch\m1_games.c</FilePath>
+            </File>
+            <File>
+              <FileName>m1_settings.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Watch\m1_settings.c</FilePath>
+            </File>
+            <File>
+              <FileName>m1_stopwatch.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Watch\m1_stopwatch.c</FilePath>
+            </File>
+            <File>
+              <FileName>m1_torch.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Watch\m1_torch.c</FilePath>
+            </File>
+            <File>
+              <FileName>m1_tunemaker.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Watch\m1_tunemaker.c</FilePath>
+            </File>
+            <File>
+              <FileName>m2_diag.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Watch\m2_diag.c</FilePath>
+            </File>
+            <File>
+              <FileName>m2_display.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Watch\m2_display.c</FilePath>
+            </File>
+            <File>
+              <FileName>m2_game1.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Watch\m2_game1.c</FilePath>
+            </File>
+            <File>
+              <FileName>m2_game2.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Watch\m2_game2.c</FilePath>
+            </File>
+            <File>
+              <FileName>m2_game3.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Watch\m2_game3.c</FilePath>
+            </File>
+            <File>
+              <FileName>m2_sleep.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Watch\m2_sleep.c</FilePath>
+            </File>
+            <File>
+              <FileName>m2_sound.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Watch\m2_sound.c</FilePath>
+            </File>
+            <File>
+              <FileName>m2_timedate.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Watch\m2_timedate.c</FilePath>
             </File>
           </Files>
         </Group>

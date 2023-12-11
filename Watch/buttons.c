@@ -6,18 +6,19 @@
    Web: http://blog.zakkemble.co.uk/diy-digital-wristwatch/
 */
 #include "buttons.h"
+
 #include "common.h"
-#include "sys.h"
 #include "led.h"
+#include "sys.h"
 // #include "yaogan.h"
 
 #define BTN_IS_PRESSED  4
 #define BTN_NOT_PRESSED 4
 
-typedef struct
-{
+typedef struct {
     millis_t pressedTime; // Time of press
-    bool processed;       // Time of press has been stored (don't store again until next press)
+    bool processed;       // Time of press has been stored (don't store again until
+                          // next press)
     byte counter;         // Debounce counter
     bool funcDone;        // Function has been ran (don't run again until next press)
     button_f onPress;     // Function to run when pressed
@@ -67,13 +68,15 @@ void buttons_update()
 void buttons_startup()
 {
     //	GPIO_InitTypeDef  GPIO_InitStructure;
-    //  RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA|RCC_AHB1Periph_GPIOE, ENABLE);//使能GPIOA,GPIOE时钟
+    //  RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA|RCC_AHB1Periph_GPIOE,
+    //  ENABLE);//使能GPIOA,GPIOE时钟
     //
-    //  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2|GPIO_Pin_3|GPIO_Pin_4; //KEY0 KEY1 KEY2对应引脚
-    //  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;//普通输入模式
-    //  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;//100M
-    //  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;//上拉
-    //  GPIO_Init(GPIOE, &GPIO_InitStructure);//初始化GPIOE2,3,4
+    //  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2|GPIO_Pin_3|GPIO_Pin_4; //KEY0
+    //  KEY1 KEY2对应引脚 GPIO_InitStructure.GPIO_Mode =
+    //  GPIO_Mode_IN;//普通输入模式 GPIO_InitStructure.GPIO_Speed =
+    //  GPIO_Speed_100MHz;//100M GPIO_InitStructure.GPIO_PuPd =
+    //  GPIO_PuPd_UP;//上拉 GPIO_Init(GPIOE,
+    //  &GPIO_InitStructure);//初始化GPIOE2,3,4
     //
     //
     //  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0;//WK_UP对应引脚PA0
@@ -82,7 +85,8 @@ void buttons_startup()
 
     // GPIO_InitTypeDef GPIO_InitStructure;
 
-    // RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB | RCC_APB2Periph_GPIOA | RCC_APB2Periph_GPIOC, ENABLE); // 使能PORTA,PORTC时钟
+    // RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB | RCC_APB2Periph_GPIOA |
+    // RCC_APB2Periph_GPIOC, ENABLE); // 使能PORTA,PORTC时钟
 
     // GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4;     // PA4
     // GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU; // 设置成上拉输入
@@ -161,8 +165,7 @@ static void processButton(s_button *button, BOOL isPressed)
 static byte bitCount(byte val)
 {
     byte count = 0;
-    for (; val; val >>= 1)
-        count += val & 1;
+    for (; val; val >>= 1) count += val & 1;
     return count;
 }
 
@@ -198,9 +201,9 @@ void buttons_setFuncs(button_f btn1, button_f btn2, button_f btn3)
 // 检测按键长时间未按下
 bool buttons_isActive()
 {
-    // If sleep has been disabled then just say that the buttons are always active
-    if (!appConfig.sleepTimeout)
-        return true;
+    // If sleep has been disabled then just say that the buttons are always
+    // active
+    if (!appConfig.sleepTimeout) return true;
 
     // Get timeout val in ms
     uint timeout = (appConfig.sleepTimeout * 5) * 1000;
@@ -209,8 +212,7 @@ bool buttons_isActive()
     // See if a button has been pressed within that timeout
     LOOPR(BTN_COUNT, i)
     {
-        if (millis() - buttons[i].pressedTime < timeout)
-            return true;
+        if (millis() - buttons[i].pressedTime < timeout) return true;
     }
 
     return false; // 长时间未按下
@@ -221,8 +223,8 @@ void buttons_wake()
 {
     LOOPR(BTN_COUNT, i)
     {
-        buttons[i].funcDone    = true;
-        buttons[i].processed   = true;
+        buttons[i].funcDone    = true; // 按键按下
+        buttons[i].processed   = true; // 按键处理
         buttons[i].counter     = BTN_IS_PRESSED;
         buttons[i].pressedTime = millis();
     }

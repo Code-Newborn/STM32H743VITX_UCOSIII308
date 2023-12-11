@@ -7,8 +7,8 @@
  */
 
 #include "common.h"
-#include "string.h"
 #include "stdio.h"
+#include "string.h"
 
 typedef enum {
     OPERATION_DRAWICON,      // 画图标操作
@@ -17,8 +17,7 @@ typedef enum {
     OPERATION_ACTION         // 执行操作
 } operation_t;
 
-typedef struct
-{
+typedef struct {
     byte data;
     operation_t op;
     byte id;
@@ -45,7 +44,7 @@ bool menu_select()
         if (!menuData.isOpen) {
             menuData.isOpen = true;
             mMainOpen();
-        } else if (menuData.func.btn2 != NULL) // 已处于主菜单中，直接执行按键功能
+        } else if (menuData.func.btn2 != NULL) // 打开后再次按下确认功能
         {
             menuData.func.btn2();
         }
@@ -67,8 +66,7 @@ bool menu_up()
 
 static void doBtn(menu_f btn)
 {
-    if (menuData.isOpen && (!animation_active() || animation_movingOn()) && btn != NULL)
-        btn();
+    if (menuData.isOpen && (!animation_active() || animation_movingOn()) && btn != NULL) btn();
 }
 
 display_t menu_draw()
@@ -80,8 +78,7 @@ display_t menu_draw()
         busy = menu_drawIcon();
 
     // menuData.func.draw是菜单运行时绑定的画图函数
-    if (menuData.func.draw != NULL)
-        busy = busy || menuData.func.draw() ? DISPLAY_BUSY : DISPLAY_DONE;
+    if (menuData.func.draw != NULL) busy = busy || menuData.func.draw() ? DISPLAY_BUSY : DISPLAY_DONE;
 
     return busy;
 }
@@ -100,8 +97,7 @@ static void loader(operation_t op, byte num, byte data)
     operation.id   = num;  // 选择菜单选项的位置索引值
     operation.data = data; // anim，是否动画
 
-    if (menuData.func.loader != NULL)
-        menuData.func.loader(num); // 指向itemLoader函数
+    if (menuData.func.loader != NULL) menuData.func.loader(num); // 指向itemLoader函数
 }
 
 static void menu_drawStr()
@@ -113,12 +109,16 @@ static void menu_drawStr()
     for (byte i = scroll; i < count; i++) // 从滚动的行数scroll到count遍历8行要显示的字符串
     {
         byte y = 8 + (8 * (i - scroll));
-        if (i == menuData.selected)
-            draw_string(">", false, 0, y);
+        if (i == menuData.selected) draw_string(">", false, 0, y);
         loader(OPERATION_DRAWNAME_STR, i, y);
     }
 }
 
+/**
+ * @brief     : 绘制图标
+ * @msg       :
+ * @return     {*} 绘制忙标志
+ */
 static display_t menu_drawIcon()
 {
     static int animX = 64;
@@ -132,8 +132,7 @@ static display_t menu_drawIcon()
         byte speed;
         if (x > animX) {
             speed = ((x - animX) / 4) + 1;
-            if (speed > 16)
-                speed = 16;
+            if (speed > 16) speed = 16;
             animX += speed;
             if (x <= animX)
                 animX = x;
@@ -141,8 +140,7 @@ static display_t menu_drawIcon()
                 busy = DISPLAY_BUSY;
         } else if (x < animX) {
             speed = ((animX - x) / 4) + 1;
-            if (speed > 16)
-                speed = 16;
+            if (speed > 16) speed = 16;
             animX -= speed;
             if (x >= animX)
                 animX = x;
@@ -172,11 +170,9 @@ static display_t menu_drawIcon()
     return busy;
 }
 
-// 设置菜单项索引、名称、图标、选中函数
 void setMenuOption_P(byte num, const char *name, const byte *icon, menu_f actionFunc)
 {
-    if (num != operation.id)
-        return;
+    if (num != operation.id) return;
 
     char buff[BUFFSIZE_STR_MENU];
     strcpy(buff, name);
@@ -186,8 +182,7 @@ void setMenuOption_P(byte num, const char *name, const byte *icon, menu_f action
 #include <math.h>
 void setMenuOption(byte num, const char *name, const byte *icon, menu_f actionFunc)
 {
-    if (num != operation.id)
-        return;
+    if (num != operation.id) return;
 
     switch (operation.op) {
         case OPERATION_DRAWICON: {
@@ -207,8 +202,7 @@ void setMenuOption(byte num, const char *name, const byte *icon, menu_f actionFu
             draw_string((char *)name, false, 6, operation.data);
             break;
         case OPERATION_ACTION:
-            if (actionFunc != NULL)
-                operation.data ? beginAnimation(actionFunc) : actionFunc();
+            if (actionFunc != NULL) operation.data ? beginAnimation(actionFunc) : actionFunc();
             break;
         default:
             break;
@@ -220,19 +214,18 @@ bool menu_isOpen()
     return menuData.isOpen;
 }
 
-// 退出主菜单
 void menu_close()
 {
-    clear();                   // 清除菜单按键功能函数数据
-    menuData.isOpen   = false; // 设置主菜单是否打开状态
-    menuData.prevMenu = NULL;  // 主菜单上一级无菜单
-    display_load();            // 显示表盘
+    clear();
+    menuData.isOpen   = false;
+    menuData.prevMenu = NULL;
+    display_load(); // Move somewhere else, sometimes we don't want to load the watch face when closing the menu
 }
 // 储存上一次菜单的打开功能函数
 void setPrevMenuOpen(prev_menu_s *prevMenu, menu_f newPrevMenu)
 {
     if (menuData.prevMenu != newPrevMenu)       // Make sure new and old menu funcs are not the same, otherwise we get stuck in a menu loop
-        prevMenu->last = menuData.prevMenu;     // 保存上一次的菜单打开功能函数
+        prevMenu->last = menuData.prevMenu;     // Save previous menu open func
     menuData.selected = prevMenu->lastSelected; //
     menuData.prevMenu = newPrevMenu;            // Set new menu open func
 }
@@ -254,11 +247,11 @@ bool exitSelected()
 /*
 void do10sStuff(byte* val, byte now)
 {
-    byte mod = mod10(*val);
-    *val = (setting.val * 10) + mod;
+        byte mod = mod10(*val);
+        *val = (setting.val * 10) + mod;
 
-    setting.val = mod;
-    setting.now = now;
+        setting.val = mod;
+        setting.now = now;
 }
 
 void do1sStuff(byte* val, byte max, byte now, byte newVal)
@@ -301,9 +294,17 @@ void beginAnimation(menu_f onComplete)
 // 带打开动画的函数，动画执行完后执行onComplete函数
 void beginAnimation2(menu_f onComplete)
 {
-    animation_start(onComplete, ANIM_MOVE_ON); // 下拉动画
+    animation_start(onComplete, ANIM_MOVE_ON);
 }
 
+/**
+ * @brief     : 设置菜单界面信息
+ * @msg       : 菜单管理
+ * @param      {byte} optionCount 选项数
+ * @param      {menu_type_t} menuType 选项的显示方式 图标 or 文字
+ * @param      {char} *title 当前界面标题
+ * @return     {*}
+ */
 void setMenuInfo(byte optionCount, menu_type_t menuType, const char *title)
 {
     clear();
@@ -326,8 +327,7 @@ void setMenuFuncs(menu_f btn1Func, menu_f btn2Func, menu_f btn3Func, itemLoader_
 void nextOption()
 {
     menuData.selected++;
-    if (menuData.selected >= menuData.optionCount)
-        menuData.selected = 0;
+    if (menuData.selected >= menuData.optionCount) menuData.selected = 0;
 
     checkScroll();
 }
@@ -336,8 +336,7 @@ void nextOption()
 void prevOption()
 {
     menuData.selected--;
-    if (menuData.selected >= menuData.optionCount)
-        menuData.selected = menuData.optionCount - 1;
+    if (menuData.selected >= menuData.optionCount) menuData.selected = menuData.optionCount - 1;
 
     checkScroll();
 }

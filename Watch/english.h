@@ -114,7 +114,7 @@
 
 // Game strings
 
-#define STR_GAME1        "Breakout"
+#define STR_GAME1        "Brick Out"
 #define STR_GAME2        "Car Dodge"
 
 #define STR_WIN          "WIN!"
