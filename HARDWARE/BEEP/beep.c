@@ -24,12 +24,12 @@
 
 #include "common.h"
 
-static uint buzzLen;
-static millis8_t startTime;
+static uint         buzzLen;
+static millis8_t    startTime;
 static buzzFinish_f onFinish;
-static tonePrio_t prio;
+static tonePrio_t   prio;
 
-static void stop(void);
+static void stop( void );
 
 // TIM13 PWM部分初始化
 // PWM输出初始化
@@ -174,13 +174,13 @@ static void stop(void);
 
 void buzzer_buzzb(byte len, tone_t tone, vol_t volType)
 {
-	(void)(volType);
+    (void)(volType);
 
-	led_flash(LED_GREEN, 50, 255);
-	led_flash(LED_RED, 50, 255);
+    led_flash(LED_GREEN, 50, 255);
+    led_flash(LED_RED, 50, 255);
 
-	power_timer1_enable();
-	TCCR1A |= _BV(COM1A1)|_BV(COM1A0);
+    power_timer1_enable();
+    TCCR1A |= _BV(COM1A1)|_BV(COM1A0);
 
 //	static uint vol = 0;
 //	vol++;
@@ -199,22 +199,21 @@ void buzzer_buzzb(byte len, tone_t tone, vol_t volType)
 //	else if(vol == 3)
 //		OCR1A = (tone / 4); // loader (acually quiter)
 
-	OCR1A = (tone * 2) - 100;
-	ICR1 = tone * 2;
-	while(len--)
-	{
-		delay(1);
-		led_update();
-	}
+    OCR1A = (tone * 2) - 100;
+    ICR1 = tone * 2;
+    while(len--)
+    {
+        delay(1);
+        led_update();
+    }
 //	delay(20);
-	TCCR1A &= ~(_BV(COM1A1)|_BV(COM1A0));
-	power_timer1_disable();
+    TCCR1A &= ~(_BV(COM1A1)|_BV(COM1A0));
+    power_timer1_disable();
 }
 */
 // Are we buzzing?
-bool buzzer_buzzing()
-{
-	return buzzLen;
+bool buzzer_buzzing() {
+    return buzzLen;
 }
 #include "led.h"
 // See if its time to stop buzzing

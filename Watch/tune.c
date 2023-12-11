@@ -9,63 +9,56 @@
 #include "common.h"
 
 #if TUNEMEM_TYPE == TUNEMEM_PROGMEM
-#define tune_read(x) (pgm_read_word(&x))
+#define tune_read( x ) ( pgm_read_word( &x ) )
 #elif TUNEMEM_TYPE == TUNEMEM_EEPROM
-#define tune_read(x) (eeprom_read_word((const uint16_t *)&x))
+#define tune_read( x ) ( eeprom_read_word( ( const uint16_t* )&x ) )
 #else
-#define tune_read(x) (x)
+#define tune_read( x ) ( x )
 #endif
 
-static byte idx;		   // Position in tune
-static const tune_t *tune; // The tune
-static vol_t vol;		   // Volume
-static tonePrio_t prio;	   // Priority
+static byte          idx;   // Position in tune
+static const tune_t* tune;  // The tune
+static vol_t         vol;   // Volume
+static tonePrio_t    prio;  // Priority
 
-static void next(void);
+static void next( void );
 
-void tune_play(const tune_t *_tune, vol_t _vol, tonePrio_t _prio)
-{
-	// Check priority, if lower than currently playing tune priority then ignore it
-	if (_prio < prio)
-		return;
+void tune_play( const tune_t* _tune, vol_t _vol, tonePrio_t _prio ) {
+    // Check priority, if lower than currently playing tune priority then ignore it
+    if ( _prio < prio )
+        return;
 
-	prio = _prio;
-	tune = _tune;
-	vol = _vol;
-	idx = 0;
+    prio = _prio;
+    tune = _tune;
+    vol  = _vol;
+    idx  = 0;
 
-	// Begin playing
-	next();
+    // Begin playing
+    next();
 }
 
-void tune_stop(tonePrio_t _prio)
-{
-	// buzzer_buzz(0, TONE_STOP, VOL_OTHER, _prio, NULL);
-	prio = PRIO_MIN;
+void tune_stop( tonePrio_t _prio ) {
+    // buzzer_buzz(0, TONE_STOP, VOL_OTHER, _prio, NULL);
+    prio = PRIO_MIN;
 }
 
-static void next()
-{
-	// Read next tone
-	tune_t data = tune_read(tune[idx++]);
+static void next() {
+    // Read next tone
+    tune_t data = tune_read( tune[ idx++ ] );
 
-	uint16_t len = data; // 取低16位
-	if (len != TONE_REPEAT)
-	{
-		// Play next tone
-		// 高16位是曲调，低16位是节拍时长
-		// buzzer_buzz(len, (data >> 16), vol, prio, next);
+    uint16_t len = data;  // 取低16位
+    if ( len != TONE_REPEAT ) {
+        // Play next tone
+        // 高16位是曲调，低16位是节拍时长
+        // buzzer_buzz(len, (data >> 16), vol, prio, next);
 
-		// If tone was TONE_STOP then reset priority
-		if (len == TONE_STOP)
-		{
-			prio = PRIO_MIN;
-		}
-	}
-	else
-	{
-		// Repeat
-		idx = 0;
-		next();
-	}
+        // If tone was TONE_STOP then reset priority
+        if ( len == TONE_STOP ) {
+            prio = PRIO_MIN;
+        }
+    } else {
+        // Repeat
+        idx = 0;
+        next();
+    }
 }
