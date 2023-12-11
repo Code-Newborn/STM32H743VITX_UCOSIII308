@@ -17,32 +17,32 @@ static void itemLoader(byte);
 
 void mSettingsOpen()
 {
-	setMenuInfo(OPTION_COUNT, MENU_TYPE_ICON, PSTR(STR_SETTINGSMENU));
-	setMenuFuncs(MENUFUNC_NEXT, mSelect, MENUFUNC_PREV, itemLoader);
+    setMenuInfo(OPTION_COUNT, MENU_TYPE_ICON, PSTR(STR_SETTINGSMENU)); // 设置【设置界面】的界面
+    setMenuFuncs(MENUFUNC_NEXT, mSelect, MENUFUNC_PREV, itemLoader);   // 【设置界面】绑定按键函数以及加载函数
 
-	setPrevMenuOpen(&prevMenuData, mSettingsOpen);
+    setPrevMenuOpen(&prevMenuData, mSettingsOpen);
 
-	beginAnimation2(NULL);
+    beginAnimation2(NULL);
 }
 
 static void mSelect()
 {
-	setPrevMenuExit(&prevMenuData);
-	doAction(true);
+    setPrevMenuExit(&prevMenuData);
+    doAction(true);
 }
 
 static void itemLoader(byte num)
 {
-	UNUSED(num);
-	setMenuOption_P(0, PSTR(STR_TIMEDATE), menu_timedate, mTimeDateOpen);
-	setMenuOption_P(1, PSTR(STR_SLEEP), menu_sleep, mSleepOpen); // 这里有bug！！！  可以再增加一个图标就可以解决
-	setMenuOption_P(2, PSTR(STR_SOUND), menu_sound, mSoundOpen);
-	setMenuOption_P(3, PSTR(STR_DISPLAY), menu_display, mDisplayOpen);
-	setMenuOption_P(4, PSTR(STR_DIAGNOSTICS), menu_diagnostic, mDiagOpen);
+    UNUSED(num);
+    setMenuOption_P(0, PSTR(STR_TIMEDATE), menu_timedate, mTimeDateOpen);
+    setMenuOption_P(1, PSTR(STR_SLEEP), menu_sleep, mSleepOpen); // 这里有bug！！！  可以再增加一个图标就可以解决
+    setMenuOption_P(2, PSTR(STR_SOUND), menu_sound, mSoundOpen);
+    setMenuOption_P(3, PSTR(STR_DISPLAY), menu_display, mDisplayOpen);
+    setMenuOption_P(4, PSTR(STR_DIAGNOSTICS), menu_diagnostic, mDiagOpen);
 
-	//	setMenuOption_P(5, PSTR(STR_UI), NULL, NULL);
-	//	setMenuOption_P(6, PSTR(STR_RCSETTINGS), NULL, NULL);
-	//		setMenuOption_P(5, PSTR(STR_EXIT), menu_exit, menu_close);
+    //	setMenuOption_P(5, PSTR(STR_UI), NULL, NULL);
+    //	setMenuOption_P(6, PSTR(STR_RCSETTINGS), NULL, NULL);
+    //		setMenuOption_P(5, PSTR(STR_EXIT), menu_exit, menu_close);
 
-	addBackOption();
+    addBackOption();
 }

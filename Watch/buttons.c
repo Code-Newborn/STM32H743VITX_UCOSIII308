@@ -148,8 +148,7 @@ static void processButton(s_button *button, BOOL isPressed)
                 // LED1=!LED1;
             }
         }
-    } else // Not pressed
-    {
+    } else {
         // 未达到按下的稳定状态
         if (bitCount(button->counter) <= BTN_NOT_PRESSED) {
             button->processed = false;

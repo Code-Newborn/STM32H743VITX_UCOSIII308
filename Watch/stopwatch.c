@@ -26,8 +26,6 @@ static display_t draw(void);
 
 void stopwatch_open()
 {
-    // menu_close();
-
     display_setDrawFunc(draw);
     buttons_setFuncs(btnReset, btnStartStop, btnExit);
     beginAnimation2(NULL); // 打开动画动画过度
