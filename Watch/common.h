@@ -53,12 +53,12 @@
 // #include "screenshot.h"    //输出oledbuff里面的数据
 
 // #include "system.h"
+#include "time.h"
 #include "alarm.h"
 #include "appconfig.h"
 #include "display.h"
 #include "global.h"
 #include "pwrmgr.h"
-#include "time.h"
 // #include "disco.h"
 #include "animation.h"
 #include "draw.h"
@@ -75,6 +75,8 @@
 #include "mpuiic.h"
 #include "resources.h"
 
+extern byte OLED_GRAM[ 512 ];
+
 // #include "wait_data_clock.h"
 // #include "wifi_task.h"
 // #include "wifi.h"
@@ -84,6 +86,6 @@
 
 #define u32 uint32_t
 #define u16 uint16_t
-#define u8 uint8_t
+#define u8  uint8_t
 
 #endif /* COMMON_H_ */

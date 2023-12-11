@@ -80,9 +80,12 @@ void tunemakerOpen() {
     // menu_close();
 
     display_setDrawFunc( draw );
-    buttons_setFunc( BTN_1, up );
-    buttons_setFunc( BTN_2, select );
-    buttons_setFunc( BTN_3, down );
+
+    buttons_setFuncs( up, select, down );
+
+    // buttons_setFunc( BTN_1, up );
+    // buttons_setFunc( BTN_2, select );
+    // buttons_setFunc( BTN_3, down );
 
     chose_tone( 1 );
     beginAnimation2( NULL );

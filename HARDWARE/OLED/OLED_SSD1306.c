@@ -543,13 +543,14 @@ void OLED_DrawLine( uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2 ) {
     uRow    = x1;
     uCol    = y1;
     if ( delta_x > 0 )
-        incx = 1;  // 设置单步方向
-    else if ( delta_x == 0 )
-        incx = 0;  // 垂直线
+        incx = 1;
+    else if ( delta_x == 0 )  // 垂直线
+        incx = 0;
     else {
         incx    = -1;
         delta_x = -delta_x;
     }
+
     if ( delta_y > 0 )
         incy = 1;
     else if ( delta_y == 0 )
@@ -558,8 +559,9 @@ void OLED_DrawLine( uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2 ) {
         incy    = -1;
         delta_y = -delta_y;
     }
+
     if ( delta_x > delta_y )
-        distance = delta_x;  // 选取基本增量坐标轴
+        distance = delta_x;  // 选取坐标差值最大方向
     else
         distance = delta_y;
     for ( t = 0; t <= distance + 1; t++ )  // 画线输出
