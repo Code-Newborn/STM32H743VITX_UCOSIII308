@@ -171,7 +171,7 @@ button_f buttons_setFunc( btn_t btn, button_f func ) {
     return old;
 }
 
-// Set functions to run for each button
+// 设置每个按键的功能
 void buttons_setFuncs( button_f btn1, button_f btn2, button_f btn3 ) {
     buttons[ BTN_1 ].onPress = btn1;
     buttons[ BTN_2 ].onPress = btn2;

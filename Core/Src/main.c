@@ -282,7 +282,7 @@ void c_setup() {
     // rtc_init();    // 初始化外部时钟模块
     // pwrmgr_init(); // 初始化电源管理模块
 
-    display_set( watchface_normal );  // 设置表盘
+    display_set( watchface_normal );  // 注册表盘函数
     display_load();                   // 启动加载表盘
 }
 

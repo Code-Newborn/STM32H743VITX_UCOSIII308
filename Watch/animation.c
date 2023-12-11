@@ -20,7 +20,7 @@ void animation_init() {
 }
 
 void animation_update() {
-    if (animationStatus.active) {
+    if (animationStatus.active) { // 动画被激活
         byte offsetY = animationStatus.offsetY;
 
         if (animationStatus.goingOffScreen)  // 由上往下↓↓↓

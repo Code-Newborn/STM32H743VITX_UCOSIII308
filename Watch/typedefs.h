@@ -13,15 +13,15 @@
 #include <stdint.h>
 #include "util.h"
 
-#if defined(__CC_ARM)
+#if defined( __CC_ARM )
 #pragma anon_unions
 #endif
 
-typedef uint8_t byte;
+typedef uint8_t  byte;
 typedef uint16_t uint;
 typedef uint32_t ulong;
 
-extern byte oledBuffer[FRAME_BUFFER_SIZE];
+extern byte oledBuffer[ FRAME_BUFFER_SIZE ];
 
 typedef unsigned int millis8_t;
 typedef unsigned int millis_t;
@@ -33,183 +33,158 @@ typedef uint8_t BOOL;
 
 typedef uint32_t timestamp_t;
 
-typedef enum
-{
-	DISPLAY_DONE,
-	DISPLAY_BUSY,
-	//	DISPLAY_TOOFAST
+typedef enum {
+    DISPLAY_DONE,
+    DISPLAY_BUSY,
+    //	DISPLAY_TOOFAST
 } display_t;
 
-typedef enum
-{
-	MENU_TYPE_STR,
-	MENU_TYPE_ICON
-} menu_type_t;
+typedef enum { MENU_TYPE_STR, MENU_TYPE_ICON } menu_type_t;
 
-typedef enum
-{
-	MONTH_JAN = 0,
-	MONTH_FEB = 1,
-	MONTH_MAR = 2,
-	MONTH_APR = 3,
-	MONTH_MAY = 4,
-	MONTH_JUN = 5,
-	MONTH_JUL = 6,
-	MONTH_AUG = 7,
-	MONTH_SEP = 8,
-	MONTH_OCT = 9,
-	MONTH_NOV = 10,
-	MONTH_DEC = 11
+typedef enum {
+    MONTH_JAN = 0,
+    MONTH_FEB = 1,
+    MONTH_MAR = 2,
+    MONTH_APR = 3,
+    MONTH_MAY = 4,
+    MONTH_JUN = 5,
+    MONTH_JUL = 6,
+    MONTH_AUG = 7,
+    MONTH_SEP = 8,
+    MONTH_OCT = 9,
+    MONTH_NOV = 10,
+    MONTH_DEC = 11
 } month_t;
 
-typedef enum
-{
-	DAY_MON = 0,
-	DAY_TUE = 1,
-	DAY_WED = 2,
-	DAY_THU = 3,
-	DAY_FRI = 4,
-	DAY_SAT = 5,
-	DAY_SUN = 6,
+typedef enum {
+    DAY_MON = 0,
+    DAY_TUE = 1,
+    DAY_WED = 2,
+    DAY_THU = 3,
+    DAY_FRI = 4,
+    DAY_SAT = 5,
+    DAY_SUN = 6,
 } day_t;
 
-typedef struct
-{
-	byte secs;
-	byte mins;
-	byte hour;
-	char ampm;
+typedef struct {
+    byte secs;
+    byte mins;
+    byte hour;
+    char ampm;
 } time_s;
 
-typedef struct
-{
-	day_t day;
-	byte date;
-	month_t month;
-	byte year;
+typedef struct {
+    day_t   day;
+    byte    date;
+    month_t month;
+    byte    year;
 } date_s;
 
-typedef struct
-{
-	time_s time;
-	date_s date;
+typedef struct {
+    time_s time;
+    date_s date;
 } timeDate_s;
 
-typedef enum
-{
-	TIMEMODE_24HR = 0,
-	TIMEMODE_12HR = 1
-} timemode_t;
+typedef enum { TIMEMODE_24HR = 0, TIMEMODE_12HR = 1 } timemode_t;
 
-typedef struct
-{
-	byte hour;
-	byte min;
-	union
-	{
-		byte days;
-		struct
-		{ // get rid of these bitfields?
-			bool mon : 1;
-			bool tues : 1;
-			bool wed : 1;
-			bool thurs : 1;
-			bool fri : 1;
-			bool sat : 1;
-			bool sun : 1;
-			bool enabled : 1;
-		};
-	};
+typedef struct {
+    byte hour;
+    byte min;
+    union {
+        byte days;
+        struct {  // get rid of these bitfields?
+            bool mon : 1;
+            bool tues : 1;
+            bool wed : 1;
+            bool thurs : 1;
+            bool fri : 1;
+            bool sat : 1;
+            bool sun : 1;
+            bool enabled : 1;
+        };
+    };
 } alarm_s;
 
 // Could use bitfields for the bools to save a few bytes of RAM and EEPROM, but uses an extra ~82 bytes of flash
-typedef struct
-{
-	// byte sleepMode;
-	// byte sleepBrightness;
-	byte sleepTimeout;
-	// byte brightness;
-	bool invert;
+typedef struct {
+    // byte sleepMode;
+    // byte sleepBrightness;
+    byte sleepTimeout;
+    // byte brightness;
+    bool invert;
 #if COMPILE_ANIMATIONS
-	bool animations;
+    bool animations;
 #endif
-	// byte clockface;
-	bool display180;
-	bool CTRL_LEDs;
-	bool showFPS;
-	timemode_t timeMode;
-	union
-	{
-		ulong volumes;
-		struct
-		{ // get rid of these bitfields?
-			byte volUI;
-			byte volAlarm;
-			byte volHour;
-			byte brightness;
-		};
-	};
+    // byte clockface;
+    bool       display180;
+    bool       CTRL_LEDs;
+    bool       showFPS;
+    timemode_t timeMode;
+    union {
+        ulong volumes;
+        struct {  // get rid of these bitfields?
+            byte volUI;
+            byte volAlarm;
+            byte volHour;
+            byte brightness;
+        };
+    };
 } appconfig_s;
 
-typedef display_t (*draw_f)(void);
-typedef void (*display_f)(void);
+typedef display_t ( *draw_f )( void );
+typedef void ( *display_f )( void );
 
 // Function for buttons to call
 // Return true to only call function once per press
 // Return false to continually call function while the button is pressed
 
 // 定义一个返回值为bool的函数指针
-typedef bool (*button_f)(void);
+typedef bool ( *button_f )( void );
 
-typedef void (*menu_f)(void);
-typedef void (*itemLoader_f)(byte);
+typedef void ( *menu_f )( void );
+typedef void ( *itemLoader_f )( byte );
 
-typedef struct
-{
-	// 菜单按键功能
-	menu_f btn1;
-	menu_f btn2;
-	menu_f btn3;
-	draw_f draw;
-	itemLoader_f loader;
-} menuFuncs_t; // 菜单功能
+typedef struct {
+    // 菜单按键功能
+    menu_f       btn1;
+    menu_f       btn2;
+    menu_f       btn3;
+    draw_f       draw;
+    itemLoader_f loader;
+} menuFuncs_t;  // 菜单功能
 
-typedef struct
-{
-	byte selected;
-	byte scroll;
-	byte optionCount;
-	bool isOpen;
-	const char *title;
-	menu_type_t menuType;
-	menuFuncs_t func;
-	menu_f prevMenu;
-} menu_s; // 菜单实例
+typedef struct {
+    byte        selected;     // 当前菜单是否被选中
+    byte        scroll;       //
+    byte        optionCount;  // 当前菜单内选项计数
+    bool        isOpen;       // 当前菜单是否处于被打开状态
+    const char* title;        // 当前菜单标题文字
+    menu_type_t menuType;     // 当前菜单内选项类型 Icon Or String
+    menuFuncs_t func;         // 当前菜单内功能函数
+    menu_f      prevMenu;     // 前次菜单打开函数
+} menu_s;                     // 菜单实例
 
-typedef struct
-{
-	byte lastSelected;
-	menu_f last;
+typedef struct {
+    byte   lastSelected;
+    menu_f last;
 } prev_menu_s;
 
-typedef struct
-{
-	bool active;				  // 开关
-	byte offsetY;				  // 反转Y
-	void (*animOnComplete)(void); // 指向的函数
-	bool goingOffScreen;		  // 动画上下移动方向
+typedef struct {
+    bool active;                       // 开关
+    byte offsetY;                      // 反转Y
+    void ( *animOnComplete )( void );  // 指向的函数
+    bool goingOffScreen;               // 动画上下移动方向
 } anim_s;
 
-typedef struct
-{
-	byte x;
-	byte y;
-	const byte *bitmap;
-	byte width;
-	byte height;
-	//	byte foreColour;
-	bool invert;
-	byte offsetY;
+typedef struct {
+    byte        x;
+    byte        y;
+    const byte* bitmap;
+    byte        width;
+    byte        height;
+    //	byte foreColour;
+    bool invert;
+    byte offsetY;
 } image_s;
 
 #endif /* TYPEDEFS_H_ */
