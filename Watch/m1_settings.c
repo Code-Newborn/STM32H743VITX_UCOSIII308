@@ -8,9 +8,9 @@
 
 #include "common.h"
 
-#define OPTION_COUNT 5
+#define OPTION_COUNT 5  // 当前选项数
 
-static prev_menu_s prevMenuData;
+static prev_menu_s prevMenuData;  // 上一次菜单数据
 
 static void mSelect( void );
 static void itemLoader( byte );
@@ -25,7 +25,7 @@ void mSettingsOpen() {
     setMenuFuncs( MENUFUNC_NEXT, mSelect, MENUFUNC_PREV, itemLoader );      // 设定按键切换，当前界面加载项
     setPrevMenuOpen( &prevMenuData, mSettingsOpen );                        // 保存上一层菜单的打开功能函数
 
-    beginAnimation2( NULL );
+    beginAnimation2( NULL );  // 设置动画初始状态
 }
 
 static void mSelect() {
@@ -35,15 +35,17 @@ static void mSelect() {
 
 static void itemLoader( byte num ) {
     UNUSED( num );
-    setMenuOption_P( 0, PSTR( STR_TIMEDATE ), menu_timedate, mTimeDateOpen );
-    setMenuOption_P( 1, PSTR( STR_SLEEP ), menu_sleep, mSleepOpen );
-    setMenuOption_P( 2, PSTR( STR_SOUND ), menu_sound, mSoundOpen );
-    setMenuOption_P( 3, PSTR( STR_DISPLAY ), menu_display, mDisplayOpen );
-    setMenuOption_P( 4, PSTR( STR_DIAGNOSTICS ), menu_diagnostic, mDiagOpen );
+    setMenuOption_P( 0, PSTR( STR_TIMEDATE ), menu_timedate, mTimeDateOpen );   // 打开日历
+    setMenuOption_P( 1, PSTR( STR_SLEEP ), menu_sleep, mSleepOpen );            // 打开睡眠
+    setMenuOption_P( 2, PSTR( STR_SOUND ), menu_sound, mSoundOpen );            // 打开音量
+    setMenuOption_P( 3, PSTR( STR_DISPLAY ), menu_display, mDisplayOpen );      // 打开显示
+    setMenuOption_P( 4, PSTR( STR_DIAGNOSTICS ), menu_diagnostic, mDiagOpen );  // 打开分析
+
+    setMenuOption_P( menuData.optionCount - 1, menuBack, menu_exit, back );  // 最后项添加返回
+
+    // 添加选项 ...
 
     // setMenuOption_P( 5, PSTR( STR_UI ), NULL, NULL );
     // setMenuOption_P( 6, PSTR( STR_RCSETTINGS ), NULL, NULL );
     // setMenuOption_P( 5, PSTR( STR_EXIT ), menu_exit, menu_close );
-
-    addBackOption();  // 添加退出选项
 }

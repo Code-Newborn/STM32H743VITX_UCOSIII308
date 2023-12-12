@@ -152,8 +152,8 @@ static display_t menu_drawIcon() {
 
     drawTitle();
 
-    draw_bitmap( 46, 14, selectbar_top, 36, 8, NOINVERT, 0 );
-    draw_bitmap( 46, 42, selectbar_bottom, 36, 8, NOINVERT, 0 );
+    draw_bitmap( 46, 14, selectbar_top, 36, 8, NOINVERT, 0 );     // 选中框上部分
+    draw_bitmap( 46, 42, selectbar_bottom, 36, 8, NOINVERT, 0 );  // 选中框下部分
 
     LOOP( menuData.optionCount, i )  // 遍历所有图标
     {
@@ -173,7 +173,7 @@ void setMenuOption_P( byte num, const char* name, const byte* icon, menu_f actio
 
     char buff[ BUFFSIZE_STR_MENU ];
     strcpy( buff, name );
-    setMenuOption( num, buff, icon, actionFunc );
+    setMenuOption( num, buff, icon, actionFunc );  // 设置菜单内选项信息
 }
 
 #include <math.h>
@@ -189,7 +189,7 @@ void setMenuOption( byte num, const char* name, const byte* icon, menu_f actionF
         float x = ( ( a / ( float )( FRAME_WIDTH - 32 ) ) * ( M_PI / 2 ) ) + ( M_PI / 4 );
         byte  y = ( sin( x ) * 32 );
 
-        y = 28;  // comment this out for magic
+        y = 28;  // 注释此处，启用选项图标弧形切换特效
 
         draw_bitmap( operation.data, y + 4 - 16, icon != NULL ? icon : menu_default, 32, 32, NOINVERT, 0 );
     } break;
@@ -201,7 +201,7 @@ void setMenuOption( byte num, const char* name, const byte* icon, menu_f actionF
         break;
     case OPERATION_ACTION:
         if ( actionFunc != NULL )
-            operation.data ? beginAnimation( actionFunc ) : actionFunc();
+            operation.data ? beginAnimation( actionFunc ) : actionFunc();  // 是否采用动画方式
         break;
     default:
         break;
@@ -297,7 +297,7 @@ void beginAnimation2( menu_f onComplete ) {
  * @return     {*}
  */
 void setMenuInfo( byte optionCount, menu_type_t menuType, const char* title ) {
-    clear();
+    clear(); // 清除相应按键函数
     menuData.scroll      = 0;
     menuData.selected    = 0;
     menuData.optionCount = optionCount + 1;

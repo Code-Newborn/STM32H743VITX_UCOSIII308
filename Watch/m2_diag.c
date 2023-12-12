@@ -8,17 +8,17 @@
 
 #include "common.h"
 
-#define OPTION_COUNT 5
+#define OPTION_COUNT 8  // 当前菜单界面选项数
 
 static prev_menu_s prevMenuData;
 
-static void mSelect(void);
-static void itemLoader(byte);
-static void updateTemperature(void);
-static void updateVoltage(void);
-static void updateFPS(void);
-static void setShowFPS(void);
-static void batteryUpdate(void);
+static void mSelect( void );
+static void itemLoader( byte );
+static void updateTemperature( void );
+static void updateVoltage( void );
+static void updateFPS( void );
+static void setShowFPS( void );
+static void batteryUpdate( void );
 
 /**
  * @brief     : 打开诊断菜单
@@ -29,35 +29,36 @@ void mDiagOpen() {
     // rtc_tempUpdate();  // 读取内部温度传感器
     //	battery_update();
 
-    setMenuInfo(OPTION_COUNT, MENU_TYPE_STR, PSTR(STR_DIAGNOSTICSMENU));
-    setMenuFuncs(MENUFUNC_NEXT, mSelect, MENUFUNC_PREV, itemLoader);
-    setPrevMenuOpen(&prevMenuData, mDiagOpen);
-    beginAnimation2(NULL);
+    setMenuInfo( OPTION_COUNT, MENU_TYPE_STR, PSTR( STR_DIAGNOSTICSMENU ) );
+    setMenuFuncs( MENUFUNC_NEXT, mSelect, MENUFUNC_PREV, itemLoader );
+    setPrevMenuOpen( &prevMenuData, mDiagOpen );
+    beginAnimation2( NULL );
 }
 
 static void mSelect() {
     bool isExiting = exitSelected();
-    if (isExiting) appconfig_save();
-    setPrevMenuExit(&prevMenuData);
-    doAction(exitSelected());
+    if ( isExiting )
+        appconfig_save();
+    setPrevMenuExit( &prevMenuData );
+    doAction( exitSelected() );
 }
 
-static void itemLoader(byte num) {
-    switch (num) {
-        case 0:
-            updateTemperature();
-            return;
-        case 1:
-            updateVoltage();
-            return;
-        case 2:
-            updateFPS();
-            return;
+static void itemLoader( byte num ) {
+    switch ( num ) {
+    case 0:
+        updateTemperature();
+        return;
+    case 1:
+        updateVoltage();
+        return;
+    case 2:
+        updateFPS();
+        return;
     }
 
-    setMenuOption_P(3, PSTR("FW    " FW_VERSION), NULL, NULL);
-    setMenuOption_P(4, PSTR("User     " USER_NAME), NULL, NULL);
-    addBackOption();
+    setMenuOption_P( 3, PSTR( "FW    " FW_VERSION ), NULL, NULL );
+    setMenuOption_P( 4, PSTR( "User     " USER_NAME ), NULL, NULL );
+    setMenuOption_P( menuData.optionCount - 1, menuBack, menu_exit, back );  // 添加返回选项
 }
 
 static void updateTemperature() {
@@ -71,26 +72,28 @@ static void updateTemperature() {
     //		temp += 2;
     // temperature.frac = div10(temp);
 
-    char buff[24];
-    sprintf_P(buff, PSTR(STR_TEMPERATURE), '1', 12);
+    char buff[ 24 ];
+    sprintf_P( buff, PSTR( STR_TEMPERATURE ), '1', 12 );
 
-    setMenuOption(0, buff, NULL, NULL);
+    setMenuOption( 0, buff, NULL, NULL );
 }
 
 static void updateVoltage() {
-    char buff[24];
-    sprintf_P(buff, PSTR(STR_BATTERY), 100);
-    setMenuOption(1, buff, NULL, batteryUpdate);
+    char buff[ 24 ];
+    sprintf_P( buff, PSTR( STR_BATTERY ), 100 );
+    setMenuOption( 1, buff, NULL, batteryUpdate );
 }
 
 static void updateFPS() {
-    char buff[20];
+    char buff[ 20 ];
     char c = appConfig.showFPS ? CHAR_YES : CHAR_NO;
-    sprintf_P(buff, PSTR(STR_SHOWFPS), c);
-    setMenuOption(2, buff, NULL, setShowFPS);
+    sprintf_P( buff, PSTR( STR_SHOWFPS ), c );
+    setMenuOption( 2, buff, NULL, setShowFPS );
 }
 
-static void setShowFPS() { appConfig.showFPS = !appConfig.showFPS; }
+static void setShowFPS() {
+    appConfig.showFPS = !appConfig.showFPS;
+}
 
 static void batteryUpdate() {
     //	battery_updateNow();

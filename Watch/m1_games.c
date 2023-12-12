@@ -12,8 +12,8 @@
 
 static prev_menu_s prevMenuData;
 
-static void mSelect(void);
-static void itemLoader(byte);
+static void mSelect( void );
+static void itemLoader( byte );
 
 static uint8_t getItemCount() {
     uint8_t cnt = 0;
@@ -30,29 +30,29 @@ static uint8_t getItemCount() {
 }
 
 void mGamesOpen() {
-    setMenuInfo(OPTION_COUNT, MENU_TYPE_ICON, PSTR(STR_GAMESMENU));
-    setMenuFuncs(MENUFUNC_NEXT, mSelect, MENUFUNC_PREV, itemLoader);
+    setMenuInfo( OPTION_COUNT, MENU_TYPE_ICON, PSTR( STR_GAMESMENU ) );
+    setMenuFuncs( MENUFUNC_NEXT, mSelect, MENUFUNC_PREV, itemLoader );
 
-    setPrevMenuOpen(&prevMenuData, mGamesOpen);
+    setPrevMenuOpen( &prevMenuData, mGamesOpen );
 
-    beginAnimation2(NULL);
+    beginAnimation2( NULL );
 }
 
 static void mSelect() {
-    setPrevMenuExit(&prevMenuData);
-    doAction(true);
+    setPrevMenuExit( &prevMenuData );
+    doAction( true );
 }
 
-static void itemLoader(byte num) {
+static void itemLoader( byte num ) {
     num = 0;
 #if COMPILE_GAME1
-    setMenuOption_P(num++, PSTR(GAME1_NAME), menu_game1, game1_start);
+    setMenuOption_P( num++, PSTR( GAME1_NAME ), menu_game1, game1_start );
 #endif
 #if COMPILE_GAME2
-    setMenuOption_P(num++, PSTR(GAME2_NAME), menu_game2, game2_start);
+    setMenuOption_P( num++, PSTR( GAME2_NAME ), menu_game2, game2_start );
 #endif
 #if COMPILE_GAME3
-    setMenuOption_P(num++, PSTR(GAME3_NAME), menu_game3, game3_start);
+    setMenuOption_P( num++, PSTR( GAME3_NAME ), menu_game3, game3_start );
 #endif
-    addBackOption();
+    setMenuOption_P( menuData.optionCount - 1, menuBack, menu_exit, back );  // 返回上级选项
 }

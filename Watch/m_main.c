@@ -39,7 +39,7 @@ static uint8_t getItemCount() {
 
 void mMainOpen() {
     buttons_setFuncs( NULL, menu_select, NULL );  // 为按键注册函数
-    beginAnimation( mOpen );                      // 关闭动画开始，并执行打开主菜单
+    beginAnimation( mOpen );                      // 设置动画初始状态，并执行注册的函数
 }
 
 // 打开主菜单界面
