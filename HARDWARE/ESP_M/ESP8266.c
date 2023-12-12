@@ -18,6 +18,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
+#include "delay.h"
 
 // UART_HandleTypeDef ESP8266_UartHandle;
 // static void ESP8266_GPIO_Config( void );
@@ -31,9 +32,9 @@ struct STRUCT_USARTx_Fram strEsp8266_Fram_Record = { 0 };
  * @retval 无
  */
 void ESP8266_Init( void ) {
-    ESP8266_GPIO_Config();
+    // ESP8266_GPIO_Config();
 
-    ESP8266_USART_Config();
+    // ESP8266_USART_Config();
 
     // macESP8266_RST_HIGH_LEVEL();
 
@@ -99,13 +100,13 @@ void ESP8266_Init( void ) {
  * 调用  ：被 ESP8266_AT_Test 调用
  */
 void ESP8266_Rst( void ) {
-#if 0
-	 ESP8266_Cmd ( "AT+RST", "OK", "ready", 2500 );
+#if 1
+    ESP8266_Cmd( "AT+RST", "OK", "ready", 2500 );
 
 #else
-    macESP8266_RST_LOW_LEVEL();
-    Delay_ms( 500 );
-    macESP8266_RST_HIGH_LEVEL();
+    // macESP8266_RST_LOW_LEVEL();
+    delay_ms( 500 );
+    // macESP8266_RST_HIGH_LEVEL();
 
 #endif
 }
@@ -136,7 +137,7 @@ bool ESP8266_Cmd( char* cmd, char* reply1, char* reply2, uint32_t waittime ) {
     if ( ( reply1 == 0 ) && ( reply2 == 0 ) )  // 不需要接收数据
         return true;
 
-    Delay_ms( waittime );  // 延时
+    delay_ms( waittime );  // 延时
 
     strEsp8266_Fram_Record.Data_RX_BUF[ strEsp8266_Fram_Record.InfBit.FramLength ] = '\0';
 
@@ -144,10 +145,8 @@ bool ESP8266_Cmd( char* cmd, char* reply1, char* reply2, uint32_t waittime ) {
 
     if ( ( reply1 != 0 ) && ( reply2 != 0 ) )
         return ( ( bool )strstr( strEsp8266_Fram_Record.Data_RX_BUF, reply1 ) || ( bool )strstr( strEsp8266_Fram_Record.Data_RX_BUF, reply2 ) );
-
     else if ( reply1 != 0 )
         return ( ( bool )strstr( strEsp8266_Fram_Record.Data_RX_BUF, reply1 ) );
-
     else
         return ( ( bool )strstr( strEsp8266_Fram_Record.Data_RX_BUF, reply2 ) );
 }
@@ -171,8 +170,8 @@ bool ESP8266_Cmd( char* cmd, char* reply1, char* reply2, uint32_t waittime ) {
 void ESP8266_AT_Test( void ) {
     char count = 0;
 
-    macESP8266_RST_HIGH_LEVEL();
-    Delay_ms( 1000 );
+    // macESP8266_RST_HIGH_LEVEL();
+    delay_ms( 1000 );
     while ( count < 10 ) {
         if ( ESP8266_Cmd( "AT", "OK", NULL, 500 ) )  // 测试 AT 启动
             return;
@@ -444,11 +443,11 @@ bool ESP8266_UnvarnishSend( void ) {
  * 调用  ：被外部调用
  */
 void ESP8266_ExitUnvarnishSend( void ) {
-    Delay_ms( 1000 );
+    delay_ms( 1000 );
 
     macESP8266_Usart( "+++" );
 
-    Delay_ms( 500 );
+    delay_ms( 500 );
 }
 
 /*
@@ -587,9 +586,9 @@ void ESP8266_StaTcpClient_UnvarnishTest( void ) {
 
     // macESP8266_CH_ENABLE();
 
-    ESP8266_AT_Test();             // 测试 AT 启动
-    while ( !ESP8266_DHCP_CUR() )  // 动态IP设置成功
-        ;
+    ESP8266_AT_Test();  // 测试 AT 启动
+    // while ( !ESP8266_DHCP_CUR() )  // 动态IP设置成功
+    //     ;
 
     ESP8266_Net_Mode_Choose( STA );  // 设置 Wi-Fi 模式 Station
 
@@ -620,7 +619,7 @@ void ESP8266_StaTcpClient_UnvarnishTest( void ) {
 
         ESP8266_SendString( ENABLE, cStr, 0, Single_ID_0 );  // 发送 DHT11 温湿度信息到网络调试助手
 
-        Delay_ms( 1500 );
+        delay_ms( 1500 );
 
         if ( ucTcpClosedFlag )  // 检测是否失去连接
         {

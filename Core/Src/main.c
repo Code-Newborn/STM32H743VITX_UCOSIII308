@@ -26,6 +26,7 @@
 /* USER CODE BEGIN Includes */
 #include <stdio.h>
 #include "ESP8266.h"
+#include "delay.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -65,9 +66,7 @@ void SystemClock_Config( void );
  */
 int main( void ) {
     /* USER CODE BEGIN 1 */
-    unsigned char*  dataPtr   = NULL;
-    uint32_t        send_time = 0;
-    ESP8266_RETTYPE ucExecRes = ESP8266_NOK;
+
     /* USER CODE END 1 */
 
     /* MCU Configuration--------------------------------------------------------*/
@@ -91,8 +90,10 @@ int main( void ) {
     MX_USART1_UART_Init();
     MX_USART2_UART_Init();
     /* USER CODE BEGIN 2 */
+    delay_init( 400 );
     ESP8266_Init();
 
+    ESP8266_StaTcpClient_UnvarnishTest();
     /* USER CODE END 2 */
 
     /* Infinite loop */
@@ -102,7 +103,7 @@ int main( void ) {
 
         /* USER CODE BEGIN 3 */
         HAL_GPIO_TogglePin( LED_GPIO_Port, LED_Pin );
-        HAL_Delay( 200 );
+        HAL_Delay( 500 );
     }
     /* USER CODE END 3 */
 }

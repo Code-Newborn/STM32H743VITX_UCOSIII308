@@ -1,40 +1,29 @@
 #ifndef __ESP8266_H
 #define __ESP8266_H
 
-// #include "./common/common.h"
-#include "stm32h743xx.h"
+#include "common.h"
+#include "stm32h7xx.h"
 
 #include <stdbool.h>
 #include <stdio.h>
 
-typedef enum {
-    DISABLE = 0,
-    ENABLE  = !DISABLE,
-} FunctionalState;
-#define IS_FUNCTIONAL_STATE( STATE ) ( ( ( STATE ) == DISABLE ) || ( ( STATE ) == ENABLE ) )
+/********************************** ç”¨æˆ·éœ€è¦è®¾ç½®çš„å‚æ•°**********************************/
+// è¦è¿æ¥çš„çƒ­ç‚¹çš„åç§°ï¼Œå³WIFIåç§°
+#define macUser_ESP8266_ApSsid "Redmi K50 Ultra"
 
-typedef enum {
-    ERROR   = 0,
-    SUCCESS = !ERROR,
-} ErrorStatus;
+// è¦è¿æ¥çš„çƒ­ç‚¹çš„å¯†é’¥
+#define macUser_ESP8266_ApPwd "12345678"
 
-/********************************** ÓÃ»§ĞèÒªÉèÖÃµÄ²ÎÊı**********************************/
-// ÒªÁ¬½ÓµÄÈÈµãµÄÃû³Æ£¬¼´WIFIÃû³Æ
-#define macUser_ESP8266_ApSsid "wifiname"
+// è¦è¿æ¥çš„æœåŠ¡å™¨çš„ IPï¼Œå³ç”µè„‘çš„IP
+#define macUser_ESP8266_TcpServer_IP "192.168.219.1"
 
-// ÒªÁ¬½ÓµÄÈÈµãµÄÃÜÔ¿
-#define macUser_ESP8266_ApPwd "password"
-
-// ÒªÁ¬½ÓµÄ·şÎñÆ÷µÄ IP£¬¼´µçÄÔµÄIP
-#define macUser_ESP8266_TcpServer_IP "192.168.0.72"
-
-// ÒªÁ¬½ÓµÄ·şÎñÆ÷µÄ¶Ë¿Ú
+// è¦è¿æ¥çš„æœåŠ¡å™¨çš„ç«¯å£
 #define macUser_ESP8266_TcpServer_Port "8080"
 
-/********************************** Íâ²¿È«¾Ö±äÁ¿ ***************************************/
+/********************************** å¤–éƒ¨å…¨å±€å˜é‡ ***************************************/
 extern volatile uint8_t ucTcpClosedFlag;
 
-/********************************** ²âÊÔº¯ÊıÉùÃ÷ ***************************************/
+/********************************** æµ‹è¯•å‡½æ•°å£°æ˜ ***************************************/
 void ESP8266_StaTcpClient_UnvarnishTest( void );
 
 // extern UART_HandleTypeDef ESP8266_UartHandle;
@@ -42,7 +31,7 @@ void ESP8266_StaTcpClient_UnvarnishTest( void );
 #pragma anon_unions
 #endif
 
-/******************************* ESP8266 Êı¾İÀàĞÍ¶¨Òå ***************************/
+/******************************* ESP8266 æ•°æ®ç±»å‹å®šä¹‰ ***************************/
 typedef enum { STA, AP, STA_AP } ENUM_Net_ModeTypeDef;
 
 typedef enum {
@@ -67,10 +56,10 @@ typedef enum {
     WPA_WPA2_PSK = 4,
 } ENUM_AP_PsdMode_TypeDef;
 
-/******************************* ESP8266 Íâ²¿È«¾Ö±äÁ¿ÉùÃ÷ ***************************/
-#define RX_BUF_MAX_LEN 1024  // ×î´ó½ÓÊÕ»º´æ×Ö½ÚÊı
+/******************************* ESP8266 å¤–éƒ¨å…¨å±€å˜é‡å£°æ˜ ***************************/
+#define RX_BUF_MAX_LEN 1024  // æœ€å¤§æ¥æ”¶ç¼“å­˜å­—èŠ‚æ•°
 
-extern struct STRUCT_USARTx_Fram  // ´®¿ÚÊı¾İÖ¡µÄ´¦Àí½á¹¹Ìå
+extern struct STRUCT_USARTx_Fram  // ä¸²å£æ•°æ®å¸§çš„å¤„ç†ç»“æ„ä½“
 {
     char Data_RX_BUF[ RX_BUF_MAX_LEN ];
 
@@ -84,7 +73,7 @@ extern struct STRUCT_USARTx_Fram  // ´®¿ÚÊı¾İÖ¡µÄ´¦Àí½á¹¹Ìå
 
 } strEsp8266_Fram_Record;
 
-/******************************** ESP8266 Á¬½ÓÒı½Å¶¨Òå ***********************************/
+/******************************** ESP8266 è¿æ¥å¼•è„šå®šä¹‰ ***********************************/
 // #define macESP8266_CH_PD_CLK_ENABLE() __HAL_RCC_GPIOB_CLK_ENABLE()
 // #define macESP8266_CH_PD_PORT         GPIOB
 // #define macESP8266_CH_PD_PIN          GPIO_PIN_1
@@ -111,7 +100,7 @@ extern struct STRUCT_USARTx_Fram  // ´®¿ÚÊı¾İÖ¡µÄ´¦Àí½á¹¹Ìå
 #define macESP8266_USART_IRQ     USART6_IRQn
 #define macESP8266_USART_INT_FUN USART6_IRQHandler
 
-/*********************************************** ESP8266 º¯Êıºê¶¨Òå *******************************************/
+/*********************************************** ESP8266 å‡½æ•°å®å®šä¹‰ *******************************************/
 #define macESP8266_Usart( fmt, ... ) USART_printf( macESP8266_USARTx, fmt, ##__VA_ARGS__ )
 #define macPC_Usart( fmt, ... )      printf( fmt, ##__VA_ARGS__ )
 
@@ -121,7 +110,7 @@ extern struct STRUCT_USARTx_Fram  // ´®¿ÚÊı¾İÖ¡µÄ´¦Àí½á¹¹Ìå
 // #define macESP8266_RST_HIGH_LEVEL() HAL_GPIO_WritePin( macESP8266_RST_PORT, macESP8266_RST_PIN, GPIO_PIN_SET )
 // #define macESP8266_RST_LOW_LEVEL()  HAL_GPIO_WritePin( macESP8266_RST_PORT, macESP8266_RST_PIN, GPIO_PIN_RESET )
 
-/****************************************** ESP8266 º¯ÊıÉùÃ÷ ***********************************************/
+/****************************************** ESP8266 å‡½æ•°å£°æ˜ ***********************************************/
 void    ESP8266_Init( void );
 void    ESP8266_Rst( void );
 bool    ESP8266_Cmd( char* cmd, char* reply1, char* reply2, uint32_t waittime );
