@@ -192,14 +192,14 @@ void SysTick_Handler( void ) {
 void USART2_IRQHandler( void ) {
     /* USER CODE BEGIN USART2_IRQn 0 */
     uint8_t ucCh;
-    if ( __HAL_UART_GET_IT( &huart2, UART_IT_RXNE ) != RESET ) {
+    if ( __HAL_UART_GET_IT( &huart2, UART_IT_RXNE ) != RESET ) {  // 中断接收
         /*读取数据*/
         ucCh = huart2.Instance->RDR;
         if ( strEsp8266_Fram_Record.InfBit.FramLength < ( RX_BUF_MAX_LEN - 1 ) )  // 预留1个字节写结束符
         {
             strEsp8266_Fram_Record.Data_RX_BUF[ strEsp8266_Fram_Record.InfBit.FramLength++ ] = ucCh;
         }
-    } else if ( huart2.Instance->ISR >> 4 & 1 ) {
+    } else if ( huart2.Instance->ISR >> 4 & 1 ) {  // 中断状态寄存器
         strEsp8266_Fram_Record.InfBit.FramFinishFlag = 1;
         /*清除空闲标志位*/
         huart2.Instance->ICR |= ( ( 1 << 4 ) );
