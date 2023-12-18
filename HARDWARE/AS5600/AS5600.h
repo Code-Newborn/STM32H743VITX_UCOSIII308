@@ -8,7 +8,7 @@
 #define I2C_TIME_OUT_BASE 10
 #define I2C_TIME_OUT_BYTE 1
 
-#define abs( x ) ( ( x ) > 0 ? ( x ) : -( x ) )
+#define abs( x ) ( ( x ) > 0 ? ( x ) : -( x ) )  // 求绝对值
 #define PI       3.1415926535f
 
 #define AS5600_RAW_ADDR 0x36

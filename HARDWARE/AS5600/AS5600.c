@@ -30,6 +30,11 @@ static int i2cRead( uint8_t dev_addr, uint8_t* pData, uint32_t count ) {
     return status;
 }
 
+/**
+ * @brief     : 获取原始角度
+ * @msg       : 二进制分辨率角度
+ * @return     {*} 返回二进制角度
+ */
 uint16_t AS5600GetRawAngle( void ) {
     uint16_t raw_angle;
     uint8_t  buffer[ 2 ]        = { 0 };
@@ -41,6 +46,11 @@ uint16_t AS5600GetRawAngle( void ) {
     return raw_angle;
 }
 
+/**
+ * @brief     : 获取绝对角度值，累加圈数
+ * @msg       :
+ * @return     {*}
+ */
 float AS5600GetAngle( void ) {
     float angle_data = AS5600GetRawAngle();
 
@@ -50,5 +60,5 @@ float AS5600GetAngle( void ) {
     }
     angle_data_prev = angle_data;
 
-    return ( full_rotation_offset + ( angle_data / AS5600_RESOLUTION ) * 2 * PI );
+    return ( full_rotation_offset + ( angle_data / AS5600_RESOLUTION ) * 2 * PI );// 弧度制角度
 }

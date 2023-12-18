@@ -60,6 +60,12 @@ void Error_Handler(void);
 /* Private defines -----------------------------------------------------------*/
 #define LED_Pin GPIO_PIN_1
 #define LED_GPIO_Port GPIOA
+#define PWM_A_Pin GPIO_PIN_9
+#define PWM_A_GPIO_Port GPIOE
+#define PWN_B_Pin GPIO_PIN_11
+#define PWN_B_GPIO_Port GPIOE
+#define PWM_C_Pin GPIO_PIN_13
+#define PWM_C_GPIO_Port GPIOE
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */
