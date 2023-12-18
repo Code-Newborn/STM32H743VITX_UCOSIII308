@@ -1,6 +1,8 @@
 #ifndef __MOTOR_FOC_H
 #define __MOTOR_FOC_H
 
+#include "stdint.h"
+
 // 初始变量及函数定义
 #define _constrain( amt, low, high ) ( ( amt ) < ( low ) ? ( low ) : ( ( amt ) > ( high ) ? ( high ) : ( amt ) ) )
 // 宏定义实现的一个约束函数,用于限制一个值的范围。
@@ -10,6 +12,10 @@
 // 这样，_constrain(amt, low, high) 就会将 amt 约束在 [low, high] 的范围内。
 
 void  setTorque( float Uq, float angle_el );
-float FOC_M0_Angle();
+void  FOC_Vbus( float power_supply );
+float FOC_M0_Angle( void );
+void  Read_Usart( uint8_t* rx, float* arrays );
+float _electricalAngle( void );
+void  FOC_alignSensor( int _PP, int _DIR );
 
 #endif  // __MOTOR_FOC_H

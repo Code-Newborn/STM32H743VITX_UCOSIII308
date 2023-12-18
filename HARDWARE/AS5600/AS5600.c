@@ -49,7 +49,7 @@ uint16_t AS5600GetRawAngle( void ) {
 /**
  * @brief     : 获取绝对角度值，累加圈数
  * @msg       :
- * @return     {*}
+ * @return     {*} 返回弧度制角度
  */
 float AS5600GetAngle( void ) {
     float angle_data = AS5600GetRawAngle();
@@ -60,5 +60,5 @@ float AS5600GetAngle( void ) {
     }
     angle_data_prev = angle_data;
 
-    return ( full_rotation_offset + ( angle_data / AS5600_RESOLUTION ) * 2 * PI );// 弧度制角度
+    return ( full_rotation_offset + ( angle_data / AS5600_RESOLUTION ) * 2 * PI );  // 弧度制角度
 }

@@ -1,6 +1,8 @@
 #include "Motor_FOC.h"
-#include "math.h"
-#include "stdio.h"
+#include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "AS5600.h"
 #include "delay.h"
 #include "tim.h"
@@ -58,7 +60,7 @@ void setTorque( float Uq, float angle_el ) {
     angle_el = _normalizeAngle( angle_el );  // 电角度
 
     // 帕克逆变换
-    Ualpha = -Uq * sin( angle_el );
+    Ualpha = -Uq * sin( angle_el );  // 与Alpha轴对齐
     Ubeta  = Uq * cos( angle_el );
 
     // 克拉克逆变换
@@ -71,10 +73,10 @@ void setTorque( float Uq, float angle_el ) {
 /**
  * @brief     : 设置相电压阈值
  * @msg       :
- * @param      {float} power_supply
+ * @param      {float} power_supply 母线电压值
  * @return     {*}
  */
-void DFOC_Vbus( float power_supply ) {
+void FOC_Vbus( float power_supply ) {
     voltage_power_supply = power_supply;
 
     // TODO 设置引脚工作模式
@@ -85,7 +87,7 @@ void DFOC_Vbus( float power_supply ) {
     // ledcAttachPin( pwmB, 1 );
     // ledcAttachPin( pwmC, 2 );
     // TODO 串口1打印信息
-    printf( "完成PWM初始化设置" );
+    printf( "完成相电压阈值设置！" );
 
     // TODO 初始化IIC引脚
     // BeginSensor();
@@ -96,7 +98,7 @@ void DFOC_Vbus( float power_supply ) {
  * @msg       :
  * @return     {*} 弧度制
  */
-float _electricalAngle() {
+float _electricalAngle( void ) {
     return _normalizeAngle( ( float )( DIR * PP ) * AS5600GetAngle() - zero_electric_angle );
 }
 
@@ -107,19 +109,21 @@ float _electricalAngle() {
  * @param      {int} _DIR
  * @return     {*}
  */
-void DFOC_alignSensor( int _PP, int _DIR ) {
-    PP  = _PP;
-    DIR = _DIR;
-    setTorque( 3, _3PI_2 );
-    delay( 3000 );
-    zero_electric_angle = _electricalAngle();
-    setTorque( 0, _3PI_2 );
+void FOC_alignSensor( int _PP, int _DIR ) {
+    PP  = _PP;               // 设置极对数
+    DIR = _DIR;              // 设置传感器方向
+    setTorque( 3, _3PI_2 );  // 设置力矩，对齐Alpha轴
+    delay_ms( 3000 );
+    zero_electric_angle = _electricalAngle();  // 获取0位电角度
+
+    setTorque( 0, _3PI_2 );  // 取消力矩，对齐Alpha轴
+    // 打印0位电角度
     printf( "0电角度：" );
     printf( "%.7f", zero_electric_angle );
 }
 
-float FOC_M0_Angle() {
-    return getAngle();  // 获取弧度角度
+float FOC_M0_Angle( void ) {
+    return AS5600GetAngle();  // 获取弧度角度
 }
 
 //==============串口1接收数据==============
@@ -155,3 +159,36 @@ float FOC_M0_Angle() {
 //     }
 //     return command;
 // }
+
+/**
+ * @brief     : 接收到的数据转换成浮点型
+ * @msg       :
+ * @param      {uint8_t*} rx 接收到的字符串
+ * @param      {float*} arrays 浮点型数组
+ * @return     {*}
+ */
+void Read_Usart( uint8_t* rx, float* arrays ) {
+    static char shuzu[ 6 ][ 8 ] = { 0 };  // 接收数据，每个数据包含小数点和负号可容纳8位（十进制）  发送的字符(包含点.在内)长度最好<8
+    static int  begin = 0, x = 0, y = 0;  // 有效数据标志，二维数组元素变量
+    int         num;
+
+    for ( int i = 0;; i++ ) {
+        if ( rx[ i ] == '[' ) {  // 起始标志
+            begin = 1;
+            x     = 0;
+            y     = 0;
+        } else if ( rx[ i ] == ']' ) {  // 结束标志 在结束时字符转换为实数
+            begin = 0;
+            for ( num = 0; num <= x; num++ )
+                arrays[ num ] = ( float )atof( shuzu[ num ] );
+            memset( shuzu, 0, sizeof( shuzu ) );  // 清空数组，初始化为0
+            break;
+        } else if ( rx[ i ] == ',' ) {
+            x++;
+            y = 0;
+        } else if ( begin == 1 ) {
+            shuzu[ x ][ y ] = rx[ i ];
+            y++;
+        }
+    }
+}
