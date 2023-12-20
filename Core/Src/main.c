@@ -135,9 +135,9 @@ int main( void ) {
         Motor_Enable( motor_en );
 
         float Kp           = 0.133;
-        float Sensor_Angle = FOC_M0_Angle();               // 传感器角度（弧度）
-        angle              = Sensor_Angle * ( 180 / PI );  // 显示绝对角度值
-                                                           // setTorque( 10, _electricalAngle() );               // 位置闭环
+        float Sensor_Angle = FOC_M0_Angle();                            // 传感器角度（弧度）
+        angle              = Sensor_DIR * Sensor_Angle * ( 180 / PI );  // 显示绝对角度值，编码器数值纠正方向，与电机旋转方向一致
+                                                                        // setTorque( 10, _electricalAngle() );               // 位置闭环
 
         // serialReceiveUserCommand();  // 获取目标角度
 
@@ -146,7 +146,7 @@ int main( void ) {
         setTorque( Kp * ( _target_angle - Sensor_DIR * Sensor_Angle ) * 180 / PI, _electricalAngle() );  // 位置闭环
         // scanf( "%s", msg_buff );                          // 获取串口数据                                                                                                   // 获取串口信息
         // Read_Usart( msg_buff, msg );                      // 解析串口数据
-        printf( "%f\r\n", ( _target_angle - Sensor_DIR * Sensor_Angle ) * 180 / PI );  // 打印角度误差数据
+        printf( "%f\r\n", ( _target_angle - angle ) * 180 / PI );  // 打印角度误差数据
     }
     /* USER CODE END 3 */
 }
