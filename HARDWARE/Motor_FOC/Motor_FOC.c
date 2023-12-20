@@ -192,3 +192,16 @@ void Read_Usart( uint8_t* rx, float* arrays ) {
         }
     }
 }
+
+/**
+ * @brief     : 电机使能
+ * @msg       : True 为使能 False 为禁能
+ * @param      {bool} enabale
+ * @return     {*}
+ */
+void Motor_Enable( bool enabale ) {
+    if ( enabale == true )
+        HAL_GPIO_WritePin( Motor_EN_GPIO_Port, Motor_EN_Pin, GPIO_PIN_SET );
+    else
+        HAL_GPIO_WritePin( Motor_EN_GPIO_Port, Motor_EN_Pin, GPIO_PIN_RESET );
+}

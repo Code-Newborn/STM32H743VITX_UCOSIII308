@@ -66,7 +66,9 @@ void SystemClock_Config( void );
 uint8_t msg_buff[ MAX_RECV_LEN ] = { 0 };
 float   message[ 6 ]             = { 0 };
 float*  msg                      = message;
-float target_angle = 0;
+float   target_angle             = 0;
+
+bool motor_en = false;
 
 /* USER CODE END 0 */
 
@@ -94,6 +96,7 @@ int main( void ) {
     /* USER CODE BEGIN SysInit */
 
     /* USER CODE END SysInit */
+
     /* Initialize all configured peripherals */
     MX_GPIO_Init();
     MX_I2C1_Init();
@@ -106,12 +109,14 @@ int main( void ) {
     HAL_TIM_PWM_Start( &htim1, TIM_CHANNEL_2 );
     HAL_TIM_PWM_Start( &htim1, TIM_CHANNEL_3 );
 
+    Motor_Enable( true );
+
     delay_init( 400 );                        // 延时函数初始化频率
     AS5600Init();                             // 编码器初始化
     FOC_Vbus( 12.6 );                         // 设定驱动器供电电压
     FOC_alignSensor( Motor_PP, Sensor_DIR );  // 电角度标定
-    /* USER CODE END 2 */
 
+    /* USER CODE END 2 */
     /* Infinite loop */
     /* USER CODE BEGIN WHILE */
     while ( 1 ) {
@@ -126,14 +131,16 @@ int main( void ) {
         // angle     = angle * ( 180 / PI );  // 显示绝对角度值
         // HAL_Delay( 100 );
 
+        Motor_Enable( motor_en );
+
         float Kp           = 0.133;
         float Sensor_Angle = FOC_M0_Angle();               // 传感器角度（弧度）
         angle              = Sensor_Angle * ( 180 / PI );  // 显示绝对角度值
-        //setTorque( 10, _electricalAngle() );               // 位置闭环
+                                                           // setTorque( 10, _electricalAngle() );               // 位置闭环
 
         // serialReceiveUserCommand();  // 获取目标角度
-		
-		float _target_angle = target_angle/(180 / PI);
+
+        float _target_angle = target_angle / ( 180 / PI );
 
         setTorque( Kp * ( _target_angle - Sensor_DIR * Sensor_Angle ) * 180 / PI, _electricalAngle() );  // 位置闭环
         // scanf( "%s", msg_buff );                          // 获取串口数据                                                                                                   // 获取串口信息

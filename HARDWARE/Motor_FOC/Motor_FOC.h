@@ -1,7 +1,8 @@
 #ifndef __MOTOR_FOC_H
 #define __MOTOR_FOC_H
 
-#include "stdint.h"
+#include <stdbool.h>
+#include <stdint.h>
 
 // 初始变量及函数定义
 #define _constrain( amt, low, high ) ( ( amt ) < ( low ) ? ( low ) : ( ( amt ) > ( high ) ? ( high ) : ( amt ) ) )
@@ -17,5 +18,7 @@ float FOC_M0_Angle( void );
 void  Read_Usart( uint8_t* rx, float* arrays );
 float _electricalAngle( void );
 void  FOC_alignSensor( int _PP, int _DIR );
+
+void Motor_Enable( bool enabale );
 
 #endif  // __MOTOR_FOC_H
