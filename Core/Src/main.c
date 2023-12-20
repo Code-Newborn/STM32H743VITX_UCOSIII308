@@ -117,6 +117,7 @@ int main( void ) {
     FOC_alignSensor( Motor_PP, Sensor_DIR );  // 电角度标定
 
     /* USER CODE END 2 */
+
     /* Infinite loop */
     /* USER CODE BEGIN WHILE */
     while ( 1 ) {
