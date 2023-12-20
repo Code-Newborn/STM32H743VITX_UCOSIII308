@@ -66,6 +66,7 @@ void SystemClock_Config( void );
 uint8_t msg_buff[ MAX_RECV_LEN ] = { 0 };
 float   message[ 6 ]             = { 0 };
 float*  msg                      = message;
+float target_angle = 0;
 
 /* USER CODE END 0 */
 
@@ -100,6 +101,11 @@ int main( void ) {
     MX_USART2_UART_Init();
     MX_TIM1_Init();
     /* USER CODE BEGIN 2 */
+
+    HAL_TIM_PWM_Start( &htim1, TIM_CHANNEL_1 );
+    HAL_TIM_PWM_Start( &htim1, TIM_CHANNEL_2 );
+    HAL_TIM_PWM_Start( &htim1, TIM_CHANNEL_3 );
+
     delay_init( 400 );                        // 延时函数初始化频率
     AS5600Init();                             // 编码器初始化
     FOC_Vbus( 12.6 );                         // 设定驱动器供电电压
@@ -121,14 +127,18 @@ int main( void ) {
         // HAL_Delay( 100 );
 
         float Kp           = 0.133;
-        float Sensor_Angle = FOC_M0_Angle();  // 传感器角度（弧度）
+        float Sensor_Angle = FOC_M0_Angle();               // 传感器角度（弧度）
+        angle              = Sensor_Angle * ( 180 / PI );  // 显示绝对角度值
+        //setTorque( 10, _electricalAngle() );               // 位置闭环
 
         // serialReceiveUserCommand();  // 获取目标角度
+		
+		float _target_angle = target_angle/(180 / PI);
 
-        setTorque( Kp * ( message[ 0 ] - Sensor_DIR * Sensor_Angle ) * 180 / PI, _electricalAngle() );  // 位置闭环
-        scanf( "%s", msg_buff );                          // 获取串口数据                                                                                                   // 获取串口信息
-        Read_Usart( msg_buff, msg );                      // 解析串口数据
-        printf( "%f\r\n", message[ 0 ] - Sensor_Angle );  // 打印角度误差数据
+        setTorque( Kp * ( _target_angle - Sensor_DIR * Sensor_Angle ) * 180 / PI, _electricalAngle() );  // 位置闭环
+        // scanf( "%s", msg_buff );                          // 获取串口数据                                                                                                   // 获取串口信息
+        // Read_Usart( msg_buff, msg );                      // 解析串口数据
+        printf( "%f\r\n", ( _target_angle - Sensor_DIR * Sensor_Angle ) * 180 / PI );  // 打印角度误差数据
     }
     /* USER CODE END 3 */
 }
