@@ -2,22 +2,29 @@
 #define __ESP8266_H
 
 #include "common.h"
+#include "main.h"
 #include "stm32h7xx.h"
 
 #include <stdbool.h>
 #include <stdio.h>
 
+#define LED1_ON  HAL_GPIO_WritePin( LED_GPIO_Port, LED_Pin, GPIO_PIN_RESET )
+#define LED1_OFF HAL_GPIO_WritePin( LED_GPIO_Port, LED_Pin, GPIO_PIN_SET )
+
 /********************************** 用户需要设置的参数**********************************/
-// 要连接的热点的名称，即WIFI名称
+#define macUser_ESP8266_BulitApSsid        "YehuoLink"  // 要建立的热点的名称
+#define macUser_ESP8266_BulitApPwd         "wildfire"   // 要建立的热点的密钥
+#define macUser_ESP8266_BulitApEcn         OPEN         // 要建立的热点的加密方式
+#define macUser_ESP8266_TcpServer_OverTime "1800"       // 服务器超时时间（单位：秒）
+
+// 要连接的WIFI名称，密码
 #define macUser_ESP8266_ApSsid "Redmi K50 Ultra"
+#define macUser_ESP8266_ApPwd  "12345678"
 
-// 要连接的热点的密钥
-#define macUser_ESP8266_ApPwd "12345678"
-
-// 要连接的服务器的 IP，即电脑的IP
-#define macUser_ESP8266_TcpServer_IP "192.168.219.1"
-
-// 要连接的服务器的端口
+// 要连接的服务器的 IP，即电脑的IP，通过cmd输入命令ipconfig查看IPv4地址
+// #define macUser_ESP8266_TcpServer_IP "192.168.205.194"  // 连接手机热点用
+#define macUser_ESP8266_TcpServer_IP "192.168.205.94"  // 连接手机热点用
+// 要连接的服务器的端口，网络调试助手设置
 #define macUser_ESP8266_TcpServer_Port "8080"
 
 /********************************** 外部全局变量 ***************************************/
@@ -25,6 +32,7 @@ extern volatile uint8_t ucTcpClosedFlag;
 
 /********************************** 测试函数声明 ***************************************/
 void ESP8266_StaTcpClient_UnvarnishTest( void );
+void ESP8266_StaTcpClient_UnvarnishTest_LedCtrl( void );
 
 // extern UART_HandleTypeDef ESP8266_UartHandle;
 #if defined( __CC_ARM )
@@ -56,6 +64,14 @@ typedef enum {
     WPA_WPA2_PSK = 4,
 } ENUM_AP_PsdMode_TypeDef;
 
+typedef struct {
+    uint8_t humi_int;   // 湿度的整数部分
+    uint8_t humi_deci;  // 湿度的小数部分
+    uint8_t temp_int;   // 温度的整数部分
+    uint8_t temp_deci;  // 温度的小数部分
+    uint8_t check_sum;  // 校验和
+} DHT11_Data_TypeDef;
+
 /******************************* ESP8266 外部全局变量声明 ***************************/
 #define RX_BUF_MAX_LEN 1024  // 最大接收缓存字节数
 
@@ -70,7 +86,6 @@ extern struct STRUCT_USARTx_Fram  // 串口数据帧的处理结构体
             __IO uint16_t FramFinishFlag : 1;  // 15
         } InfBit;
     };
-
 } strEsp8266_Fram_Record;
 
 /******************************** ESP8266 连接引脚定义 ***********************************/

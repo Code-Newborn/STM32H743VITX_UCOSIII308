@@ -93,7 +93,7 @@ int main( void ) {
     delay_init( 400 );
     ESP8266_Init();
 
-    ESP8266_StaTcpClient_UnvarnishTest();
+    ESP8266_StaTcpClient_UnvarnishTest_LedCtrl();
     /* USER CODE END 2 */
 
     /* Infinite loop */
@@ -102,8 +102,8 @@ int main( void ) {
         /* USER CODE END WHILE */
 
         /* USER CODE BEGIN 3 */
-        HAL_GPIO_TogglePin( LED_GPIO_Port, LED_Pin );
-        HAL_Delay( 500 );
+        // HAL_GPIO_TogglePin( LED_GPIO_Port, LED_Pin );
+        // HAL_Delay( 500 );
     }
     /* USER CODE END 3 */
 }
