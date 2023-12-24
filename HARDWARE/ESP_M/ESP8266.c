@@ -115,8 +115,8 @@ bool ESP8266_DHCP_CUR() {
     char cCmd[ 40 ];
 
     // AP与STA切换时需修改
-    // sprintf( cCmd, "AT+CWDHCP_CUR=1,1" );  // 设置 ESP8266 Station 开启 DHCP
-    sprintf( cCmd, "AT+CWDHCP_CUR=0,0" );  // 设置 ESP8266 Station 关闭 DHCP
+    sprintf( cCmd, "AT+CWDHCP_CUR=0,1" );  // 设置 ESP8266 Station 开启 DHCP
+    // sprintf( cCmd, "AT+CWDHCP_CUR=0,0" );  // 设置 ESP8266 Station 关闭 DHCP
 
     return ESP8266_Cmd( cCmd, "OK", NULL, 500 );
 }
@@ -573,7 +573,7 @@ uint8_t ESP8266_CIPAP( char* pApIp ) {
 volatile uint8_t ucTcpClosedFlag = 0;
 
 /**
- * @brief  ESP8266 （Sta Tcp Client）透传
+ * @brief  ESP8266 （Sta站点终端设备 Tcp Client）透传
  * @param  无
  * @retval 无
  */
@@ -592,7 +592,7 @@ void ESP8266_StaTcpClient_UnvarnishTest( void ) {
     while ( !ESP8266_DHCP_CUR() )  // 动态IP设置成功
         ;
 
-    ESP8266_Net_Mode_Choose( STA );  // 设置 Wi-Fi 模式 Station
+    ESP8266_Net_Mode_Choose( STA );  // Station 站点终端
 
     while ( !ESP8266_JoinAP( macUser_ESP8266_ApSsid, macUser_ESP8266_ApPwd ) )  // 连接目标AP成功
         ;
@@ -651,7 +651,7 @@ void ESP8266_StaTcpClient_UnvarnishTest( void ) {
 }
 
 /**
- * @brief  ESP8266 （Sta Tcp Client）透传
+ * @brief  ESP8266 （AP网络中心节点 Tcp Client）透传，TCP指令控制
  * @param  无
  * @retval 无
  */

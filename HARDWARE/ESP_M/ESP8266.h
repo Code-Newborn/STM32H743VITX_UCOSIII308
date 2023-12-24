@@ -33,6 +33,7 @@ extern volatile uint8_t ucTcpClosedFlag;
 /********************************** 测试函数声明 ***************************************/
 void ESP8266_StaTcpClient_UnvarnishTest( void );
 void ESP8266_StaTcpClient_UnvarnishTest_LedCtrl( void );
+void ESP8266_StaTcpClient_UnvarnishTest_mobile( void );
 
 // extern UART_HandleTypeDef ESP8266_UartHandle;
 #if defined( __CC_ARM )
