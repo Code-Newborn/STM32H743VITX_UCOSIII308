@@ -96,6 +96,7 @@ int main( void ) {
     /* USER CODE BEGIN 2 */
     delay_init( 400 );
     OLED_Init();  // OLED初始化
+
     /* USER CODE END 2 */
 
     /* Infinite loop */

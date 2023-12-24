@@ -66,8 +66,8 @@ void Error_Handler( void );
 #define OLED_DC_GPIO_Port  GPIOC
 #define OLED_CS_Pin        GPIO_PIN_0
 #define OLED_CS_GPIO_Port  GPIOB
-#define DHT11_DQ_Pin       GPIO_PIN_1
-#define DHT11_DQ_GPIO_Port GPIOB
+#define DHT11_DQ_Pin       GPIO_PIN_11
+#define DHT11_DQ_GPIO_Port GPIOD
 /* USER CODE BEGIN Private defines */
 extern uint8_t Pin_state;
 /* USER CODE END Private defines */
