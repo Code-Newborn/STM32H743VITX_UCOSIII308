@@ -696,6 +696,7 @@ void ESP8266_StaTcpClient_UnvarnishTest_LedCtrl( void ) {
         if ( strEsp8266_Fram_Record.InfBit.FramFinishFlag ) {
             strEsp8266_Fram_Record.Data_RX_BUF[ strEsp8266_Fram_Record.InfBit.FramLength ] = '\0';
 
+            // 发送CMD_LED_1_1 打开1号灯
             if ( ( pCh = strstr( strEsp8266_Fram_Record.Data_RX_BUF, "CMD_LED_" ) ) != 0 ) {
                 cCh = *( pCh + 8 );
 
