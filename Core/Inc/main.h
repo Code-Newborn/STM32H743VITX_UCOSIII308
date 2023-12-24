@@ -24,8 +24,7 @@
 #define __MAIN_H
 
 #ifdef __cplusplus
-extern "C"
-{
+extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
@@ -34,44 +33,44 @@ extern "C"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "string.h"
-  /* USER CODE END Includes */
+/* USER CODE END Includes */
 
-  /* Exported types ------------------------------------------------------------*/
-  /* USER CODE BEGIN ET */
+/* Exported types ------------------------------------------------------------*/
+/* USER CODE BEGIN ET */
 
-  /* USER CODE END ET */
+/* USER CODE END ET */
 
-  /* Exported constants --------------------------------------------------------*/
-  /* USER CODE BEGIN EC */
+/* Exported constants --------------------------------------------------------*/
+/* USER CODE BEGIN EC */
 
-  /* USER CODE END EC */
+/* USER CODE END EC */
 
-  /* Exported macro ------------------------------------------------------------*/
-  /* USER CODE BEGIN EM */
+/* Exported macro ------------------------------------------------------------*/
+/* USER CODE BEGIN EM */
 
-  /* USER CODE END EM */
+/* USER CODE END EM */
 
-  /* Exported functions prototypes ---------------------------------------------*/
-  void Error_Handler(void);
+/* Exported functions prototypes ---------------------------------------------*/
+void Error_Handler( void );
 
 /* USER CODE BEGIN EFP */
 
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define LED_Pin GPIO_PIN_1
-#define LED_GPIO_Port GPIOA
-#define OLED_RST_Pin GPIO_PIN_4
+#define LED_Pin            GPIO_PIN_1
+#define LED_GPIO_Port      GPIOA
+#define OLED_RST_Pin       GPIO_PIN_4
 #define OLED_RST_GPIO_Port GPIOC
-#define OLED_DC_Pin GPIO_PIN_5
-#define OLED_DC_GPIO_Port GPIOC
-#define OLED_CS_Pin GPIO_PIN_0
-#define OLED_CS_GPIO_Port GPIOB
-#define DHT11_DQ_Pin GPIO_PIN_1
+#define OLED_DC_Pin        GPIO_PIN_5
+#define OLED_DC_GPIO_Port  GPIOC
+#define OLED_CS_Pin        GPIO_PIN_0
+#define OLED_CS_GPIO_Port  GPIOB
+#define DHT11_DQ_Pin       GPIO_PIN_1
 #define DHT11_DQ_GPIO_Port GPIOB
-  /* USER CODE BEGIN Private defines */
-  extern uint8_t Pin_state;
-  /* USER CODE END Private defines */
+/* USER CODE BEGIN Private defines */
+extern uint8_t Pin_state;
+/* USER CODE END Private defines */
 
 #ifdef __cplusplus
 }
