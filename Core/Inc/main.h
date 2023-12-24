@@ -60,9 +60,9 @@ void Error_Handler( void );
 /* Private defines -----------------------------------------------------------*/
 #define LED_Pin            GPIO_PIN_1
 #define LED_GPIO_Port      GPIOA
-#define OLED_RST_Pin       GPIO_PIN_4
-#define OLED_RST_GPIO_Port GPIOC
-#define OLED_DC_Pin        GPIO_PIN_5
+#define OLED_RST_Pin       GPIO_PIN_6
+#define OLED_RST_GPIO_Port GPIOA
+#define OLED_DC_Pin        GPIO_PIN_4
 #define OLED_DC_GPIO_Port  GPIOC
 #define OLED_CS_Pin        GPIO_PIN_0
 #define OLED_CS_GPIO_Port  GPIOB
