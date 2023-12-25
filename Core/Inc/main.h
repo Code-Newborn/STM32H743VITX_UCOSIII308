@@ -60,8 +60,8 @@ void Error_Handler( void );
 /* Private defines -----------------------------------------------------------*/
 #define LED_Pin            GPIO_PIN_1
 #define LED_GPIO_Port      GPIOA
-#define DHT11_DQ_Pin       GPIO_PIN_1
-#define DHT11_DQ_GPIO_Port GPIOB
+#define DHT11_DQ_Pin       GPIO_PIN_11
+#define DHT11_DQ_GPIO_Port GPIOD
 /* USER CODE BEGIN Private defines */
 extern uint8_t Pin_state;
 /* USER CODE END Private defines */

@@ -29,18 +29,18 @@ static void DHT11_GPIO_MODE_SET( uint8_t mode ) {
     if ( mode ) {
         /*  输入  */
         GPIO_InitTypeDef GPIO_InitStruct;
-        GPIO_InitStruct.Pin  = GPIO_PIN_1;       //  11号引脚
+        GPIO_InitStruct.Pin  = DHT11_DQ_Pin;     //  11号引脚
         GPIO_InitStruct.Mode = GPIO_MODE_INPUT;  //  输入模式
         GPIO_InitStruct.Pull = GPIO_PULLUP;      //  上拉输入
-        HAL_GPIO_Init( GPIOB, &GPIO_InitStruct );
+        HAL_GPIO_Init( DHT11_DQ_GPIO_Port, &GPIO_InitStruct );
     } else {
         /*  输出  */
         GPIO_InitTypeDef GPIO_InitStructure;
-        GPIO_InitStructure.Pin   = GPIO_PIN_1;            //  11号引脚
+        GPIO_InitStructure.Pin   = DHT11_DQ_Pin;          //  11号引脚
         GPIO_InitStructure.Mode  = GPIO_MODE_OUTPUT_PP;   //  Push Pull 推挽输出模式
         GPIO_InitStructure.Pull  = GPIO_PULLUP;           //  上拉输出
         GPIO_InitStructure.Speed = GPIO_SPEED_FREQ_HIGH;  //  高速
-        HAL_GPIO_Init( GPIOB, &GPIO_InitStructure );
+        HAL_GPIO_Init( DHT11_DQ_GPIO_Port, &GPIO_InitStructure );
     }
 }
 
