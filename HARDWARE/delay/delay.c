@@ -25,8 +25,6 @@
 
 #include "delay.h"
 
-#include "stm32h7xx.h"
-#include "core_cm7.h"
 #include "stm32h7xx_hal.h"
 
 static uint32_t g_fac_us = 0; /* us延时倍乘数 */
@@ -59,20 +57,19 @@ static uint32_t g_fac_us = 0; /* us延时倍乘数 */
  * @param     sysclk: 系统时钟频率, 即CPU频率(CubeMX中的SYSCLK)
  * @retval    无
  */
-void delay_init(uint16_t sysclk)
-{
+void delay_init( uint16_t sysclk ) {
 #if SYS_SUPPORT_OS /* 如果需要支持OS */
     uint32_t reload;
 #endif
     SysTick->CTRL = 0;
-    HAL_SYSTICK_CLKSourceConfig(SYSTICK_CLKSOURCE_HCLK); /* SYSTICK使用外部时钟源,频率为HCLK */
-    g_fac_us = sysclk;                                   /* 不论是否使用OS，g_fac_us都需要使用 */
-#if SYS_SUPPORT_OS                                       /* 如果需要支持OS. */
-    reload = sysclk;                                     /* 每秒钟的计数次数 单位为M */
+    HAL_SYSTICK_CLKSourceConfig( SYSTICK_CLKSOURCE_HCLK ); /* SYSTICK使用外部时钟源,频率为HCLK */
+    g_fac_us = sysclk;                                     /* 不论是否使用OS，g_fac_us都需要使用 */
+#if SYS_SUPPORT_OS                                         /* 如果需要支持OS. */
+    reload = sysclk;                                       /* 每秒钟的计数次数 单位为M */
     reload *= 1000000 / OSCfg_TickRate_Hz;
 
     SysTick->CTRL |= 1 << 1;
-    SysTick->LOAD = reload; // 每经过 reload 个系统节拍完成一个UCOS时间片
+    SysTick->LOAD = reload;  // 每经过 reload 个系统节拍完成一个UCOS时间片
     SysTick->CTRL |= 1 << 0;
 #endif
 }
@@ -85,8 +82,7 @@ void delay_init(uint16_t sysclk)
  * @note      nus取值范围 : 0 ~ 190887435us(最大值即 2^32 / fac_us @fac_us = 21)
  * @retval    无
  */
-void delay_us(uint32_t nus)
-{
+void delay_us( uint32_t nus ) {
     uint32_t ticks;
     uint32_t told, tnow, tcnt = 0;
     uint32_t reload = SysTick->LOAD; /* LOAD的值 */
@@ -94,30 +90,24 @@ void delay_us(uint32_t nus)
     OS_ERR err;
     ticks = nus * g_fac_us; /* 需要的节拍数 */
     /* 锁定 uC/OS-III 的任务调度器 */
-    OSSchedLock(&err);
+    OSSchedLock( &err );
     told = SysTick->VAL; /* 刚进入时的计数器值 */
-    while (1)
-    {
+    while ( 1 ) {
         tnow = SysTick->VAL;
-        if (tnow != told)
-        {
-            if (tnow < told)
-            {
+        if ( tnow != told ) {
+            if ( tnow < told ) {
                 tcnt += told - tnow; /* 这里注意一下SYSTICK是一个递减的计数器就可以了 */
-            }
-            else
-            {
+            } else {
                 tcnt += reload - tnow + told;
             }
             told = tnow;
-            if (tcnt >= ticks)
-            {
+            if ( tcnt >= ticks ) {
                 break; /* 时间超过/等于要延迟的时间,则退出 */
             }
         }
     }
     /* 恢复 uC/OS-III 的任务调度器 */
-    OSSchedUnlock(&err);
+    OSSchedUnlock( &err );
 }
 
 /**
@@ -125,12 +115,10 @@ void delay_us(uint32_t nus)
  * @param     nms: 要延时的ms数 (0< nms <= 65535)
  * @retval    无
  */
-void delay_ms(uint16_t nms)
-{
+void delay_ms( uint16_t nms ) {
     uint32_t i;
-    for (i = 0; i < nms; i++)
-    {
-        delay_us(1000);
+    for ( i = 0; i < nms; i++ ) {
+        delay_us( 1000 );
     }
 }
 
@@ -142,18 +130,16 @@ void delay_ms(uint16_t nms)
  * @note        nus取值范围 : 0~190887435(最大值即 2^32 / fac_us @fac_us = 21)
  * @retval      无
  */
-void delay_us(uint32_t nus)
-{
+void delay_us( uint32_t nus ) {
     uint32_t temp;
-    SysTick->LOAD = nus * g_fac_us;           // 时间加载
-    SysTick->VAL = 0x00;                      // 清空计数器
-    SysTick->CTRL |= SysTick_CTRL_ENABLE_Msk; // 开始倒数
-    do
-    {
+    SysTick->LOAD = nus * g_fac_us;            // 时间加载
+    SysTick->VAL  = 0x00;                      // 清空计数器
+    SysTick->CTRL |= SysTick_CTRL_ENABLE_Msk;  // 开始倒数
+    do {
         temp = SysTick->CTRL;
-    } while ((temp & 0x01) && !(temp & (1 << 16))); // 等待时间到达
-    SysTick->CTRL &= ~SysTick_CTRL_ENABLE_Msk;      // 关闭计数器
-    SysTick->VAL = 0X00;                            // 清空计数器
+    } while ( ( temp & 0x01 ) && !( temp & ( 1 << 16 ) ) );  // 等待时间到达
+    SysTick->CTRL &= ~SysTick_CTRL_ENABLE_Msk;               // 关闭计数器
+    SysTick->VAL = 0X00;                                     // 清空计数器
 }
 
 /**
@@ -162,20 +148,17 @@ void delay_us(uint32_t nus)
  * @retval      无
  */
 uint32_t test = 0;
-void delay_ms(uint16_t nms)
-{
+void     delay_ms( uint16_t nms ) {
     uint32_t repeat = nms / 540; /*  这里用540,是考虑到可能有超频应用, 比如248M的时候,delay_us最大只能延时541ms左右了 */
     uint32_t remain = nms % 540;
-    test = repeat;
-    while (repeat != 0)
-    {
-        delay_us(540 * 1000); /* 利用delay_us 实现 540ms 延时 */
+    test            = repeat;
+    while ( repeat != 0 ) {
+        delay_us( 540 * 1000 ); /* 利用delay_us 实现 540ms 延时 */
         repeat--;
     }
 
-    if (remain)
-    {
-        delay_us(remain * 1000); /* 利用delay_us, 把尾数延时(remain ms)给做了 */
+    if ( remain ) {
+        delay_us( remain * 1000 ); /* 利用delay_us, 把尾数延时(remain ms)给做了 */
     }
 }
 
@@ -185,8 +168,7 @@ void delay_ms(uint16_t nms)
  * @param       Delay : 要延时的毫秒数
  * @retval      None
  */
-void HAL_Delay(uint32_t Delay)
-{
-    delay_ms(Delay);
+void HAL_Delay( uint32_t Delay ) {
+    delay_ms( Delay );
 }
 #endif
