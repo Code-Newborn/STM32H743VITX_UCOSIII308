@@ -27,141 +27,131 @@
 ADC_HandleTypeDef hadc1;
 
 /* ADC1 init function */
-void MX_ADC1_Init(void)
-{
+void MX_ADC1_Init( void ) {
 
-  /* USER CODE BEGIN ADC1_Init 0 */
+    /* USER CODE BEGIN ADC1_Init 0 */
 
-  /* USER CODE END ADC1_Init 0 */
+    /* USER CODE END ADC1_Init 0 */
 
-  ADC_MultiModeTypeDef multimode = {0};
-  ADC_ChannelConfTypeDef sConfig = {0};
+    ADC_MultiModeTypeDef   multimode = { 0 };
+    ADC_ChannelConfTypeDef sConfig   = { 0 };
 
-  /* USER CODE BEGIN ADC1_Init 1 */
+    /* USER CODE BEGIN ADC1_Init 1 */
 
-  /* USER CODE END ADC1_Init 1 */
-  /** Common config
-   */
-  hadc1.Instance = ADC1;
-  hadc1.Init.ClockPrescaler = ADC_CLOCK_ASYNC_DIV2;
-  hadc1.Init.Resolution = ADC_RESOLUTION_16B;
-  hadc1.Init.ScanConvMode = ADC_SCAN_ENABLE;
-  hadc1.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
-  hadc1.Init.LowPowerAutoWait = DISABLE;
-  hadc1.Init.ContinuousConvMode = DISABLE;
-  hadc1.Init.NbrOfConversion = 2;
-  hadc1.Init.DiscontinuousConvMode = ENABLE;
-  hadc1.Init.NbrOfDiscConversion = 1;
-  hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
-  hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
-  hadc1.Init.ConversionDataManagement = ADC_CONVERSIONDATA_DR;
-  hadc1.Init.Overrun = ADC_OVR_DATA_PRESERVED;
-  hadc1.Init.LeftBitShift = ADC_LEFTBITSHIFT_NONE;
-  hadc1.Init.OversamplingMode = DISABLE;
-  if (HAL_ADC_Init(&hadc1) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /** Configure the ADC multi-mode
-   */
-  multimode.Mode = ADC_MODE_INDEPENDENT;
-  if (HAL_ADCEx_MultiModeConfigChannel(&hadc1, &multimode) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /** Configure Regular Channel
-   */
-  sConfig.Channel = ADC_CHANNEL_14;
-  sConfig.Rank = ADC_REGULAR_RANK_1;
-  sConfig.SamplingTime = ADC_SAMPLETIME_2CYCLES_5;
-  sConfig.SingleDiff = ADC_SINGLE_ENDED;
-  sConfig.OffsetNumber = ADC_OFFSET_NONE;
-  sConfig.Offset = 0;
-  sConfig.OffsetSignedSaturation = DISABLE;
-  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /** Configure Regular Channel
-   */
-  sConfig.Channel = ADC_CHANNEL_15;
-  sConfig.Rank = ADC_REGULAR_RANK_2;
-  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN ADC1_Init 2 */
-
-  /* USER CODE END ADC1_Init 2 */
-}
-
-void HAL_ADC_MspInit(ADC_HandleTypeDef *adcHandle)
-{
-
-  GPIO_InitTypeDef GPIO_InitStruct = {0};
-  RCC_PeriphCLKInitTypeDef PeriphClkInitStruct = {0};
-  if (adcHandle->Instance == ADC1)
-  {
-    /* USER CODE BEGIN ADC1_MspInit 0 */
-
-    /* USER CODE END ADC1_MspInit 0 */
-    /** Initializes the peripherals clock
+    /* USER CODE END ADC1_Init 1 */
+    /** Common config
      */
-    PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_ADC;
-    PeriphClkInitStruct.PLL2.PLL2M = 4;
-    PeriphClkInitStruct.PLL2.PLL2N = 9;
-    PeriphClkInitStruct.PLL2.PLL2P = 3;
-    PeriphClkInitStruct.PLL2.PLL2Q = 2;
-    PeriphClkInitStruct.PLL2.PLL2R = 2;
-    PeriphClkInitStruct.PLL2.PLL2RGE = RCC_PLL2VCIRANGE_3;
-    PeriphClkInitStruct.PLL2.PLL2VCOSEL = RCC_PLL2VCOMEDIUM;
-    PeriphClkInitStruct.PLL2.PLL2FRACN = 3072.0;
-    PeriphClkInitStruct.AdcClockSelection = RCC_ADCCLKSOURCE_PLL2;
-    if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK)
-    {
-      Error_Handler();
+    hadc1.Instance                      = ADC1;
+    hadc1.Init.ClockPrescaler           = ADC_CLOCK_ASYNC_DIV2;
+    hadc1.Init.Resolution               = ADC_RESOLUTION_16B;
+    hadc1.Init.ScanConvMode             = ADC_SCAN_ENABLE;
+    hadc1.Init.EOCSelection             = ADC_EOC_SINGLE_CONV;
+    hadc1.Init.LowPowerAutoWait         = DISABLE;
+    hadc1.Init.ContinuousConvMode       = DISABLE;
+    hadc1.Init.NbrOfConversion          = 2;
+    hadc1.Init.DiscontinuousConvMode    = ENABLE;
+    hadc1.Init.NbrOfDiscConversion      = 1;
+    hadc1.Init.ExternalTrigConv         = ADC_SOFTWARE_START;
+    hadc1.Init.ExternalTrigConvEdge     = ADC_EXTERNALTRIGCONVEDGE_NONE;
+    hadc1.Init.ConversionDataManagement = ADC_CONVERSIONDATA_DR;
+    hadc1.Init.Overrun                  = ADC_OVR_DATA_PRESERVED;
+    hadc1.Init.LeftBitShift             = ADC_LEFTBITSHIFT_NONE;
+    hadc1.Init.OversamplingMode         = DISABLE;
+    if ( HAL_ADC_Init( &hadc1 ) != HAL_OK ) {
+        Error_Handler();
     }
+    /** Configure the ADC multi-mode
+     */
+    multimode.Mode = ADC_MODE_INDEPENDENT;
+    if ( HAL_ADCEx_MultiModeConfigChannel( &hadc1, &multimode ) != HAL_OK ) {
+        Error_Handler();
+    }
+    /** Configure Regular Channel
+     */
+    sConfig.Channel                = ADC_CHANNEL_14;
+    sConfig.Rank                   = ADC_REGULAR_RANK_1;
+    sConfig.SamplingTime           = ADC_SAMPLETIME_2CYCLES_5;
+    sConfig.SingleDiff             = ADC_SINGLE_ENDED;
+    sConfig.OffsetNumber           = ADC_OFFSET_NONE;
+    sConfig.Offset                 = 0;
+    sConfig.OffsetSignedSaturation = DISABLE;
+    if ( HAL_ADC_ConfigChannel( &hadc1, &sConfig ) != HAL_OK ) {
+        Error_Handler();
+    }
+    /** Configure Regular Channel
+     */
+    sConfig.Channel = ADC_CHANNEL_15;
+    sConfig.Rank    = ADC_REGULAR_RANK_2;
+    if ( HAL_ADC_ConfigChannel( &hadc1, &sConfig ) != HAL_OK ) {
+        Error_Handler();
+    }
+    /* USER CODE BEGIN ADC1_Init 2 */
 
-    /* ADC1 clock enable */
-    __HAL_RCC_ADC12_CLK_ENABLE();
-
-    __HAL_RCC_GPIOA_CLK_ENABLE();
-    /**ADC1 GPIO Configuration
-    PA2     ------> ADC1_INP14
-    PA3     ------> ADC1_INP15
-    */
-    GPIO_InitStruct.Pin = GPIO_PIN_2 | GPIO_PIN_3;
-    GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
-    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-
-    /* USER CODE BEGIN ADC1_MspInit 1 */
-
-    /* USER CODE END ADC1_MspInit 1 */
-  }
+    /* USER CODE END ADC1_Init 2 */
 }
 
-void HAL_ADC_MspDeInit(ADC_HandleTypeDef *adcHandle)
-{
+void HAL_ADC_MspInit( ADC_HandleTypeDef* adcHandle ) {
 
-  if (adcHandle->Instance == ADC1)
-  {
-    /* USER CODE BEGIN ADC1_MspDeInit 0 */
+    GPIO_InitTypeDef         GPIO_InitStruct     = { 0 };
+    RCC_PeriphCLKInitTypeDef PeriphClkInitStruct = { 0 };
+    if ( adcHandle->Instance == ADC1 ) {
+        /* USER CODE BEGIN ADC1_MspInit 0 */
 
-    /* USER CODE END ADC1_MspDeInit 0 */
-    /* Peripheral clock disable */
-    __HAL_RCC_ADC12_CLK_DISABLE();
+        /* USER CODE END ADC1_MspInit 0 */
+        /** Initializes the peripherals clock
+         */
+        PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_ADC;
+        PeriphClkInitStruct.PLL2.PLL2M           = 4;
+        PeriphClkInitStruct.PLL2.PLL2N           = 9;
+        PeriphClkInitStruct.PLL2.PLL2P           = 3;
+        PeriphClkInitStruct.PLL2.PLL2Q           = 2;
+        PeriphClkInitStruct.PLL2.PLL2R           = 2;
+        PeriphClkInitStruct.PLL2.PLL2RGE         = RCC_PLL2VCIRANGE_3;
+        PeriphClkInitStruct.PLL2.PLL2VCOSEL      = RCC_PLL2VCOMEDIUM;
+        PeriphClkInitStruct.PLL2.PLL2FRACN       = 3072.0;
+        PeriphClkInitStruct.AdcClockSelection    = RCC_ADCCLKSOURCE_PLL2;
+        if ( HAL_RCCEx_PeriphCLKConfig( &PeriphClkInitStruct ) != HAL_OK ) {
+            Error_Handler();
+        }
 
-    /**ADC1 GPIO Configuration
-    PA2     ------> ADC1_INP14
-    PA3     ------> ADC1_INP15
-    */
-    HAL_GPIO_DeInit(GPIOA, GPIO_PIN_2 | GPIO_PIN_3);
+        /* ADC1 clock enable */
+        __HAL_RCC_ADC12_CLK_ENABLE();
 
-    /* USER CODE BEGIN ADC1_MspDeInit 1 */
+        __HAL_RCC_GPIOA_CLK_ENABLE();
+        /**ADC1 GPIO Configuration
+        PA2     ------> ADC1_INP14
+        PA3     ------> ADC1_INP15
+        */
+        GPIO_InitStruct.Pin  = GPIO_PIN_2 | GPIO_PIN_3;
+        GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+        GPIO_InitStruct.Pull = GPIO_NOPULL;
+        HAL_GPIO_Init( GPIOA, &GPIO_InitStruct );
 
-    /* USER CODE END ADC1_MspDeInit 1 */
-  }
+        /* USER CODE BEGIN ADC1_MspInit 1 */
+
+        /* USER CODE END ADC1_MspInit 1 */
+    }
+}
+
+void HAL_ADC_MspDeInit( ADC_HandleTypeDef* adcHandle ) {
+
+    if ( adcHandle->Instance == ADC1 ) {
+        /* USER CODE BEGIN ADC1_MspDeInit 0 */
+
+        /* USER CODE END ADC1_MspDeInit 0 */
+        /* Peripheral clock disable */
+        __HAL_RCC_ADC12_CLK_DISABLE();
+
+        /**ADC1 GPIO Configuration
+        PA2     ------> ADC1_INP14
+        PA3     ------> ADC1_INP15
+        */
+        HAL_GPIO_DeInit( GPIOA, GPIO_PIN_2 | GPIO_PIN_3 );
+
+        /* USER CODE BEGIN ADC1_MspDeInit 1 */
+
+        /* USER CODE END ADC1_MspDeInit 1 */
+    }
 }
 
 /* USER CODE BEGIN 1 */
