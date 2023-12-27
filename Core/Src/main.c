@@ -62,6 +62,8 @@ uint16_t TS_CAL2;
 uint16_t VREFINT_CAL;
 float    Temp_oC;
 float    Vrefint;
+float    AD1_5;
+float    AD1_10;
 
 uint16_t AD_value[ 2 ]  = { 0 };
 uint16_t AD_value_[ 2 ] = { 0 };
@@ -133,17 +135,33 @@ int main( void ) {
             HAL_ADC_PollForConversion( &hadc3, 10 );      // 等待转换完成
             AD_value_[ i ] = HAL_ADC_GetValue( &hadc3 );  // 依次获取ADC转换值
 
-            Temp_oC = ( ( 110.0f - 30.0f ) / ( TS_CAL2 - TS_CAL1 ) ) * ( AD_value_[ 0 ] - TS_CAL1 ) + 30.0f;
-            printf( "ADC3_TempSensor_%d:%.3f℃\r\n", i, Temp_oC );  // 打印获取片内温度传感器值
-            Vrefint = ( 3.0 * VREFINT_CAL ) / AD_value_[ 1 ];
-            printf( "ADC3_VrefInt_%d:%.3f v\r\n", i, Vrefint );  // 打印参考电压转换值
-
-            HAL_ADC_Start( &hadc1 );                                                                                               // 开启ADC1
-            HAL_ADC_PollForConversion( &hadc1, 10 );                                                                               // 等待转换完成
-            AD_value[ i ] = HAL_ADC_GetValue( &hadc1 );                                                                            // 依次获取ADC转换值
-            printf( "ADC1_%d:%d\r\n", i, AD_value[ i ] );                                                                          // 打印获取电压采样值
-            printf( "ADC1_%d:%.3f v\r\n", i, ( float )( 3 * VREFINT_CAL * AD_value[ i ] ) / ( AD_value_[ 1 ] * ( 65536 - 1 ) ) );  // 打印电压转换值 精度16bit 2^16 根据实时参考电压校正值
+            if ( i == 0 )
+                Temp_oC = ( ( 110.0f - 30.0f ) / ( TS_CAL2 - TS_CAL1 ) ) * ( AD_value_[ 0 ] - TS_CAL1 ) + 30.0f;
+            if ( i == 1 )
+                Vrefint = ( 3.3f * VREFINT_CAL ) / AD_value_[ 1 ];
         }
+        printf( "ADC3_TempSensor:\t%.3f\r\n", Temp_oC );  // 打印获取片内温度传感器值
+        printf( "ADC3_VrefInt:\t%.3f v\r\n", Vrefint );   // 打印参考电压转换值
+        printf( "\n" );
+
+        for ( uint8_t i = 0; i < 2; i++ ) {
+            HAL_ADC_Start( &hadc1 );                     // 开启ADC1
+            HAL_ADC_PollForConversion( &hadc1, 50 );     // 等待转换完成
+            AD_value[ i ] = HAL_ADC_GetValue( &hadc1 );  // 依次获取ADC转换值
+
+            if ( i == 0 )
+                AD1_5 = ( float )( 3.3f * VREFINT_CAL * AD_value[ 0 ] ) / ( AD_value_[ 1 ] * ( 65536 - 1 ) );
+            if ( i == 1 )
+                AD1_10 = ( float )( 3.3f * VREFINT_CAL * AD_value[ 1 ] ) / ( AD_value_[ 1 ] * ( 65536 - 1 ) );
+        }
+        // 打印获取电压采样值
+        printf( "X_ADC1_INP5_DATA:\t%d\r\n", AD_value[ 0 ] );
+        printf( "X_ADC1_INP5_VOLT:\t%.3f\r\n", AD1_5 );
+        // 打印电压转换值 精度16bit 2^16 根据实时参考电压校正值
+        printf( "X_ADC1_INP10_DATA:\t%d\r\n", AD_value[ 1 ] );
+        printf( "Y_ADC1_INP10_VOLT:\t%.3f v\r\n", AD1_10 );
+        printf( "\n" );
+
         HAL_Delay( 500 );
     }
     /* USER CODE END 3 */
