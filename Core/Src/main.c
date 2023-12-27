@@ -19,7 +19,6 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-
 #include "gpio.h"
 #include "spi.h"
 #include "tim.h"
@@ -323,11 +322,9 @@ int main( void ) {
 
     /* USER CODE END 1 */
 
-    /* MCU
-     * Configuration--------------------------------------------------------*/
+    /* MCU Configuration--------------------------------------------------------*/
 
-    /* Reset of all peripherals, Initializes the Flash interface and the
-     * Systick. */
+    /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
     HAL_Init();
 
     /* USER CODE BEGIN Init */

@@ -51,31 +51,31 @@ extern "C" {
 /* USER CODE END EM */
 
 /* Exported functions prototypes ---------------------------------------------*/
-void Error_Handler(void);
+void Error_Handler( void );
 
 /* USER CODE BEGIN EFP */
 
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define KEY_RST_Pin GPIO_PIN_2
-#define KEY_RST_GPIO_Port GPIOE
-#define KEY_SET_Pin GPIO_PIN_3
-#define KEY_SET_GPIO_Port GPIOE
-#define KEY_MID_Pin GPIO_PIN_4
-#define KEY_MID_GPIO_Port GPIOE
-#define LED_Pin GPIO_PIN_1
-#define LED_GPIO_Port GPIOA
-#define OLED_RST_Pin GPIO_PIN_4
-#define OLED_RST_GPIO_Port GPIOC
-#define OLED_DC_Pin GPIO_PIN_5
-#define OLED_DC_GPIO_Port GPIOC
-#define OLED_CS_Pin GPIO_PIN_0
-#define OLED_CS_GPIO_Port GPIOB
-#define DHT11_DQ_Pin GPIO_PIN_1
-#define DHT11_DQ_GPIO_Port GPIOB
+#define KEY_MID_Pin        GPIO_PIN_13
+#define KEY_MID_GPIO_Port  GPIOC
+#define LED_Pin            GPIO_PIN_1
+#define LED_GPIO_Port      GPIOA
+#define OLED_RST_Pin       GPIO_PIN_6
+#define OLED_RST_GPIO_Port GPIOA
+#define OLED_DC_Pin        GPIO_PIN_4
+#define OLED_DC_GPIO_Port  GPIOC
+#define OLED_CS_Pin        GPIO_PIN_0
+#define OLED_CS_GPIO_Port  GPIOB
+#define DHT11_DQ_Pin       GPIO_PIN_11
+#define DHT11_DQ_GPIO_Port GPIOD
+#define KEY_SET_Pin        GPIO_PIN_12
+#define KEY_SET_GPIO_Port  GPIOC
+#define KEY_RST_Pin        GPIO_PIN_6
+#define KEY_RST_GPIO_Port  GPIOD
 /* USER CODE BEGIN Private defines */
-  extern uint8_t Pin_state;
+extern uint8_t Pin_state;
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus
