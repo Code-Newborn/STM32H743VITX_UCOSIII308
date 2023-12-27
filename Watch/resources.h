@@ -23,13 +23,13 @@ extern const byte selectbar_top[];
 
 extern const char dowChars[];
 
-extern const char days[7][BUFFSIZE_STR_DAYS];
-extern const char months[12][BUFFSIZE_STR_MONTHS];
+extern const char days[ 7 ][ BUFFSIZE_STR_DAYS ];
+extern const char months[ 12 ][ BUFFSIZE_STR_MONTHS ];
 
 extern const byte livesImg[];
 extern const byte stopwatch[];
 
-extern const byte dowImg[7][8];
+extern const byte dowImg[ 7 ][ 8 ];
 
 extern const byte menu_tunemaker[];
 
@@ -42,11 +42,11 @@ extern const byte menu_game1[];
 extern const byte menu_game2[];
 extern const byte menu_game3[];
 // extern const byte menu_calc[];
-extern const byte menu_brightness[][128];
-extern const byte menu_LEDs[][128];
+extern const byte menu_brightness[][ 128 ];
+extern const byte menu_LEDs[][ 128 ];
 extern const byte menu_invert[];
-extern const byte menu_anim[][128];
-extern const byte menu_volume[][128];
+extern const byte menu_anim[][ 128 ];
+extern const byte menu_volume[][ 128 ];
 extern const byte menu_rotate[];
 extern const byte menu_display[];
 extern const byte menu_sleeptimeout[];
@@ -64,23 +64,23 @@ extern const byte menu_setfps[];
 // Alarm icon
 // extern const byte smallFontAlarm[];
 
-#define SMALLFONT_WIDTH 5
+#define SMALLFONT_WIDTH  5
 #define SMALLFONT_HEIGHT 8
-extern const byte smallFont[][5];
+extern const byte smallFont[][ 5 ];
 
-#define MIDFONT_WIDTH 19
+#define MIDFONT_WIDTH  19
 #define MIDFONT_HEIGHT 24
-extern const byte midFont[][57];
+extern const byte midFont[][ 57 ];
 
-#define SEGFONT_WIDTH 19
+#define SEGFONT_WIDTH  19
 #define SEGFONT_HEIGHT 24
-extern const byte segFont[][57];
+extern const byte segFont[][ 57 ];
 
-#define FONT_SMALL2_WIDTH 11
+#define FONT_SMALL2_WIDTH  11
 #define FONT_SMALL2_HEIGHT 16
-extern const byte small2Font[][22];
+extern const byte small2Font[][ 22 ];
 
-#define FONT_COLON_WIDTH 6
+#define FONT_COLON_WIDTH  6
 #define FONT_COLON_HEIGHT 24
 extern const byte colon[];
 

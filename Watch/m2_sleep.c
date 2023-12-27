@@ -12,35 +12,36 @@
 
 static prev_menu_s prevMenuData;
 
-static void mSelect(void);
-static void itemLoader(byte);
-static void setTimeout(void);
-static void setMenuOptions(void);
+static void mSelect( void );
+static void itemLoader( byte );
+static void setTimeout( void );
+static void setMenuOptions( void );
 
-static display_t mDraw(void);
+static display_t mDraw( void );
 
 void mSleepOpen() {
     menuData.func.draw = mDraw;
 
-    setMenuInfo(OPTION_COUNT, MENU_TYPE_ICON, PSTR(STR_SLEEPMENU));
-    setMenuFuncs(MENUFUNC_NEXT, mSelect, MENUFUNC_PREV, itemLoader);
-    setPrevMenuOpen(&prevMenuData, mSleepOpen);
+    setMenuInfo( OPTION_COUNT, MENU_TYPE_ICON, PSTR( STR_SLEEPMENU ) );
+    setMenuFuncs( MENUFUNC_NEXT, mSelect, MENUFUNC_PREV, itemLoader );
+    setPrevMenuOpen( &prevMenuData, mSleepOpen );
 
-    beginAnimation2(NULL);
+    beginAnimation2( NULL );
 }
 
 static void mSelect() {
     bool isExiting = exitSelected();
 
-    if (isExiting) appconfig_save();
+    if ( isExiting )
+        appconfig_save();
 
-    setPrevMenuExit(&prevMenuData);
+    setPrevMenuExit( &prevMenuData );
 
-    doAction(isExiting);
+    doAction( isExiting );
 }
 
-static void itemLoader(byte num) {
-    UNUSED(num);
+static void itemLoader( byte num ) {
+    UNUSED( num );
     setMenuOptions();
     //	setMenuOption_P(1, menuBack, menu_exit, back);
     addBackOption();
@@ -49,17 +50,20 @@ static void itemLoader(byte num) {
 static void setTimeout() {
     byte timeout = appConfig.sleepTimeout;
     timeout++;
-    if (timeout > 12) timeout = 0;
+    if ( timeout > 12 )
+        timeout = 0;
     appConfig.sleepTimeout = timeout;
 }
 
-static void setMenuOptions() { setMenuOption_P(0, PSTR(STR_TIMEOUT), menu_sleeptimeout, setTimeout); }
+static void setMenuOptions() {
+    setMenuOption_P( 0, PSTR( STR_TIMEOUT ), menu_sleeptimeout, setTimeout );
+}
 
 static display_t mDraw() {
-    if (menuData.selected == 0) {
-        char buff[4];
-        sprintf_P(buff, PSTR("%hhuS"), (unsigned char)(appConfig.sleepTimeout * 5));  // INFO 设置自动息屏定时 每次增加5秒
-        draw_string(buff, NOINVERT, 56, 40);
+    if ( menuData.selected == 0 ) {
+        char buff[ 4 ];
+        sprintf_P( buff, PSTR( "%hhuS" ), ( unsigned char )( appConfig.sleepTimeout * 5 ) );  // INFO 设置自动息屏定时 每次增加5秒
+        draw_string( buff, NOINVERT, 56, 40 );
     }
     return DISPLAY_DONE;
 }

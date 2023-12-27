@@ -7,8 +7,8 @@
  */
 
 #include "common.h"
-#include "sys.h"
 #include "led.h"
+#include "sys.h"
 // #include "misc.h"
 
 // 时基心跳获取
@@ -16,9 +16,8 @@
 volatile millis_t milliseconds = 0;
 
 // Get current milliseconds
-millis_t millis_get()
-{
-	millis_t ms;
-	ms = milliseconds;
-	return ms;
+millis_t millis_get() {
+    millis_t ms;
+    ms = milliseconds;
+    return ms;
 }

@@ -7,7 +7,7 @@
 //
 //
 /***********************************/
-void DrawDrawRectangle2rotate(int left, int top, int width, int height);
-void RoundClock(int hours, int minute, int sec);
+void DrawDrawRectangle2rotate( int left, int top, int width, int height );
+void RoundClock( int hours, int minute, int sec );
 
 #endif

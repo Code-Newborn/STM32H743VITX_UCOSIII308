@@ -24,17 +24,17 @@ extern void eeprom_write_word (uint16_t *addr, uint16_t val);//向指定地址�
 #include "common.h"
 // #include "stmflash.h"
 
-#define LENTH(Buffer)      sizeof(Buffer) // 数组长度
-#define SIZE(buff)         LENTH(buff) / 4 + ((LENTH(buff) % 4) ? 1 : 0)
+#define LENTH( Buffer ) sizeof( Buffer )  // 数组长度
+#define SIZE( buff )    LENTH( buff ) / 4 + ( ( LENTH( buff ) % 4 ) ? 1 : 0 )
 
-#define EEPROM_CHECK_NUM   0xFF // Any 8 bit number that isn't 0 or 255
+#define EEPROM_CHECK_NUM 0xFF  // Any 8 bit number that isn't 0 or 255
 
-#define eepCheck_SAVE_ADDR 0X080E0000 // 设置FLASH 保存地址(必须为偶数，且所在扇区,要大于本代码所占用到的扇区.
+#define eepCheck_SAVE_ADDR 0X080E0000  // 设置FLASH 保存地址(必须为偶数，且所在扇区,要大于本代码所占用到的扇区.
 // 否则,写操作的时候,可能会导致擦除整个扇区,从而引起部分程序丢失.引起死机.
-#define appConfig_SAVE_ADDR eepCheck_SAVE_ADDR + 16 // 设置FLASH 保存地址(必须为偶数，且所在扇区,要大于本代码所占用到的扇区.
+#define appConfig_SAVE_ADDR eepCheck_SAVE_ADDR + 16  // 设置FLASH 保存地址(必须为偶数，且所在扇区,要大于本代码所占用到的扇区.
 // 否则,写操作的时候,可能会导致擦除整个扇区,从而引起部分程序丢失.引起死机.
 
-appconfig_s appConfig; // appconfig_s的长度为8
+appconfig_s appConfig;  // appconfig_s的长度为8
 
 // static byte eepCheck EEMEM ;//= EEPROM_CHECK_NUM;
 
@@ -52,8 +52,7 @@ appconfig_s appConfig; // appconfig_s的长度为8
 //	}
 // };
 
-void appconfig_init()
-{
+void appconfig_init() {
 
     //	 STMFLASH_Read(eepCheck_SAVE_ADDR,(u32*)(&eepCheck),LENTH(byte));
     ////   appConfig = (appconfig_s *) malloc(sizeof(appconfig_s));
@@ -76,14 +75,12 @@ void appconfig_init()
     //		appConfig.sleepTimeout = 0;
 }
 
-void appconfig_save()
-{
+void appconfig_save() {
     // STMFLASH_Write(appConfig_SAVE_ADDR,(u32*)(&appConfig),LENTH(appconfig_s));
 }
 
 // 应用默认配置
-void appconfig_reset()
-{
+void appconfig_reset() {
     appConfig.sleepTimeout = 1;
     appConfig.invert       = false;
 #if COMPILE_ANIMATIONS

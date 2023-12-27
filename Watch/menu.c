@@ -297,7 +297,7 @@ void beginAnimation2( menu_f onComplete ) {
  * @return     {*}
  */
 void setMenuInfo( byte optionCount, menu_type_t menuType, const char* title ) {
-    clear(); // 清除相应按键函数
+    clear();  // 清除相应按键函数
     menuData.scroll      = 0;
     menuData.selected    = 0;
     menuData.optionCount = optionCount + 1;

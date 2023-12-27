@@ -6,25 +6,21 @@ static Type_color _fill = pix_white;
 // static Type_color _text=pix_white;
 // static Type_color _textbk=pix_black;
 
-void SetDrawColor(Type_color value)
-{
-	_Draw = value;
+void SetDrawColor( Type_color value ) {
+    _Draw = value;
 }
 
-Type_color GetDrawColor(void)
-{
-	return _Draw;
+Type_color GetDrawColor( void ) {
+    return _Draw;
 }
 
-void SetFillcolor(Type_color value)
-{
-	_fill = value;
+void SetFillcolor( Type_color value ) {
+    _fill = value;
 }
 
-Type_color GetFillColor(void)
-{
+Type_color GetFillColor( void ) {
 
-	return _fill;
+    return _fill;
 }
 
 // void SetLineColor(Type_color value)

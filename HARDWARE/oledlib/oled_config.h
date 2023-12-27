@@ -12,7 +12,7 @@
 // 5.HW_8080   硬件8080
 // 现在只支持硬件iic 和硬件SPI
 /*****************************************************************/
-#define TRANSFER_METHOD (HW_SPI)
+#define TRANSFER_METHOD ( HW_SPI )
 
 /*****************************************************************/
 // 选择字库来源
@@ -24,7 +24,7 @@
 // 5.FONT_FROM_SOFT 		 软件取模，这个会占用很多内存
 // 现在只有软件取模字库，
 /*****************************************************************/
-#define FONT_SOURCE (FONT_FROM_SOFT)
+#define FONT_SOURCE ( FONT_FROM_SOFT )
 
 /*****************************************************************/
 // 选择屏幕类型
@@ -34,35 +34,35 @@
 // 现在仅支持OLED_12864
 /*****************************************************************/
 
-#define SCREEN_TYPE (OLED_12864)
+#define SCREEN_TYPE ( OLED_12864 )
 
-#if (SCREEN_TYPE == OLED_12864)
+#if ( SCREEN_TYPE == OLED_12864 )
 #define OLED_12864
-#define SCREEN_PAGE_NUM (8)
-#define SCREEN_PAGEDATA_NUM (128)
-#define SCREEN_COLUMN (128)
-#define SCREEN_ROW (64)
+#define SCREEN_PAGE_NUM     ( 8 )
+#define SCREEN_PAGEDATA_NUM ( 128 )
+#define SCREEN_COLUMN       ( 128 )
+#define SCREEN_ROW          ( 64 )
 #if 0
-#define SCREEN_PHY_X (21.744)
-#define SCREEN_PHY_Y (10.864)
+#define SCREEN_PHY_X ( 21.744 )
+#define SCREEN_PHY_Y ( 10.864 )
 #endif
 
 #endif
 
 // 驱动还未完善，现在使用的IIC1
-#if (TRANSFER_METHOD == HW_IIC)
+#if ( TRANSFER_METHOD == HW_IIC )
 // IIC_1: PB6 -- SCL; PB7 -- SDA
 // IIC_2: PB10-- SCL; PB11 --SDA
 #define USE_HW_IIC IIC_1
-#elif (TRANSFER_METHOD == SW_IIC)
+#elif ( TRANSFER_METHOD == SW_IIC )
 
-#elif (TRANSFER_METHOD == HW_SPI)
+#elif ( TRANSFER_METHOD == HW_SPI )
 // 如需更换片选、复位、控制等引脚去oled_driver.h设置
 // SPI_1: 没添加SPI1，如需要SPI1，到oled_driver.h,自行添加
 // SPI_2: PB10--RES; PB11--DC; PB12--CS;PB13--D0;PB15--D1;
 #define USE_HW_SPI SPI_1
 
-#elif (TRANSFER_METHOD == SW_SPI)
+#elif ( TRANSFER_METHOD == SW_SPI )
 
 #endif
 

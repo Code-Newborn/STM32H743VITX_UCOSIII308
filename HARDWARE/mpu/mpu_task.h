@@ -6,8 +6,8 @@
 extern float pitch;
 extern float roll;
 extern float yaw;
-	
-void mpu_open(void);
-void mpu_updata(void);
+
+void mpu_open( void );
+void mpu_updata( void );
 
 #endif

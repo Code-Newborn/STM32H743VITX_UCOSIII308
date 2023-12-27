@@ -11,10 +11,10 @@
 
 #include "typedefs.h"
 
-bool menu_select(void);
-bool menu_down(void);
-bool menu_up(void);
-bool menu_isOpen(void);
-void menu_close(void);
+bool menu_select( void );
+bool menu_down( void );
+bool menu_up( void );
+bool menu_isOpen( void );
+void menu_close( void );
 
 #endif /* MENU_H_ */

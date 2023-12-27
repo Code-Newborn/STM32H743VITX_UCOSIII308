@@ -12,16 +12,16 @@
 
 #define ALARM_COUNT 10
 
-#define _BV(bit) (1 << (bit))
-#define alarm_dayEnabled(days, day) (days & _BV(day))
+#define _BV( bit )                    ( 1 << ( bit ) )
+#define alarm_dayEnabled( days, day ) ( days & _BV( day ) )
 
-void alarm_init(void);
-void alarm_reset(void);
-void alarm_get(byte, alarm_s *);
-bool alarm_getNext(alarm_s *);
-byte alarm_getNextDay(void);
-void alarm_save(byte, alarm_s *);
-void alarm_update(void);
-void alarm_updateNextAlarm(void);
+void alarm_init( void );
+void alarm_reset( void );
+void alarm_get( byte, alarm_s* );
+bool alarm_getNext( alarm_s* );
+byte alarm_getNextDay( void );
+void alarm_save( byte, alarm_s* );
+void alarm_update( void );
+void alarm_updateNextAlarm( void );
 
 #endif /* ALARM_H_ */

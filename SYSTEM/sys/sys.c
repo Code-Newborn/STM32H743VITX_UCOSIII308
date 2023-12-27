@@ -29,10 +29,9 @@
  * @param       offset: 偏移量
  * @retval      无
  */
-void sys_nvic_set_vector_table(uint32_t baseaddr, uint32_t offset)
-{
+void sys_nvic_set_vector_table( uint32_t baseaddr, uint32_t offset ) {
     /* 设置NVIC的向量表偏移寄存器,VTOR低9位保留,即[8:0]保留 */
-    SCB->VTOR = baseaddr | (offset & (uint32_t)0xFFFFFE00);
+    SCB->VTOR = baseaddr | ( offset & ( uint32_t )0xFFFFFE00 );
 }
 
 /**
@@ -40,9 +39,8 @@ void sys_nvic_set_vector_table(uint32_t baseaddr, uint32_t offset)
  * @param       无
  * @retval      无
  */
-void sys_wfi_set(void)
-{
-    __ASM volatile("wfi");
+void sys_wfi_set( void ) {
+    __ASM volatile( "wfi" );
 }
 
 /**
@@ -50,9 +48,8 @@ void sys_wfi_set(void)
  * @param       无
  * @retval      无
  */
-void sys_intx_disable(void)
-{
-    __ASM volatile("cpsid i");
+void sys_intx_disable( void ) {
+    __ASM volatile( "cpsid i" );
 }
 
 /**
@@ -60,9 +57,8 @@ void sys_intx_disable(void)
  * @param       无
  * @retval      无
  */
-void sys_intx_enable(void)
-{
-    __ASM volatile("cpsie i");
+void sys_intx_enable( void ) {
+    __ASM volatile( "cpsie i" );
 }
 
 /**
@@ -71,9 +67,8 @@ void sys_intx_enable(void)
  * @param       addr: 栈顶地址
  * @retval      无
  */
-void sys_msr_msp(uint32_t addr)
-{
-    __set_MSP(addr); /* 设置栈顶地址 */
+void sys_msr_msp( uint32_t addr ) {
+    __set_MSP( addr ); /* 设置栈顶地址 */
 }
 
 /**
@@ -92,8 +87,7 @@ void sys_msr_msp(uint32_t addr)
  * @param       无
  * @retval      无
  */
-void sys_soft_reset(void)
-{
+void sys_soft_reset( void ) {
     NVIC_SystemReset();
 }
 
@@ -105,10 +99,8 @@ void sys_soft_reset(void)
  *              line：指向在文件中的行数
  * @retval      无
  */
-void assert_failed(uint8_t *file, uint32_t line)
-{
-    while (1)
-    {
+void assert_failed( uint8_t* file, uint32_t line ) {
+    while ( 1 ) {
     }
 }
 #endif

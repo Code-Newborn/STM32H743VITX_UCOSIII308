@@ -15,30 +15,28 @@
 typedef enum {
     SYS_AWAKE,
     SYS_CRTANIM,
-    SYS_SLEEP
+    SYS_SLEEP,
 } sys_t;
 
 typedef enum {
     USER_ACTIVE,
-    USER_INACTIVE
+    USER_INACTIVE,
 } user_t;
 
-static sys_t systemState;
+static sys_t  systemState;
 static user_t userState;
 
-static void batteryCutoff(void);
-static void userWake(void);
-static void userSleep(void);
+static void batteryCutoff( void );
+static void userWake( void );
+static void userSleep( void );
 
-void pwrmgr_init()
-{
+void pwrmgr_init() {
     systemState = SYS_AWAKE;
     userState   = USER_ACTIVE;
     // set_sleep_mode(SLEEP_MODE_IDLE);
 }
 
-static void batteryCutoff()
-{
+static void batteryCutoff() {
     //	// If the battery voltage goes below a threshold then disable
     //	// all wakeup sources apart from USB plug-in and go to power down sleep.
     //	// This helps protect the battery from undervoltage and since the battery's own PCM hasn't kicked in yet the RTC will continue working.
@@ -81,20 +79,19 @@ static void batteryCutoff()
 bool keep_on = 0;
 
 // 电源管理更新
-void pwrmgr_update()
-{
-    batteryCutoff(); // 电源切断
+void pwrmgr_update() {
+    batteryCutoff();  // 电源切断
 
     bool buttonsActive = buttons_isActive() || keep_on;
 
-    if (buttonsActive) {
+    if ( buttonsActive ) {
 
 #if COMPILE_ANIMATIONS
-        if (systemState == SYS_CRTANIM && buttonsActive) // Cancel CRT anim if a button is pressed
+        if ( systemState == SYS_CRTANIM && buttonsActive )  // Cancel CRT anim if a button is pressed
         {
-            display_startCRTAnim(CRTANIM_OPEN); // 设置开屏
+            display_startCRTAnim( CRTANIM_OPEN );  // 设置开屏
             systemState = SYS_AWAKE;
-        } else // 空闲睡眠模式
+        } else  // 空闲睡眠模式
 #endif
         {
             // if (PRR == (_BV(PRTWI) | _BV(PRTIM0) | _BV(PRTIM1) | _BV(PRSPI) | _BV(PRUSART0) | _BV(PRADC))) // No peripherals are in use other than Timer2
@@ -106,14 +103,14 @@ void pwrmgr_update()
             // sleep_mode();
             // debugPin_sleepIdle(LOW);
         }
-    } else // 按键长时间未按下
+    } else  // 按键长时间未按下
     {
 #if COMPILE_ANIMATIONS
-        if (systemState == SYS_AWAKE) // 设置关屏
+        if ( systemState == SYS_AWAKE )  // 设置关屏
         {
             systemState = SYS_CRTANIM;
-            display_startCRTAnim(CRTANIM_CLOSE);
-        } else if (systemState == SYS_CRTANIM) // 处于关屏
+            display_startCRTAnim( CRTANIM_CLOSE );
+        } else if ( systemState == SYS_CRTANIM )  // 处于关屏
 #endif
         {
             // Shutdown
@@ -126,29 +123,26 @@ void pwrmgr_update()
             // time_sleep();
             systemState = SYS_CRTANIM;
 
-            if (time_wake() != RTCWAKE_SYSTEM) // Woken by button press, USB plugged in or by RTC user alarm
-                userWake();                    // 用户唤醒
+            if ( time_wake() != RTCWAKE_SYSTEM )  // Woken by button press, USB plugged in or by RTC user alarm
+                userWake();                       // 用户唤醒
         }
     }
 }
 
-bool pwrmgr_userActive()
-{
+bool pwrmgr_userActive() {
     return userState == USER_ACTIVE;
 }
 
-static void userWake()
-{
+static void userWake() {
     userState = USER_ACTIVE;
     buttons_wake();
-    display_startCRTAnim(CRTANIM_OPEN); // 设置开屏
+    display_startCRTAnim( CRTANIM_OPEN );  // 设置开屏
 
     // oled_power(OLED_PWR_ON);
     // battery_setUpdate(3);
 }
 
-static void userSleep()
-{
+static void userSleep() {
     userState = USER_INACTIVE;
     // oled_power(OLED_PWR_OFF);
 }

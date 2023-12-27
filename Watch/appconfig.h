@@ -12,8 +12,8 @@
 
 extern appconfig_s appConfig;
 
-void appconfig_init(void);
-void appconfig_save(void);
-void appconfig_reset(void);
+void appconfig_init( void );
+void appconfig_save( void );
+void appconfig_reset( void );
 
 #endif /* APPCONFIG_H_ */
