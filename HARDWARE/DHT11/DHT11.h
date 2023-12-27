@@ -1,8 +1,6 @@
 #ifndef __DHT11_H
 #define __DHT11_H
 
-// #include <stm32h743xx.h>
-// #include "core_cm7.h"
 #include "stm32h7xx_hal.h"
 
 // 采用定时器TIM2作为微秒级延时的来源
