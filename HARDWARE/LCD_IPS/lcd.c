@@ -109,6 +109,7 @@ void LCD_Init( void ) {
     else
         LCD_WR_DATA8( 0xA0 );
 
+    // RGB 5-6-5-bit input; 65K-Color
     LCD_WR_REG( 0x3A );
     LCD_WR_DATA8( 0x05 );
 
@@ -319,7 +320,7 @@ void LCD_ShowChinese( uint16_t x, uint16_t y, uint8_t* s, uint16_t fc, uint16_t 
             LCD_ShowChinese32x32( x, y, s, fc, bc, sizey, mode );
         else
             return;
-        s += 2;
+        s += 3;  // 汉字的UTF编码一般占用三个字节
         x += sizey;
     }
 }
@@ -498,15 +499,15 @@ void LCD_ShowChinese32x32( uint16_t x, uint16_t y, uint8_t* s, uint16_t fc, uint
     uint16_t TypefaceNum;  // 一个字符所占字节大小
     uint16_t x0 = x;
     TypefaceNum = ( sizey / 8 + ( ( sizey % 8 ) ? 1 : 0 ) ) * sizey;
-    HZnum       = sizeof( tfont32 ) / sizeof( typFNT_GB32 );  // 统计汉字数目
+    HZnum       = sizeof( tCustom32 ) / sizeof( typFNT_GB32 );  // 统计汉字数目
     for ( k = 0; k < HZnum; k++ ) {
-        if ( ( tfont32[ k ].Index[ 0 ] == *( s ) ) && ( tfont32[ k ].Index[ 1 ] == *( s + 1 ) ) ) {
+        if ( ( tCustom32[ k ].Index[ 0 ] == *( s ) ) && ( tCustom32[ k ].Index[ 1 ] == *( s + 1 ) ) && ( tCustom32[ k ].Index[ 2 ] == *( s + 2 ) ) ) {
             LCD_Address_Set( x, y, x + sizey - 1, y + sizey - 1 );
             for ( i = 0; i < TypefaceNum; i++ ) {
                 for ( j = 0; j < 8; j++ ) {
                     if ( !mode )  // 非叠加方式
                     {
-                        if ( tfont32[ k ].Msk[ i ] & ( 0x01 << j ) )
+                        if ( tCustom32[ k ].Msk[ i ] & ( 0x01 << j ) )
                             LCD_WR_DATA( fc );
                         else
                             LCD_WR_DATA( bc );
@@ -517,7 +518,7 @@ void LCD_ShowChinese32x32( uint16_t x, uint16_t y, uint8_t* s, uint16_t fc, uint
                         }
                     } else  // 叠加方式
                     {
-                        if ( tfont32[ k ].Msk[ i ] & ( 0x01 << j ) )
+                        if ( tCustom32[ k ].Msk[ i ] & ( 0x01 << j ) )
                             LCD_DrawPoint( x, y, fc );  // 画一个点
                         x++;
                         if ( ( x - x0 ) == sizey ) {

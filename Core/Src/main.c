@@ -19,6 +19,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include <stdio.h>
 #include "gpio.h"
 #include "spi.h"
 #include "usart.h"
@@ -117,8 +118,18 @@ int main( void ) {
         // OLED_Clear();
         DHT11();  // 获取温湿度
 
-        // LCD_ShowChinese( 0, 0, "中景园电子", RED, WHITE, 32, 0 );
-        LCD_ShowString( 40, 0, "Can not Show Chinese:", YELLOW, RED, 16, 0 );
+        // uint8_t* arr = "袁";
+        // while ( *arr != 0 ) {
+        //     printf( " 0x%2x ", *arr++ );
+        // }
+
+        // unsigned char* arr = test->Index;
+        // while ( *arr != 0 ) {
+        //     printf( "0x%2x ", *arr++ );
+        // }
+
+        LCD_ShowChinese( 48, 0, "龙腾龘龖", RED, WHITE, 32, 0 );
+        // LCD_ShowChinese( 48, 0, "中景园电子", RED, WHITE, 32, 0 );
         LCD_ShowString( 0, 40, "LCD_W:", RED, WHITE, 16, 0 );
         LCD_ShowIntNum( 48, 40, LCD_W, 3, RED, WHITE, 16 );
         LCD_ShowString( 80, 40, "LCD_H:", RED, WHITE, 16, 0 );
