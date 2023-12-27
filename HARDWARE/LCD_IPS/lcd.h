@@ -50,6 +50,7 @@ void LCD_DrawLine( uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint16_t 
 void LCD_DrawRectangle( uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint16_t color );  // 在指定位置画一个矩形
 void Draw_Circle( uint16_t x0, uint16_t y0, uint8_t r, uint16_t color );                       // 在指定位置画一个圆
 
+void Show_Str( uint16_t x, uint16_t y, uint16_t fc, uint16_t bc, uint8_t* str, uint8_t size, uint8_t mode );
 void LCD_ShowChinese( uint16_t x, uint16_t y, uint8_t* s, uint16_t fc, uint16_t bc, uint8_t sizey, uint8_t mode );       // 显示汉字串
 void LCD_ShowChinese12x12( uint16_t x, uint16_t y, uint8_t* s, uint16_t fc, uint16_t bc, uint8_t sizey, uint8_t mode );  // 显示单个12x12汉字
 void LCD_ShowChinese16x16( uint16_t x, uint16_t y, uint8_t* s, uint16_t fc, uint16_t bc, uint8_t sizey, uint8_t mode );  // 显示单个16x16汉字

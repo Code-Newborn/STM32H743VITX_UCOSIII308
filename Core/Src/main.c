@@ -117,7 +117,8 @@ int main( void ) {
         // OLED_Clear();
         DHT11();  // 获取温湿度
 
-        LCD_ShowChinese( 0, 0, "中景园电子", RED, WHITE, 32, 0 );
+        // LCD_ShowChinese( 0, 0, "中景园电子", RED, WHITE, 32, 0 );
+        LCD_ShowString( 40, 0, "Can not Show Chinese:", YELLOW, RED, 16, 0 );
         LCD_ShowString( 0, 40, "LCD_W:", RED, WHITE, 16, 0 );
         LCD_ShowIntNum( 48, 40, LCD_W, 3, RED, WHITE, 16 );
         LCD_ShowString( 80, 40, "LCD_H:", RED, WHITE, 16, 0 );
@@ -131,8 +132,6 @@ int main( void ) {
                 LCD_ShowPicture( 40 * i, 120 + j * 40, 40, 40, gImage_1 );
             }
         }
-
-        // =============== DHT11温湿度传感器 读取 END ===============
     }
     /* USER CODE END 3 */
 }

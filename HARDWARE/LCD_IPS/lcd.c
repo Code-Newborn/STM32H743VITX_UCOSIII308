@@ -1,6 +1,7 @@
 #include "lcd.h"
 #include "delay.h"
 #include "lcdfont.h"
+#include "spi.h"
 
 /******************************************************************************
       函数说明：LCD串行数据写入函数
@@ -8,18 +9,8 @@
       返回值：  无
 ******************************************************************************/
 void LCD_Writ_Bus( uint8_t dat ) {
-    uint8_t i;
     LCD_CS_Clr();
-    for ( i = 0; i < 8; i++ ) {
-        LCD_SCLK_Clr();
-        if ( dat & 0x80 ) {
-            LCD_MOSI_Set();
-        } else {
-            LCD_MOSI_Clr();
-        }
-        LCD_SCLK_Set();
-        dat <<= 1;
-    }
+    HAL_SPI_Transmit( &hspi1, &dat, 1, 1000 );
     LCD_CS_Set();
 }
 
@@ -96,8 +87,6 @@ void LCD_Address_Set( uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2 ) {
 }
 
 void LCD_Init( void ) {
-    LCD_GPIO_Init();  // 初始化GPIO
-
     LCD_RES_Clr();  // 复位
     delay_ms( 100 );
     LCD_RES_Set();
@@ -596,6 +585,66 @@ void LCD_ShowChar( uint16_t x, uint16_t y, uint8_t num, uint16_t fc, uint16_t bc
                     break;
                 }
             }
+        }
+    }
+}
+
+//******************************************************************
+// 函数名：  Show_Str
+// 功能：    显示一个字符串,包含中英文显示
+// 输入参数：x,y :起点坐标
+//             fc:前置画笔颜色
+//            bc:背景颜色
+//            str :字符串
+//            size:字体大小
+//            mode:模式    0,填充模式;1,叠加模式
+// 返回值：  无
+// 修改记录：无
+//******************************************************************
+void Show_Str( uint16_t x, uint16_t y, uint16_t fc, uint16_t bc, uint8_t* str, uint8_t size, uint8_t mode ) {
+    uint16_t x0  = x;
+    uint8_t  bHz = 0;    // 字符或者中文
+    while ( *str != 0 )  // 数据未结束
+    {
+        if ( !bHz ) {
+            if ( x > ( LCD_W - size / 2 ) || y > ( LCD_H - size ) )
+                return;
+            if ( *str > 0x80 )
+                bHz = 1;  // 中文
+            else          // 字符
+            {
+                if ( *str == 0x0D )  // 换行符号
+                {
+                    y += size;
+                    x = x0;
+                    str++;
+                } else {
+                    if ( size == 12 || size == 16 ) {
+                        LCD_ShowChar( x, y, fc, bc, *str, size, mode );
+                        x += size / 2;  // 字符,为全字的一半
+                    } else              // 字库中没有集成16X32的英文字体,用8X16代替
+                    {
+                        LCD_ShowChar( x, y, fc, bc, *str, 16, mode );
+                        x += 8;  // 字符,为全字的一半
+                    }
+                }
+                str++;
+            }
+        } else  // 中文
+        {
+            if ( x > ( LCD_W - size ) || y > ( LCD_H - size ) )
+                return;
+            bHz = 0;  // 有汉字库
+            if ( size == 32 )
+                LCD_ShowChinese32x32( x, y, str, fc, bc, 32, mode );
+            // GUI_DrawFont32( x, y, fc, bc, str, mode );
+            else if ( size == 24 )
+                LCD_ShowChinese24x24( x, y, str, fc, bc, 24, mode );
+            else
+                LCD_ShowChinese16x16( x, y, str, fc, bc, 16, mode );
+
+            str += 2;
+            x += size;  // 下一个汉字偏移
         }
     }
 }
