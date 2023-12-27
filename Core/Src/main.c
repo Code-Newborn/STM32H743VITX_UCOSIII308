@@ -126,6 +126,12 @@ int main( void ) {
         LCD_ShowString( 80, 40, "LCD_H:", RED, WHITE, 16, 0 );
         LCD_ShowString( 0, 70, "Increaseing Nun:", RED, WHITE, 16, 0 );
         LCD_ShowFloatNum1( 128, 70, t, 4, RED, WHITE, 16 );
+
+        LCD_ShowString( 0, 88, "Temp:", RED, WHITE, 16, 0 );
+        LCD_ShowFloatNum1( 48, 88, temp + ( temp_decimal / 100.0f ), 4, WHITE, DARKBLUE, 16 );
+        LCD_ShowString( 96, 88, "Humi:", RED, WHITE, 16, 0 );
+        LCD_ShowFloatNum1( 144, 88, humi + ( humi_decimal / 100.0f ), 4, WHITE, LIGHTGREEN, 16 );
+
         t += 0.11f;
         for ( j = 0; j < 3; j++ ) {
             for ( i = 0; i < 6; i++ ) {
