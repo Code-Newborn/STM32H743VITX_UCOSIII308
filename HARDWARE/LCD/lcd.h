@@ -54,8 +54,8 @@ typedef struct {
     volatile uint16_t LCD_REG;
     volatile uint16_t LCD_RAM;
 } LCD_TypeDef;
-// 使用NOR/SRAM的 Bank1.sector4,地址位HADDR[27,26]=11 A18作为数据命令区分线
-// 注意设置时STM32内部会右移一位对其!
+// 使用NOR/SRAM的 Bank1.sector1,地址位HADDR[27,26]=00 A18作为数据命令区分线
+// 注意设置时STM32内部会右移一位对齐!
 #define LCD_BASE ( ( uint32_t )( 0x60000000 | 0x0007FFFE ) )
 #define LCD      ( ( LCD_TypeDef* )LCD_BASE )
 //////////////////////////////////////////////////////////////////////////////////

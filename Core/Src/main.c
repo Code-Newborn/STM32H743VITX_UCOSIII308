@@ -254,7 +254,7 @@ int main( void ) {
     SystemClock_Config();
 
     /* USER CODE BEGIN SysInit */
-
+    delay_init( 400 );
     /* USER CODE END SysInit */
 
     /* Initialize all configured peripherals */
