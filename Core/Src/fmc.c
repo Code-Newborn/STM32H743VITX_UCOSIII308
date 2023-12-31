@@ -73,7 +73,7 @@ void MX_FMC_Init( void ) {
     /* ExtTiming */
     ExtTiming.AddressSetupTime      = 4;
     ExtTiming.AddressHoldTime       = 15;
-    ExtTiming.DataSetupTime         = 9;
+    ExtTiming.DataSetupTime         = 15;
     ExtTiming.BusTurnAroundDuration = 0;
     ExtTiming.CLKDivision           = 16;
     ExtTiming.DataLatency           = 17;
