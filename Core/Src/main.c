@@ -88,13 +88,13 @@ int main( void ) {
     /* Initialize all configured peripherals */
     MX_GPIO_Init();
     MX_USART1_UART_Init();
-    MX_USART2_UART_Init();
+    MX_USART3_UART_Init();
     /* USER CODE BEGIN 2 */
     delay_init( 400 );
     ESP8266_Init();
 
     ESP8266_StaTcpClient_UnvarnishTest_LedCtrl();  // 手机连接ESP8266时需断开手机流量网络
-    /* USER CODE END 2 */
+                                                   /* USER CODE END 2 */
 
     /* Infinite loop */
     /* USER CODE BEGIN WHILE */

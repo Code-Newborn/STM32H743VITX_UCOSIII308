@@ -20,6 +20,9 @@
 #include <string.h>
 #include "delay.h"
 
+// 禁止编译器输出中文字符警告
+#pragma diag_suppress 870
+
 // UART_HandleTypeDef ESP8266_UartHandle;
 // static void ESP8266_GPIO_Config( void );
 // static void ESP8266_USART_Config( void );
@@ -40,57 +43,6 @@ void ESP8266_Init( void ) {
 
     // macESP8266_CH_DISABLE();
 }
-
-/**
- * @brief  初始化ESP8266用到的 USART
- * @param  无
- * @retval 无
- */
-// static void ESP8266_USART_Config( void ) {
-//     GPIO_InitTypeDef         GPIO_InitStruct;
-//     RCC_PeriphCLKInitTypeDef RCC_PeriphClkInit;
-
-//     macESP8266_USART_TX_GPIO_CLK();
-//     macESP8266_USART_RX_GPIO_CLK();
-
-//     /* 配置串口1时钟源*/
-//     RCC_PeriphClkInit.PeriphClockSelection  = RCC_PERIPHCLK_USART6;
-//     RCC_PeriphClkInit.Usart16ClockSelection = RCC_USART16CLKSOURCE_D2PCLK2;
-//     HAL_RCCEx_PeriphCLKConfig( &RCC_PeriphClkInit );
-//     /* 使能串口6时钟 */
-//     macESP8266_USART_CLK_ENABLE();
-
-//     /* 配置Tx引脚为复用功能  */
-//     GPIO_InitStruct.Pin       = macESP8266_USART_TX_PIN;
-//     GPIO_InitStruct.Mode      = GPIO_MODE_AF_PP;
-//     GPIO_InitStruct.Pull      = GPIO_PULLUP;
-//     GPIO_InitStruct.Speed     = GPIO_SPEED_FREQ_HIGH;
-//     GPIO_InitStruct.Alternate = macESP8266_USART_TX_AF;
-//     HAL_GPIO_Init( macESP8266_USART_TX_PORT, &GPIO_InitStruct );
-
-//     /* 配置Rx引脚为复用功能 */
-//     GPIO_InitStruct.Pin       = macESP8266_USART_RX_PIN;
-//     GPIO_InitStruct.Alternate = macESP8266_USART_RX_AF;
-//     HAL_GPIO_Init( macESP8266_USART_RX_PORT, &GPIO_InitStruct );
-
-//     /* 配置串GPS_USART 模式 */
-//     ESP8266_UartHandle.Instance        = macESP8266_USARTx;
-//     ESP8266_UartHandle.Init.BaudRate   = macESP8266_USART_BAUD_RATE;
-//     ESP8266_UartHandle.Init.WordLength = UART_WORDLENGTH_8B;
-//     ESP8266_UartHandle.Init.StopBits   = UART_STOPBITS_1;
-//     ESP8266_UartHandle.Init.Parity     = UART_PARITY_NONE;
-//     ESP8266_UartHandle.Init.Mode       = UART_MODE_TX_RX;
-//     ESP8266_UartHandle.Init.HwFlowCtl  = UART_HWCONTROL_NONE;
-//     HAL_UART_Init( &ESP8266_UartHandle );
-
-//     /*配置中断优先级*/
-//     HAL_NVIC_SetPriority( macESP8266_USART_IRQ, 1, 0 );
-//     /*使能DMA中断*/
-//     HAL_NVIC_EnableIRQ( macESP8266_USART_IRQ );
-//     /*配置中断条件*/
-//     __HAL_USART_ENABLE_IT( &ESP8266_UartHandle, USART_IT_RXNE );
-//     __HAL_USART_ENABLE_IT( &ESP8266_UartHandle, USART_IT_IDLE );
-// }
 
 /*
  * 函数名：ESP8266_Rst
@@ -613,7 +565,8 @@ void ESP8266_StaTcpClient_UnvarnishTest( void ) {
         uint8_t humi_deci = 13;
         uint8_t temp_int  = 14;
         uint8_t temp_deci = 15;
-        sprintf( cStr, "\r\n读取DHT11成功!\r\n\r\n湿度为%d.%d ％RH ，温度为 %d.%d℃ \r\n", humi_int, humi_deci, temp_int, temp_deci );
+        sprintf( cStr, "\r\n读取DHT11成功！\r\n\r\n湿度为 %d.%d RH，温度为 %d.%d ℃ \r\n", humi_int, humi_deci, temp_int, temp_deci );
+        // sprintf( cStr, "\r\n读取DHT11成功!\r\n\r\n湿度为%d.%d ％RH ，温度为 %d.%d℃ \r\n", humi_int, humi_deci, temp_int, temp_deci );
 
         // else sprintf( cStr, "Read DHT11 ERROR!\r\n" );
 

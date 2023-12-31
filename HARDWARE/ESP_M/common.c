@@ -34,12 +34,12 @@ void    USART_printf( USART_TypeDef* USARTx, char* Data, ... ) {
         {
             switch ( *++Data ) {
             case 'r':  // 回车符
-                HAL_UART_Transmit( &huart2, ( uint8_t* )&buffer[ 0 ], 1, 0xFFFF );
+                HAL_UART_Transmit( &huart3, ( uint8_t* )&buffer[ 0 ], 1, 0xFFFF );
                 Data++;
                 break;
 
             case 'n':  // 换行符
-                HAL_UART_Transmit( &huart2, ( uint8_t* )&buffer[ 1 ], 1, 0xFFFF );
+                HAL_UART_Transmit( &huart3, ( uint8_t* )&buffer[ 1 ], 1, 0xFFFF );
                 Data++;
                 break;
 
@@ -55,8 +55,8 @@ void    USART_printf( USART_TypeDef* USARTx, char* Data, ... ) {
                 s = va_arg( ap, const char* );  // 取出ap指向的指针，并把指针前进一个char *大小
 
                 for ( ; *s; s++ ) {
-                    HAL_UART_Transmit( &huart2, ( uint8_t* )s, 1, 0xFFFF );
-                    while ( __HAL_UART_GET_FLAG( &huart2, UART_FLAG_TXE ) == RESET )
+                    HAL_UART_Transmit( &huart3, ( uint8_t* )s, 1, 0xFFFF );
+                    while ( __HAL_UART_GET_FLAG( &huart3, UART_FLAG_TXE ) == RESET )
                         ;
                 }
 
@@ -71,8 +71,8 @@ void    USART_printf( USART_TypeDef* USARTx, char* Data, ... ) {
                 itoa( d, buf, 10 );
 
                 for ( s = buf; *s; s++ ) {
-                    HAL_UART_Transmit( &huart2, ( uint8_t* )s, 1, 0xFFFF );
-                    while ( __HAL_UART_GET_FLAG( &huart2, UART_FLAG_TXE ) == RESET )
+                    HAL_UART_Transmit( &huart3, ( uint8_t* )s, 1, 0xFFFF );
+                    while ( __HAL_UART_GET_FLAG( &huart3, UART_FLAG_TXE ) == RESET )
                         ;
                 }
 
@@ -88,11 +88,11 @@ void    USART_printf( USART_TypeDef* USARTx, char* Data, ... ) {
         }
 
         else {
-            HAL_UART_Transmit( &huart2, ( uint8_t* )Data, 1, 0xFFFF );
+            HAL_UART_Transmit( &huart3, ( uint8_t* )Data, 1, 0xFFFF );
             Data++;
         }
 
-        while ( __HAL_UART_GET_FLAG( &huart2, UART_FLAG_TXE ) == RESET )
+        while ( __HAL_UART_GET_FLAG( &huart3, UART_FLAG_TXE ) == RESET )
             ;
     }
 }
