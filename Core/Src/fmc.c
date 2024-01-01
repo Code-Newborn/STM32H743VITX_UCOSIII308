@@ -6,7 +6,7 @@
  ******************************************************************************
  * @attention
  *
- * <h2><center>&copy; Copyright (c) 2023 STMicroelectronics.
+ * <h2><center>&copy; Copyright (c) 2024 STMicroelectronics.
  * All rights reserved.</center></h2>
  *
  * This software component is licensed by ST under BSD 3-Clause license,
@@ -63,17 +63,17 @@ void MX_FMC_Init( void ) {
     hsram1.Init.WriteFifo          = FMC_WRITE_FIFO_ENABLE;
     hsram1.Init.PageSize           = FMC_PAGE_SIZE_NONE;
     /* Timing */
-    Timing.AddressSetupTime      = 2;
+    Timing.AddressSetupTime      = 0;
     Timing.AddressHoldTime       = 15;
-    Timing.DataSetupTime         = 16;
+    Timing.DataSetupTime         = 142;
     Timing.BusTurnAroundDuration = 0;
     Timing.CLKDivision           = 16;
     Timing.DataLatency           = 17;
     Timing.AccessMode            = FMC_ACCESS_MODE_A;
     /* ExtTiming */
-    ExtTiming.AddressSetupTime      = 4;
+    ExtTiming.AddressSetupTime      = 0;
     ExtTiming.AddressHoldTime       = 15;
-    ExtTiming.DataSetupTime         = 15;
+    ExtTiming.DataSetupTime         = 6;
     ExtTiming.BusTurnAroundDuration = 0;
     ExtTiming.CLKDivision           = 16;
     ExtTiming.DataLatency           = 17;
