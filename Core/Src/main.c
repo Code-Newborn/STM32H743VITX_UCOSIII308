@@ -25,6 +25,8 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
+#include "delay.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -80,7 +82,7 @@ int main( void ) {
     SystemClock_Config();
 
     /* USER CODE BEGIN SysInit */
-
+    delay_init( 400 );
     /* USER CODE END SysInit */
 
     /* Initialize all configured peripherals */
@@ -97,7 +99,7 @@ int main( void ) {
 
         /* USER CODE BEGIN 3 */
         HAL_GPIO_TogglePin( LED_GPIO_Port, LED_Pin );
-        HAL_Delay( 200 );
+        HAL_Delay( 1000 );
     }
     /* USER CODE END 3 */
 }
