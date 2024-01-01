@@ -66,8 +66,6 @@ void Error_Handler( void );
 #define T_PEN_GPIO_Port   GPIOB
 #define T_CS_Pin          GPIO_PIN_1
 #define T_CS_GPIO_Port    GPIOB
-#define T_CLK_Pin         GPIO_PIN_13
-#define T_CLK_GPIO_Port   GPIOB
 #define ILI_CTR_Pin       GPIO_PIN_5
 #define ILI_CTR_GPIO_Port GPIOB
 /* USER CODE BEGIN Private defines */
