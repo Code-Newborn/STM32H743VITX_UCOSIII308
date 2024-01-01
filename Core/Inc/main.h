@@ -51,23 +51,23 @@ extern "C" {
 /* USER CODE END EM */
 
 /* Exported functions prototypes ---------------------------------------------*/
-void Error_Handler(void);
+void Error_Handler( void );
 
 /* USER CODE BEGIN EFP */
 
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define LED_Pin GPIO_PIN_1
-#define LED_GPIO_Port GPIOA
-#define OLED_RST_Pin GPIO_PIN_4
-#define OLED_RST_GPIO_Port GPIOC
-#define OLED_DC_Pin GPIO_PIN_5
-#define OLED_DC_GPIO_Port GPIOC
-#define OLED_CS_Pin GPIO_PIN_0
-#define OLED_CS_GPIO_Port GPIOB
+#define LED_Pin            GPIO_PIN_1
+#define LED_GPIO_Port      GPIOA
+#define OLED_RST_Pin       GPIO_PIN_6
+#define OLED_RST_GPIO_Port GPIOA
+#define OLED_DC_Pin        GPIO_PIN_4
+#define OLED_DC_GPIO_Port  GPIOC
+#define OLED_CS_Pin        GPIO_PIN_0
+#define OLED_CS_GPIO_Port  GPIOB
 /* USER CODE BEGIN Private defines */
-  extern uint8_t Pin_state;
+extern uint8_t Pin_state;
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus
