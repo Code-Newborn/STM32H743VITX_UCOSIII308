@@ -62,8 +62,8 @@ extern _m_tp_dev tp_dev;  // 触屏控制器在touch.c里面定义
 // #define DOUT PGin( 3 )   // T_MISO
 // #define TDIN PIout( 3 )  // T_MOSI
 // #define TCLK PHout( 6 )  // T_SCK
-#define TCS_Set HAL_GPIO_WritePin( T_PEN_GPIO_Port, T_PEN_Pin, GPIO_PIN_SET )    // T_CS
-#define TCS_Rst HAL_GPIO_WritePin( T_PEN_GPIO_Port, T_PEN_Pin, GPIO_PIN_RESET )  // T_CS
+#define TCS_Set HAL_GPIO_WritePin( T_CS_GPIO_Port, T_CS_Pin, GPIO_PIN_SET )    // T_CS
+#define TCS_Rst HAL_GPIO_WritePin( T_CS_GPIO_Port, T_CS_Pin, GPIO_PIN_RESET )  // T_CS
 
 // 电阻屏函数
 void     TP_Write_Byte( uint8_t num );                                                                                                              // 向控制芯片写入一个数据

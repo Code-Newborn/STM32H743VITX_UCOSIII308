@@ -444,7 +444,7 @@ void TP_Adjust( void ) {
                 POINT_COLOR = BLUE;
                 LCD_Clear( WHITE );                                                                     // 清屏
                 LCD_ShowString( 35, 110, lcddev.width, lcddev.height, 16, "Touch Screen Adjust OK!" );  // 校正完成
-                delay_ms( 1000 );
+                delay_ms( 2000 );
                 // TP_Save_Adjdata();
                 LCD_Clear( WHITE );  // 清屏
                 return;              // 校正完成
@@ -488,8 +488,8 @@ uint8_t TP_Init( void ) {
     // GPIO_Initure.Pin = GPIO_PIN_3;          // PG3
     // HAL_GPIO_Init( GPIOG, &GPIO_Initure );  // 初始化
 
-    // TP_Read_XY( &tp_dev.x[ 0 ], &tp_dev.y[ 0 ] );  // 第一次读取初始化
-    // // AT24CXX_Init();                                // 初始化24CXX
+    TP_Read_XY( &tp_dev.x[ 0 ], &tp_dev.y[ 0 ] );  // 第一次读取初始化
+    // AT24CXX_Init();                                // 初始化24CXX
     // if ( TP_Get_Adjdata() )
     //     return 0;  // 已经校准
     // else           // 未校准?
