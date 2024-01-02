@@ -60,14 +60,16 @@ void delay_init( uint16_t sysclk ) {
 #if SYS_SUPPORT_OS /* 如果需要支持OS */
     uint32_t reload;
 #endif
-    g_fac_us = sysclk; /* 不论是否使用OS，g_fac_us都需要使用 */
-#if SYS_SUPPORT_OS     /* 如果需要支持OS. */
-    reload = sysclk;   /* 每秒钟的计数次数 单位为M */
-    reload *= 1000000 / OSCfg_TickRate_Hz;
-
-    SysTick->CTRL |= 1 << 1;
-    SysTick->LOAD = reload;  // 每经过 reload 个系统节拍完成一个UCOS时间片
-    SysTick->CTRL |= 1 << 0;
+    g_fac_us = sysclk;                       /* 不论是否使用OS,g_fac_us都需要使用 */
+#if SYS_SUPPORT_OS                           /* 如果需要支持OS. */
+    reload = sysclk;                         /* 每秒钟的计数次数 单位为M */
+    reload *= 1000000 / delay_ostickspersec; /* 根据delay_ostickspersec设定溢出时间,
+                                                reload为24位寄存器,最大值:16777216
+                                              */
+    g_fac_ms = 1000 / delay_ostickspersec;   /* 代表OS可以延时的最少单位 */
+    SysTick->CTRL |= 1 << 1;                 /* 开启SYSTICK中断 */
+    SysTick->LOAD = reload;                  /* 每1/delay_ostickspersec秒中断一次 */
+    SysTick->CTRL |= 1 << 0;                 /* 开启SYSTICK */
 #endif
 }
 
@@ -156,6 +158,7 @@ void delay_us( uint32_t nus ) {
  * @retval      无
  */
 void delay_ms( uint16_t nms ) {
+
     delay_us( ( uint32_t )( nms * 1000 ) ); /* 普通方式延时 */
 }
 #endif

@@ -205,7 +205,7 @@
       <pMultCmdsp></pMultCmdsp>
       <SystemViewers>
         <Entry>
-          <Name>System Viewer\GPIOB</Name>
+          <Name>System Viewer\GPIOA</Name>
           <WinId>35905</WinId>
         </Entry>
       </SystemViewers>
