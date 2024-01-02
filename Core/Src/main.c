@@ -20,11 +20,14 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "gpio.h"
+#include "spi.h"
 #include "usart.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
+#include "Ink_bmp.h"
+#include "Ink_oled.h"
 #include "delay.h"
 
 /* USER CODE END Includes */
@@ -58,6 +61,8 @@ void SystemClock_Config( void );
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
+uint8_t Image_BW[ 4796 ];
+
 /* USER CODE END 0 */
 
 /**
@@ -88,7 +93,13 @@ int main( void ) {
     /* Initialize all configured peripherals */
     MX_GPIO_Init();
     MX_USART1_UART_Init();
+    MX_SPI1_Init();
     /* USER CODE BEGIN 2 */
+
+    uint8_t t = ' ';
+    OLED_GUIInit();
+    Paint_NewImage( Image_BW, OLED_W, OLED_H, ROTATE_0, WHITE );
+    OLED_Clear( WHITE );
 
     /* USER CODE END 2 */
 
@@ -98,9 +109,49 @@ int main( void ) {
         /* USER CODE END WHILE */
 
         /* USER CODE BEGIN 3 */
-        HAL_GPIO_TogglePin( LED_GPIO_Port, LED_Pin );
-        HAL_Delay( 1000 );
-        printf( "Hello World!\r\n" );
+        OLED_GUIInit();
+        OLED_ShowPicture( 0, 0, 296, 128, gImage_1, BLACK );
+        OLED_Display( Image_BW );
+        delay_ms( 1000 );
+        delay_ms( 1000 );
+        delay_ms( 1000 );
+        OLED_Clear( WHITE );
+        OLED_GUIInit();
+        OLED_ShowChinese( 61, 0, 0, 16, BLACK );    // 中
+        OLED_ShowChinese( 77, 0, 1, 16, BLACK );    // 景
+        OLED_ShowChinese( 93, 0, 2, 16, BLACK );    // 园
+        OLED_ShowChinese( 109, 0, 3, 16, BLACK );   // 电
+        OLED_ShowChinese( 125, 0, 4, 16, BLACK );   // 子
+        OLED_ShowChinese( 141, 0, 5, 16, BLACK );   // 技
+        OLED_ShowChinese( 157, 0, 6, 16, BLACK );   // 术
+        OLED_ShowChinese( 173, 0, 7, 16, BLACK );   // 有
+        OLED_ShowChinese( 189, 0, 8, 16, BLACK );   // 限
+        OLED_ShowChinese( 205, 0, 9, 16, BLACK );   // 公
+        OLED_ShowChinese( 221, 0, 10, 16, BLACK );  // 司
+        OLED_ShowString( 108, 20, "2014/05/01", 16, BLACK );
+        OLED_ShowString( 80, 40, "ASCII:", 16, BLACK );
+        OLED_ShowString( 157, 40, "CODE:", 16, BLACK );
+        OLED_ShowChar( 131, 40, t, 16, BLACK );
+        OLED_ShowNum( 198, 40, t, 3, 16, BLACK );
+        t++;
+        if ( t > '~' )
+            t = ' ';
+        OLED_ShowString( 33, 56, "Welcome to 2.90-inch E-paper", 16, BLACK );
+        OLED_ShowString( 49, 73, "with 296 x 128 resolution", 16, BLACK );
+        OLED_DrawLine( 1, 89, 296, 89, BLACK );
+        OLED_ShowString( 53, 90, "Zhongjingyuan Electronic", 16, BLACK );
+        OLED_ShowString( 75, 106, "Technology Co.,Ltd.", 16, BLACK );
+        OLED_Display( Image_BW );
+        delay_ms( 1000 );
+        delay_ms( 1000 );
+        delay_ms( 1000 );
+        OLED_GUIInit();
+        OLED_DrawRectangle( 1, 1, 296, 128, BLACK, 0 );
+        OLED_Display( Image_BW );
+        delay_ms( 1000 );
+        delay_ms( 1000 );
+        delay_ms( 1000 );
+        OLED_Clear( WHITE );
     }
     /* USER CODE END 3 */
 }
@@ -133,7 +184,7 @@ void SystemClock_Config( void ) {
     RCC_OscInitStruct.PLL.PLLM            = 4;
     RCC_OscInitStruct.PLL.PLLN            = 50;
     RCC_OscInitStruct.PLL.PLLP            = 2;
-    RCC_OscInitStruct.PLL.PLLQ            = 2;
+    RCC_OscInitStruct.PLL.PLLQ            = 4;
     RCC_OscInitStruct.PLL.PLLR            = 2;
     RCC_OscInitStruct.PLL.PLLRGE          = RCC_PLL1VCIRANGE_3;
     RCC_OscInitStruct.PLL.PLLVCOSEL       = RCC_PLL1VCOWIDE;
