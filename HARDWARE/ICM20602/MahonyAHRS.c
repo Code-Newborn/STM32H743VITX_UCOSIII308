@@ -1,7 +1,9 @@
-// Reference:
-// https://github.com/PaulStoffregen/MahonyAHRS/blob/master/src/MahonyAHRS.cpp
-// https://ahrs.readthedocs.io/en/latest/filters/mahony.html
-// https://github.com/dccharacter/AHRS/blob/master/MadgwickAHRS.c
+/** Reference:
+ * https://github.com/PaulStoffregen/MahonyAHRS/blob/master/src/MahonyAHRS.cpp
+ * https://ahrs.readthedocs.io/en/latest/filters/mahony.html
+ * https://github.com/dccharacter/AHRS/blob/master/MadgwickAHRS.c
+ * https://x-io.co.uk/open-source-imu-and-ahrs-algorithms/
+ */
 
 #include "MahonyAHRS.h"
 #include <math.h>
