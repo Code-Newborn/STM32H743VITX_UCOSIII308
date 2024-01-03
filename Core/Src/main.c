@@ -178,7 +178,7 @@ void rtp_test( void ) {
         if ( tp_dev.sta & TP_PRES_DOWN )  // 触摸屏被按下
         {
             if ( tp_dev.x[ 0 ] < lcddev.width && tp_dev.y[ 0 ] < lcddev.height ) {
-                if ( tp_dev.x[ 0 ] > ( lcddev.width - 24 ) && tp_dev.y[ 0 ] < 16 )
+                if ( tp_dev.x[ 0 ] > ( lcddev.width - 48 ) && tp_dev.y[ 0 ] < 32 )
                     Load_Drow_Dialog();  // 清除
                 else
                     TP_Draw_Big_Point( tp_dev.x[ 0 ], tp_dev.y[ 0 ], RED );  // 画图
