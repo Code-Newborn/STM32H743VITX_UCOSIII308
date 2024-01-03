@@ -22,9 +22,9 @@
                     ------------------------------------
  ********************************************************************************************************************/
 
-#include "stm32h7xx_hal.h"
 #include "SEEKFREE_ICM20602.h"
 #include "spi.h"
+#include "stm32h7xx_hal.h"
 
 int16_t icm_gyro_x, icm_gyro_y, icm_gyro_z;
 int16_t icm_acc_x, icm_acc_y, icm_acc_z;
@@ -41,16 +41,15 @@ int16_t icm_acc_x, icm_acc_y, icm_acc_z;
 //  @since      v1.0
 //  Sample usage:
 //-------------------------------------------------------------------------------------------------------------------
-void icm_spi_w_reg_byte(uint8_t cmd, uint8_t val)
-{
-    uint8_t dat[2];
-    HAL_GPIO_WritePin(ICM_CS_GPIO_Port, ICM_CS_Pin, GPIO_PIN_RESET);
+void icm_spi_w_reg_byte( uint8_t cmd, uint8_t val ) {
+    uint8_t dat[ 2 ];
+    HAL_GPIO_WritePin( ICM_CS_GPIO_Port, ICM_CS_Pin, GPIO_PIN_RESET );
 
-    dat[0] = cmd | ICM20602_SPI_W;
-    dat[1] = val;
-    HAL_SPI_Transmit(&hspi1, dat, 2, 0xFFFF);
+    dat[ 0 ] = cmd | ICM20602_SPI_W;
+    dat[ 1 ] = val;
+    HAL_SPI_Transmit( &hspi1, dat, 2, 0xFFFF );
 
-    HAL_GPIO_WritePin(ICM_CS_GPIO_Port, ICM_CS_Pin, GPIO_PIN_SET);
+    HAL_GPIO_WritePin( ICM_CS_GPIO_Port, ICM_CS_Pin, GPIO_PIN_SET );
 }
 
 //-------------------------------------------------------------------------------------------------------------------
@@ -62,18 +61,17 @@ void icm_spi_w_reg_byte(uint8_t cmd, uint8_t val)
 //  Sample usage:
 //-------------------------------------------------------------------------------------------------------------------
 
-void icm_spi_r_reg_byte(uint8_t cmd, uint8_t *val)
-{
-    uint8_t dat[2];
+void icm_spi_r_reg_byte( uint8_t cmd, uint8_t* val ) {
+    uint8_t dat[ 2 ];
 
-    HAL_GPIO_WritePin(ICM_CS_GPIO_Port, ICM_CS_Pin, GPIO_PIN_RESET);
-    dat[0] = cmd | ICM20602_SPI_R;
-    dat[1] = *val;
-    HAL_SPI_TransmitReceive(&hspi1, dat, dat, 2, 0xFFFF);
+    HAL_GPIO_WritePin( ICM_CS_GPIO_Port, ICM_CS_Pin, GPIO_PIN_RESET );
+    dat[ 0 ] = cmd | ICM20602_SPI_R;
+    dat[ 1 ] = *val;
+    HAL_SPI_TransmitReceive( &hspi1, dat, dat, 2, 0xFFFF );
 
-    HAL_GPIO_WritePin(ICM_CS_GPIO_Port, ICM_CS_Pin, GPIO_PIN_SET);
+    HAL_GPIO_WritePin( ICM_CS_GPIO_Port, ICM_CS_Pin, GPIO_PIN_SET );
 
-    *val = dat[1];
+    *val = dat[ 1 ];
 }
 
 //-------------------------------------------------------------------------------------------------------------------
@@ -85,11 +83,10 @@ void icm_spi_r_reg_byte(uint8_t cmd, uint8_t *val)
 //  @since      v1.0
 //  Sample usage:
 //-------------------------------------------------------------------------------------------------------------------
-void icm_spi_r_reg_bytes(uint8_t *val, uint8_t num)
-{
-    HAL_GPIO_WritePin(ICM_CS_GPIO_Port, ICM_CS_Pin, GPIO_PIN_RESET);
-    HAL_SPI_TransmitReceive(&hspi1, val, val, num, 500);
-    HAL_GPIO_WritePin(ICM_CS_GPIO_Port, ICM_CS_Pin, GPIO_PIN_SET);
+void icm_spi_r_reg_bytes( uint8_t* val, uint8_t num ) {
+    HAL_GPIO_WritePin( ICM_CS_GPIO_Port, ICM_CS_Pin, GPIO_PIN_RESET );
+    HAL_SPI_TransmitReceive( &hspi1, val, val, num, 500 );
+    HAL_GPIO_WritePin( ICM_CS_GPIO_Port, ICM_CS_Pin, GPIO_PIN_SET );
 }
 
 //-------------------------------------------------------------------------------------------------------------------
@@ -99,13 +96,12 @@ void icm_spi_r_reg_bytes(uint8_t *val, uint8_t num)
 //  @since      v1.0
 //  Sample usage:
 //-------------------------------------------------------------------------------------------------------------------
-void icm20602_self3_check(void)
-{
+void icm20602_self3_check( void ) {
     uint8_t dat = 0;
-    while (0x12 != dat) // 读取ICM20602 ID
+    while ( 0x12 != dat )  // 读取ICM20602 ID
     {
-        icm_spi_r_reg_byte(ICM20602_WHO_AM_I, &dat);
-        HAL_Delay(10);
+        icm_spi_r_reg_byte( ICM20602_WHO_AM_I, &dat );
+        HAL_Delay( 10 );
         // 卡在这里原因有以下几点
         // 1 MPU6050坏了，如果是新的这样的概率极低
         // 2 接线错误或者没有接好
@@ -120,28 +116,26 @@ void icm20602_self3_check(void)
 //  @since      v1.0
 //  Sample usage:
 //-------------------------------------------------------------------------------------------------------------------
-void icm20602_init_spi(void)
-{
+void icm20602_init_spi( void ) {
     uint8_t val = 0x0;
 
-    HAL_Delay(10); // 上电延时
+    HAL_Delay( 10 );  // 上电延时
 
-    icm20602_self3_check(); // 检测
+    icm20602_self3_check();  // 检测
 
-    icm_spi_w_reg_byte(ICM20602_PWR_MGMT_1, 0x80); // 复位设备
-    HAL_Delay(2);
-    do
-    { // 等待复位成功
-        icm_spi_r_reg_byte(ICM20602_PWR_MGMT_1, &val);
-    } while (0x41 != val);
+    icm_spi_w_reg_byte( ICM20602_PWR_MGMT_1, 0x80 );  // 复位设备
+    HAL_Delay( 2 );
+    do {  // 等待复位成功
+        icm_spi_r_reg_byte( ICM20602_PWR_MGMT_1, &val );
+    } while ( 0x41 != val );
 
-    icm_spi_w_reg_byte(ICM20602_PWR_MGMT_1, 0x01);     // 时钟设置
-    icm_spi_w_reg_byte(ICM20602_PWR_MGMT_2, 0x00);     // 开启陀螺仪和加速度计
-    icm_spi_w_reg_byte(ICM20602_CONFIG, 0x01);         // 176HZ 1KHZ
-    icm_spi_w_reg_byte(ICM20602_SMPLRT_DIV, 0x07);     // 采样速率 SAMPLE_RATE = INTERNAL_SAMPLE_RATE / (1 + SMPLRT_DIV)
-    icm_spi_w_reg_byte(ICM20602_GYRO_CONFIG, 0x18);    // ±2000 dps
-    icm_spi_w_reg_byte(ICM20602_ACCEL_CONFIG, 0x10);   // ±8g
-    icm_spi_w_reg_byte(ICM20602_ACCEL_CONFIG_2, 0x03); // Average 4 samples   44.8HZ   //0x23 Average 16 samples
+    icm_spi_w_reg_byte( ICM20602_PWR_MGMT_1, 0x01 );      // 时钟设置
+    icm_spi_w_reg_byte( ICM20602_PWR_MGMT_2, 0x00 );      // 开启陀螺仪和加速度计
+    icm_spi_w_reg_byte( ICM20602_CONFIG, 0x01 );          // 176HZ 1KHZ
+    icm_spi_w_reg_byte( ICM20602_SMPLRT_DIV, 0x07 );      // 采样速率 SAMPLE_RATE = INTERNAL_SAMPLE_RATE / (1 + SMPLRT_DIV)
+    icm_spi_w_reg_byte( ICM20602_GYRO_CONFIG, 0x18 );     // ±2000 dps
+    icm_spi_w_reg_byte( ICM20602_ACCEL_CONFIG, 0x10 );    // ±8g
+    icm_spi_w_reg_byte( ICM20602_ACCEL_CONFIG_2, 0x03 );  // Average 4 samples   44.8HZ   //0x23 Average 16 samples
     // ICM20602_GYRO_CONFIG寄存器
     // 设置为:0x00 陀螺仪量程为:±250 dps     获取到的陀螺仪数据除以131           可以转化为带物理单位的数据，单位为：°/s
     // 设置为:0x08 陀螺仪量程为:±500 dps     获取到的陀螺仪数据除以65.5          可以转化为带物理单位的数据，单位为：°/s
@@ -162,20 +156,18 @@ void icm20602_init_spi(void)
 //  @since      v1.0
 //  Sample usage:				执行该函数后，直接查看对应的变量即可
 //-------------------------------------------------------------------------------------------------------------------
-void get_icm20602_accdata_spi(void)
-{
-    struct
-    {
+void get_icm20602_accdata_spi( void ) {
+    struct {
         uint8_t reg;
-        uint8_t dat[6];
+        uint8_t dat[ 6 ];
     } buf;
 
     buf.reg = ICM20602_ACCEL_XOUT_H | ICM20602_SPI_R;
 
-    icm_spi_r_reg_bytes(&buf.reg, 7);
-    icm_acc_x = (int16_t)(((uint16_t)buf.dat[0] << 8 | buf.dat[1]));
-    icm_acc_y = (int16_t)(((uint16_t)buf.dat[2] << 8 | buf.dat[3]));
-    icm_acc_z = (int16_t)(((uint16_t)buf.dat[4] << 8 | buf.dat[5]));
+    icm_spi_r_reg_bytes( &buf.reg, 7 );
+    icm_acc_x = ( int16_t )( ( ( uint16_t )buf.dat[ 0 ] << 8 | buf.dat[ 1 ] ) );
+    icm_acc_y = ( int16_t )( ( ( uint16_t )buf.dat[ 2 ] << 8 | buf.dat[ 3 ] ) );
+    icm_acc_z = ( int16_t )( ( ( uint16_t )buf.dat[ 4 ] << 8 | buf.dat[ 5 ] ) );
 }
 
 //-------------------------------------------------------------------------------------------------------------------
@@ -185,20 +177,18 @@ void get_icm20602_accdata_spi(void)
 //  @since      v1.0
 //  Sample usage:				执行该函数后，直接查看对应的变量即可
 //-------------------------------------------------------------------------------------------------------------------
-void get_icm20602_gyro_spi(void)
-{
-    struct
-    {
+void get_icm20602_gyro_spi( void ) {
+    struct {
         uint8_t reg;
-        uint8_t dat[6];
+        uint8_t dat[ 6 ];
     } buf;
 
     buf.reg = ICM20602_GYRO_XOUT_H | ICM20602_SPI_R;
 
-    icm_spi_r_reg_bytes(&buf.reg, 7);
-    icm_gyro_x = (int16_t)(((uint16_t)buf.dat[0] << 8 | buf.dat[1]));
-    icm_gyro_y = (int16_t)(((uint16_t)buf.dat[2] << 8 | buf.dat[3]));
-    icm_gyro_z = (int16_t)(((uint16_t)buf.dat[4] << 8 | buf.dat[5]));
+    icm_spi_r_reg_bytes( &buf.reg, 7 );
+    icm_gyro_x = ( int16_t )( ( ( uint16_t )buf.dat[ 0 ] << 8 | buf.dat[ 1 ] ) );
+    icm_gyro_y = ( int16_t )( ( ( uint16_t )buf.dat[ 2 ] << 8 | buf.dat[ 3 ] ) );
+    icm_gyro_z = ( int16_t )( ( ( uint16_t )buf.dat[ 4 ] << 8 | buf.dat[ 5 ] ) );
 }
 
 //-------------------------------------------------------------------------------------------------------------------
@@ -215,8 +205,7 @@ float unit_icm_gyro_z;
 float unit_icm_acc_x;
 float unit_icm_acc_y;
 float unit_icm_acc_z;
-void icm20602_data_change(void)
-{
+void  icm20602_data_change( void ) {
     // ICM20602_GYRO_CONFIG寄存器
     // 设置为:0x00 陀螺仪量程为:±250 dps     获取到的陀螺仪数据除以131           可以转化为带物理单位的数据， 单位为：°/s
     // 设置为:0x08 陀螺仪量程为:±500 dps     获取到的陀螺仪数据除以65.5          可以转化为带物理单位的数据，单位为：°/s
@@ -228,23 +217,22 @@ void icm20602_data_change(void)
     // 设置为:0x08 加速度计量程为:±4g          获取到的加速度计数据 除以8192       可以转化为带物理单位的数据，单位：g(m/s^2)
     // 设置为:0x10 加速度计量程为:±8g          获取到的加速度计数据 除以4096       可以转化为带物理单位的数据，单位：g(m/s^2)
     // 设置为:0x18 加速度计量程为:±16g         获取到的加速度计数据 除以2048       可以转化为带物理单位的数据，单位：g(m/s^2)
-    unit_icm_gyro_x = (float)icm_gyro_x / 16.4f;
-    unit_icm_gyro_y = (float)icm_gyro_y / 16.4f;
-    unit_icm_gyro_z = (float)icm_gyro_z / 16.4f;
+    unit_icm_gyro_x = ( float )icm_gyro_x / 16.4f;
+    unit_icm_gyro_y = ( float )icm_gyro_y / 16.4f;
+    unit_icm_gyro_z = ( float )icm_gyro_z / 16.4f;
 
-    unit_icm_acc_x = (float)icm_acc_x / 4096;
-    unit_icm_acc_y = (float)icm_acc_y / 4096;
-    unit_icm_acc_z = (float)icm_acc_z / 4096;
+    unit_icm_acc_x = ( float )icm_acc_x / 4096;
+    unit_icm_acc_y = ( float )icm_acc_y / 4096;
+    unit_icm_acc_z = ( float )icm_acc_z / 4096;
 }
 
-float inclination_x; // 与X轴线夹角
-float inclination_y; // 与Y轴线夹角
-float inclination_z; // 与Z轴线夹角
-void icm20602_inclination(void)
-{
+float inclination_x;  // 与X轴线夹角
+float inclination_y;  // 与Y轴线夹角
+float inclination_z;  // 与Z轴线夹角
+void  icm20602_inclination( void ) {
     float inclination_z_ = 0;
-    inclination_x = atanf(unit_icm_acc_x / sqrtf(pow(unit_icm_acc_y, 2) + pow(unit_icm_acc_z, 2))) * RAD2DEG;  // 传感器X轴偏离角度
-    inclination_y = atanf(unit_icm_acc_y / sqrtf(pow(unit_icm_acc_x, 2) + pow(unit_icm_acc_z, 2))) * RAD2DEG;  // 传感器Y轴偏离角度
-    inclination_z_ = atanf(unit_icm_acc_z / sqrtf(pow(unit_icm_acc_x, 2) + pow(unit_icm_acc_y, 2))) * RAD2DEG; // 传感器Z轴偏离角度
-    inclination_z = 90.0f - inclination_z_;                                                                    // 传感器Z轴偏离重力方向
+    inclination_x        = atanf( unit_icm_acc_x / sqrtf( pow( unit_icm_acc_y, 2 ) + pow( unit_icm_acc_z, 2 ) ) ) * RAD2DEG;  // 传感器X轴偏离角度
+    inclination_y        = atanf( unit_icm_acc_y / sqrtf( pow( unit_icm_acc_x, 2 ) + pow( unit_icm_acc_z, 2 ) ) ) * RAD2DEG;  // 传感器Y轴偏离角度
+    inclination_z_       = atanf( unit_icm_acc_z / sqrtf( pow( unit_icm_acc_x, 2 ) + pow( unit_icm_acc_y, 2 ) ) ) * RAD2DEG;  // 传感器Z轴偏离角度
+    inclination_z        = 90.0f - inclination_z_;                                                                            // 传感器Z轴偏离重力方向
 }
