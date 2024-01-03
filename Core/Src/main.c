@@ -26,6 +26,7 @@
 /* USER CODE BEGIN Includes */
 #include "stdio.h"
 #include "SEEKFREE_ICM20602.h"
+#include "delay.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -45,10 +46,6 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-
-uint8_t rgb5050_RValue = 0;
-uint8_t rgb5050_GValue = 0;
-uint8_t rgb5050_BValue = 0;
 
 /* USER CODE END PV */
 
