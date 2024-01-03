@@ -20,6 +20,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "gpio.h"
+#include "tim.h"
 #include "usart.h"
 
 /* Private includes ----------------------------------------------------------*/
@@ -88,7 +89,11 @@ int main( void ) {
     /* Initialize all configured peripherals */
     MX_GPIO_Init();
     MX_USART1_UART_Init();
+    MX_TIM2_Init();
+    MX_TIM3_Init();
     /* USER CODE BEGIN 2 */
+
+    HAL_TIM_Encoder_Start( &htim2, TIM_CHANNEL_ALL );
 
     /* USER CODE END 2 */
 
@@ -98,9 +103,9 @@ int main( void ) {
         /* USER CODE END WHILE */
 
         /* USER CODE BEGIN 3 */
-        HAL_GPIO_TogglePin( LED_GPIO_Port, LED_Pin );
-        HAL_Delay( 1000 );
-        printf( "Hello World!\r\n" );
+        // HAL_GPIO_TogglePin( LED_GPIO_Port, LED_Pin );
+        // HAL_Delay( 1000 );
+        // printf( "Hello World!\r\n" );
     }
     /* USER CODE END 3 */
 }

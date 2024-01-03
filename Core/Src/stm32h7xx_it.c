@@ -24,6 +24,9 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
+#include <stdio.h>
+#include "KY040.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -57,6 +60,7 @@
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
+extern TIM_HandleTypeDef  htim3;
 extern UART_HandleTypeDef huart1;
 /* USER CODE BEGIN EV */
 
@@ -187,6 +191,19 @@ void SysTick_Handler( void ) {
 /******************************************************************************/
 
 /**
+ * @brief This function handles TIM3 global interrupt.
+ */
+void TIM3_IRQHandler( void ) {
+    /* USER CODE BEGIN TIM3_IRQn 0 */
+
+    /* USER CODE END TIM3_IRQn 0 */
+    HAL_TIM_IRQHandler( &htim3 );
+    /* USER CODE BEGIN TIM3_IRQn 1 */
+
+    /* USER CODE END TIM3_IRQn 1 */
+}
+
+/**
  * @brief This function handles USART1 global interrupt.
  */
 void USART1_IRQHandler( void ) {
@@ -200,6 +217,13 @@ void USART1_IRQHandler( void ) {
 }
 
 /* USER CODE BEGIN 1 */
+
+void HAL_TIM_PeriodElapsedCallback( TIM_HandleTypeDef* htim ) {
+    if ( htim->Instance == TIM3 ) {
+        getTimerEncoder();
+        printf( "捕获到的脉冲数：%d\r\n", TimerEncoder );
+    }
+}
 
 /* USER CODE END 1 */
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
