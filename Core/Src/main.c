@@ -90,7 +90,7 @@ int main( void ) {
 
     /* Initialize all configured peripherals */
     MX_GPIO_Init();
-    MX_SPI1_Init();
+    MX_SPI4_Init();
     /* USER CODE BEGIN 2 */
     icm20602_init_spi();
     /* USER CODE END 2 */

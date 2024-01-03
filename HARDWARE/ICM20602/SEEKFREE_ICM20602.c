@@ -47,7 +47,7 @@ void icm_spi_w_reg_byte( uint8_t cmd, uint8_t val ) {
 
     dat[ 0 ] = cmd | ICM20602_SPI_W;
     dat[ 1 ] = val;
-    HAL_SPI_Transmit( &hspi1, dat, 2, 0xFFFF );
+    HAL_SPI_Transmit( &hspi4, dat, 2, 0xFFFF );
 
     HAL_GPIO_WritePin( ICM_CS_GPIO_Port, ICM_CS_Pin, GPIO_PIN_SET );
 }
@@ -67,7 +67,7 @@ void icm_spi_r_reg_byte( uint8_t cmd, uint8_t* val ) {
     HAL_GPIO_WritePin( ICM_CS_GPIO_Port, ICM_CS_Pin, GPIO_PIN_RESET );
     dat[ 0 ] = cmd | ICM20602_SPI_R;
     dat[ 1 ] = *val;
-    HAL_SPI_TransmitReceive( &hspi1, dat, dat, 2, 0xFFFF );
+    HAL_SPI_TransmitReceive( &hspi4, dat, dat, 2, 0xFFFF );
 
     HAL_GPIO_WritePin( ICM_CS_GPIO_Port, ICM_CS_Pin, GPIO_PIN_SET );
 
@@ -85,7 +85,7 @@ void icm_spi_r_reg_byte( uint8_t cmd, uint8_t* val ) {
 //-------------------------------------------------------------------------------------------------------------------
 void icm_spi_r_reg_bytes( uint8_t* val, uint8_t num ) {
     HAL_GPIO_WritePin( ICM_CS_GPIO_Port, ICM_CS_Pin, GPIO_PIN_RESET );
-    HAL_SPI_TransmitReceive( &hspi1, val, val, num, 500 );
+    HAL_SPI_TransmitReceive( &hspi4, val, val, num, 500 );
     HAL_GPIO_WritePin( ICM_CS_GPIO_Port, ICM_CS_Pin, GPIO_PIN_SET );
 }
 
