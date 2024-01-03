@@ -20,11 +20,14 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "gpio.h"
+#include "spi.h"
 #include "usart.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
+#include <string.h>
+#include "W25Qx.h"
 #include "delay.h"
 
 /* USER CODE END Includes */
@@ -58,6 +61,11 @@ void SystemClock_Config( void );
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
+uint8_t  wData[ 0x100 ];
+uint8_t  rData[ 0x100 ];
+uint8_t  ID[ 4 ];
+uint32_t i;
+
 /* USER CODE END 0 */
 
 /**
@@ -88,7 +96,54 @@ int main( void ) {
     /* Initialize all configured peripherals */
     MX_GPIO_Init();
     MX_USART1_UART_Init();
+    MX_SPI2_Init();
     /* USER CODE BEGIN 2 */
+
+    printf( "\r\nSPI-W25Qxxx Example \r\n\r\n" );
+
+    /*##-1- Read the device ID  ########################*/
+    BSP_W25Qx_Init();
+    BSP_W25Qx_Read_ID( ID );
+    printf( "【W25Qxxx】 ID is : " );
+    for ( i = 0; i < 2; i++ ) {
+        printf( "0x%02X ", ID[ i ] );
+    }
+    printf( "\r\n\r\n" );
+
+    /*##-2- Erase Block ##################################*/
+    if ( BSP_W25Qx_Erase_Block( 0 ) == W25Qx_OK )
+        printf( "SPI Erase Block ok\r\n" );
+    else
+        Error_Handler();
+
+    /*##-2- Written to the flash ########################*/
+    /* fill buffer */
+    for ( i = 0; i < 0x100; i++ ) {
+        wData[ i ] = i;
+        rData[ i ] = 0;
+    }
+
+    if ( BSP_W25Qx_Write( wData, 0x00, 0x100 ) == W25Qx_OK )
+        printf( "SPI Write ok\r\n" );
+    else
+        Error_Handler();
+
+    /*##-3- Read the flash     ########################*/
+    if ( BSP_W25Qx_Read( rData, 0x00, 0x100 ) == W25Qx_OK )
+        printf( "SPI Read ok\r\n\r\n" );
+    else
+        Error_Handler();
+
+    printf( "SPI Read Data : \r\n" );
+    for ( i = 0; i < 0x100; i++ )
+        printf( "0x%02X  ", rData[ i ] );
+    printf( "\r\n\r\n" );
+
+    /*##-4- check data          ########################*/
+    if ( memcmp( wData, rData, 0x100 ) == 0 )  // 读写数据无损
+        printf( "【W25Q64JV】 SPI Test OK\r\n" );
+    else
+        printf( "【W25Q64JV】 SPI Test False\r\n" );
 
     /* USER CODE END 2 */
 
@@ -98,9 +153,9 @@ int main( void ) {
         /* USER CODE END WHILE */
 
         /* USER CODE BEGIN 3 */
-        HAL_GPIO_TogglePin( LED_GPIO_Port, LED_Pin );
-        HAL_Delay( 1000 );
-        printf( "Hello World!\r\n" );
+        // HAL_GPIO_TogglePin( LED_GPIO_Port, LED_Pin );
+        // HAL_Delay( 1000 );
+        // printf( "Hello World!\r\n" );
     }
     /* USER CODE END 3 */
 }
@@ -133,7 +188,7 @@ void SystemClock_Config( void ) {
     RCC_OscInitStruct.PLL.PLLM            = 4;
     RCC_OscInitStruct.PLL.PLLN            = 50;
     RCC_OscInitStruct.PLL.PLLP            = 2;
-    RCC_OscInitStruct.PLL.PLLQ            = 2;
+    RCC_OscInitStruct.PLL.PLLQ            = 4;
     RCC_OscInitStruct.PLL.PLLR            = 2;
     RCC_OscInitStruct.PLL.PLLRGE          = RCC_PLL1VCIRANGE_3;
     RCC_OscInitStruct.PLL.PLLVCOSEL       = RCC_PLL1VCOWIDE;
