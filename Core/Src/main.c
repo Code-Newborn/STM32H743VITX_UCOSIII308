@@ -20,6 +20,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "gpio.h"
+#include "tim.h"
 #include "usart.h"
 
 /* Private includes ----------------------------------------------------------*/
@@ -46,6 +47,10 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
+
+uint8_t rgb5050_RValue = 0;
+uint8_t rgb5050_GValue = 0;
+uint8_t rgb5050_BValue = 0;
 
 /* USER CODE END PV */
 
@@ -88,8 +93,12 @@ int main( void ) {
     /* Initialize all configured peripherals */
     MX_GPIO_Init();
     MX_USART1_UART_Init();
+    MX_TIM1_Init();
+    MX_TIM3_Init();
     /* USER CODE BEGIN 2 */
-
+    HAL_TIM_PWM_Start( &htim1, TIM_CHANNEL_4 );
+    HAL_TIM_PWM_Start( &htim3, TIM_CHANNEL_3 );
+    HAL_TIM_PWM_Start( &htim3, TIM_CHANNEL_4 );
     /* USER CODE END 2 */
 
     /* Infinite loop */
@@ -98,9 +107,17 @@ int main( void ) {
         /* USER CODE END WHILE */
 
         /* USER CODE BEGIN 3 */
-        HAL_GPIO_TogglePin( LED_GPIO_Port, LED_Pin );
-        HAL_Delay( 1000 );
-        printf( "Hello World!\r\n" );
+        // HAL_GPIO_TogglePin( LED_GPIO_Port, LED_Pin );
+        // HAL_Delay( 1000 );
+        __HAL_TIM_SET_COMPARE( &htim1, TIM_CHANNEL_4, rgb5050_RValue );
+        __HAL_TIM_SET_COMPARE( &htim3, TIM_CHANNEL_3, rgb5050_GValue );
+        __HAL_TIM_SET_COMPARE( &htim3, TIM_CHANNEL_4, rgb5050_BValue );
+
+        // 设置完比较值后需重新启动PWM
+        HAL_TIM_PWM_Start( &htim1, TIM_CHANNEL_4 );
+        HAL_TIM_PWM_Start( &htim3, TIM_CHANNEL_3 );
+        HAL_TIM_PWM_Start( &htim3, TIM_CHANNEL_4 );
+        // HAL_Delay( 1 );
     }
     /* USER CODE END 3 */
 }
