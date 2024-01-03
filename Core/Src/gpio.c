@@ -29,6 +29,13 @@
 /*----------------------------------------------------------------------------*/
 /* USER CODE BEGIN 1 */
 
+/** ICM20602六轴传感器SPI 引脚连接
+    PA5   ------>   SPI1_SCK    ------>   SPC
+    PA6   ------>   SPI1_MISO   ------>   SDO
+    PA7   ------>   SPI1_MOSI   ------>   SDI
+    PC4   ------>   ICM_CS      ------>   CS
+*/
+
 /* USER CODE END 1 */
 
 /** Configure pins
@@ -51,12 +58,22 @@ void MX_GPIO_Init( void ) {
     /*Configure GPIO pin Output Level */
     HAL_GPIO_WritePin( LED_GPIO_Port, LED_Pin, GPIO_PIN_SET );
 
+    /*Configure GPIO pin Output Level */
+    HAL_GPIO_WritePin( ICM_CS_GPIO_Port, ICM_CS_Pin, GPIO_PIN_SET );
+
     /*Configure GPIO pin : PtPin */
     GPIO_InitStruct.Pin   = LED_Pin;
     GPIO_InitStruct.Mode  = GPIO_MODE_OUTPUT_PP;
     GPIO_InitStruct.Pull  = GPIO_PULLUP;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
     HAL_GPIO_Init( LED_GPIO_Port, &GPIO_InitStruct );
+
+    /*Configure GPIO pin : PtPin */
+    GPIO_InitStruct.Pin   = ICM_CS_Pin;
+    GPIO_InitStruct.Mode  = GPIO_MODE_OUTPUT_PP;
+    GPIO_InitStruct.Pull  = GPIO_PULLUP;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+    HAL_GPIO_Init( ICM_CS_GPIO_Port, &GPIO_InitStruct );
 }
 
 /* USER CODE BEGIN 2 */

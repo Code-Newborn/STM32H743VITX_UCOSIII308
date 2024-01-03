@@ -20,14 +20,14 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "gpio.h"
+#include "spi.h"
 #include "tim.h"
 #include "usart.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
-#include "delay.h"
-
+#include "stdio.h"
+#include "SEEKFREE_ICM20602.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -92,13 +92,9 @@ int main( void ) {
 
     /* Initialize all configured peripherals */
     MX_GPIO_Init();
-    MX_USART1_UART_Init();
-    MX_TIM1_Init();
-    MX_TIM3_Init();
+    MX_SPI1_Init();
     /* USER CODE BEGIN 2 */
-    HAL_TIM_PWM_Start( &htim1, TIM_CHANNEL_4 );
-    HAL_TIM_PWM_Start( &htim3, TIM_CHANNEL_3 );
-    HAL_TIM_PWM_Start( &htim3, TIM_CHANNEL_4 );
+    icm20602_init_spi();
     /* USER CODE END 2 */
 
     /* Infinite loop */
@@ -107,17 +103,19 @@ int main( void ) {
         /* USER CODE END WHILE */
 
         /* USER CODE BEGIN 3 */
-        // HAL_GPIO_TogglePin( LED_GPIO_Port, LED_Pin );
-        // HAL_Delay( 1000 );
-        __HAL_TIM_SET_COMPARE( &htim1, TIM_CHANNEL_4, rgb5050_RValue );
-        __HAL_TIM_SET_COMPARE( &htim3, TIM_CHANNEL_3, rgb5050_GValue );
-        __HAL_TIM_SET_COMPARE( &htim3, TIM_CHANNEL_4, rgb5050_BValue );
+        // HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
+        // HAL_Delay(200);
 
-        // 设置完比较值后需重新启动PWM
-        HAL_TIM_PWM_Start( &htim1, TIM_CHANNEL_4 );
-        HAL_TIM_PWM_Start( &htim3, TIM_CHANNEL_3 );
-        HAL_TIM_PWM_Start( &htim3, TIM_CHANNEL_4 );
-        // HAL_Delay( 1 );
+        // 使用在线调试查看 icm_gyro_x，icm_gyro_y，icm_gyro_z的值可以得到陀螺仪数据
+        // 使用在线调试查看 icm_acc_x，icm_acc_y，icm_acc_z   的值可以得到加速度计数据
+
+        get_icm20602_accdata_spi();
+        get_icm20602_gyro_spi();
+        icm20602_data_change();
+        MahonyAHRSupdateIMU( icm_gyro_x, icm_gyro_y, icm_gyro_z, icm_acc_x, icm_acc_y, icm_acc_z );
+        Quaternion2Angles();
+        icm20602_inclination();  // 倾角
+        HAL_Delay( 5 );
     }
     /* USER CODE END 3 */
 }
