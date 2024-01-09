@@ -26,6 +26,7 @@
 /* USER CODE BEGIN Includes */
 
 #include "delay.h"
+#include "key.h"
 
 /* USER CODE END Includes */
 
@@ -46,6 +47,15 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
+
+enum {
+    Motor_Standby,
+    Motor_forward,
+    Motor_backward,
+    Motor_brake,
+} MotorState;
+
+uint8_t key;
 
 /* USER CODE END PV */
 
@@ -98,9 +108,40 @@ int main( void ) {
         /* USER CODE END WHILE */
 
         /* USER CODE BEGIN 3 */
-        HAL_GPIO_TogglePin( LED_GPIO_Port, LED_Pin );
-        HAL_Delay( 1000 );
-        printf( "Hello World!\r\n" );
+        // HAL_GPIO_TogglePin( LED_GPIO_Port, LED_Pin );
+        // HAL_Delay( 1000 );
+        // printf( "Hello World!\r\n" );
+
+        key = key_scan( 1 ); /* 得到键值 */
+
+        if ( key ) {
+
+            switch ( MotorState ) {
+            case Motor_Standby:  // 待机
+                HAL_GPIO_WritePin( Motor_IN3_GPIO_Port, Motor_IN3_Pin, GPIO_PIN_RESET );
+                HAL_GPIO_WritePin( Motor_IN4_GPIO_Port, Motor_IN4_Pin, GPIO_PIN_RESET );
+                break;
+            case Motor_forward:  // 正转
+                HAL_GPIO_WritePin( Motor_IN3_GPIO_Port, Motor_IN3_Pin, GPIO_PIN_SET );
+                HAL_GPIO_WritePin( Motor_IN4_GPIO_Port, Motor_IN4_Pin, GPIO_PIN_RESET );
+                break;
+            case Motor_backward:  // 反转
+                HAL_GPIO_WritePin( Motor_IN3_GPIO_Port, Motor_IN3_Pin, GPIO_PIN_RESET );
+                HAL_GPIO_WritePin( Motor_IN4_GPIO_Port, Motor_IN4_Pin, GPIO_PIN_SET );
+                break;
+            case Motor_brake:  // 刹车
+                HAL_GPIO_WritePin( Motor_IN3_GPIO_Port, Motor_IN3_Pin, GPIO_PIN_SET );
+                HAL_GPIO_WritePin( Motor_IN4_GPIO_Port, Motor_IN4_Pin, GPIO_PIN_SET );
+                break;
+            default:  // 默认刹车
+                HAL_GPIO_WritePin( Motor_IN3_GPIO_Port, Motor_IN3_Pin, GPIO_PIN_SET );
+                HAL_GPIO_WritePin( Motor_IN4_GPIO_Port, Motor_IN4_Pin, GPIO_PIN_SET );
+                break;
+            }
+        } else {
+            HAL_GPIO_WritePin( Motor_IN3_GPIO_Port, Motor_IN3_Pin, GPIO_PIN_SET );
+            HAL_GPIO_WritePin( Motor_IN4_GPIO_Port, Motor_IN4_Pin, GPIO_PIN_SET );
+        }
     }
     /* USER CODE END 3 */
 }

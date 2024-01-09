@@ -58,8 +58,14 @@ void Error_Handler( void );
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define LED_Pin       GPIO_PIN_1
-#define LED_GPIO_Port GPIOA
+#define Motor_IN4_Pin       GPIO_PIN_0
+#define Motor_IN4_GPIO_Port GPIOC
+#define LED_Pin             GPIO_PIN_1
+#define LED_GPIO_Port       GPIOA
+#define Motor_IN3_Pin       GPIO_PIN_1
+#define Motor_IN3_GPIO_Port GPIOB
+#define SW_Pin              GPIO_PIN_8
+#define SW_GPIO_Port        GPIOA
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */
