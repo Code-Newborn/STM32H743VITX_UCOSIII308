@@ -51,15 +51,21 @@ extern "C" {
 /* USER CODE END EM */
 
 /* Exported functions prototypes ---------------------------------------------*/
-void Error_Handler( void );
+void Error_Handler(void);
 
 /* USER CODE BEGIN EFP */
 
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define LED_Pin       GPIO_PIN_1
+#define PS2_X_Pin GPIO_PIN_1
+#define PS2_X_GPIO_Port GPIOC
+#define LED_Pin GPIO_PIN_1
 #define LED_GPIO_Port GPIOA
+#define PS2_Z_Pin GPIO_PIN_2
+#define PS2_Z_GPIO_Port GPIOA
+#define PS2_Y_Pin GPIO_PIN_3
+#define PS2_Y_GPIO_Port GPIOA
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */

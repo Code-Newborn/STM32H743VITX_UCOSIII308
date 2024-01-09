@@ -6,7 +6,7 @@
  ******************************************************************************
  * @attention
  *
- * <h2><center>&copy; Copyright (c) 2023 STMicroelectronics.
+ * <h2><center>&copy; Copyright (c) 2024 STMicroelectronics.
  * All rights reserved.</center></h2>
  *
  * This software component is licensed by ST under BSD 3-Clause license,
@@ -57,6 +57,12 @@ void MX_GPIO_Init( void ) {
     GPIO_InitStruct.Pull  = GPIO_PULLUP;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
     HAL_GPIO_Init( LED_GPIO_Port, &GPIO_InitStruct );
+
+    /*Configure GPIO pin : PtPin */
+    GPIO_InitStruct.Pin  = PS2_Z_Pin;
+    GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+    GPIO_InitStruct.Pull = GPIO_PULLUP;
+    HAL_GPIO_Init( PS2_Z_GPIO_Port, &GPIO_InitStruct );
 }
 
 /* USER CODE BEGIN 2 */

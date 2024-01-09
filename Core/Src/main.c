@@ -19,6 +19,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "adc.h"
 #include "gpio.h"
 #include "usart.h"
 
@@ -46,6 +47,8 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
+
+uint16_t AD_value[ 2 ] = { 0 };
 
 /* USER CODE END PV */
 
@@ -88,7 +91,12 @@ int main( void ) {
     /* Initialize all configured peripherals */
     MX_GPIO_Init();
     MX_USART1_UART_Init();
+    MX_ADC2_Init();
     /* USER CODE BEGIN 2 */
+
+    if ( HAL_ADCEx_Calibration_Start( &hadc2, ADC_CALIB_OFFSET, ADC_SINGLE_ENDED ) != HAL_OK ) {
+        printf( "校准失败\r\n" );
+    }
 
     /* USER CODE END 2 */
 
@@ -101,6 +109,16 @@ int main( void ) {
         HAL_GPIO_TogglePin( LED_GPIO_Port, LED_Pin );
         HAL_Delay( 1000 );
         printf( "Hello World!\r\n" );
+
+        for ( uint8_t i = 0; i < 2; i++ ) {
+            HAL_ADC_Start( &hadc2 );                                          // 开启ADC1
+            HAL_ADC_PollForConversion( &hadc2, 10 );                          // 等待转换完成
+            AD_value[ i ] = HAL_ADC_GetValue( &hadc2 );                       // 依次获取ADC转换值
+            printf( "PA%d:%d\r\n", i, AD_value[ i ] );                        // 打印获取电压采样值
+            printf( "PA%d:%.3f v\r\n", i, AD_value[ i ] * 3.3 / 4096 / 16 );  // 精度16bit 2^16 电压转换值
+        }
+
+        HAL_Delay( 500 );
     }
     /* USER CODE END 3 */
 }
@@ -122,6 +140,9 @@ void SystemClock_Config( void ) {
 
     while ( !__HAL_PWR_GET_FLAG( PWR_FLAG_VOSRDY ) ) {
     }
+    /** Macro to configure the PLL clock source
+     */
+    __HAL_RCC_PLL_PLLSOURCE_CONFIG( RCC_PLLSOURCE_HSI );
     /** Initializes the RCC Oscillators according to the specified parameters
      * in the RCC_OscInitTypeDef structure.
      */
