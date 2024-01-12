@@ -406,6 +406,11 @@ void rgb565_test( void ) {
     //     }
     //     delay_ms( 10 );
     // }
+
+    // 原尺寸显示
+    fac = ( float )800 / outputheight; /* 得到比例因子 */
+    ov5640_outsize_set( ( 1280 - fac * lcddev.width ) / 2, ( 800 - fac * outputheight ) / 2, lcddev.width, outputheight );
+    sprintf( ( char* )msgbuf, "Full Size 1:1" );
 }
 
 /* USER CODE END 0 */
@@ -416,9 +421,6 @@ void rgb565_test( void ) {
  */
 int main( void ) {
     /* USER CODE BEGIN 1 */
-
-    uint8_t  key = 0;
-    uint16_t t   = 0;
 
     /* USER CODE END 1 */
 
@@ -466,7 +468,6 @@ int main( void ) {
     }
 
     LCD_ShowString( 30, 130, 200, 16, 16, "OV5640 OK" );
-
     /* USER CODE END 2 */
 
     /* Infinite loop */
@@ -576,6 +577,13 @@ void MPU_Config( void ) {
     MPU_InitStruct.IsShareable      = MPU_ACCESS_NOT_SHAREABLE;
     MPU_InitStruct.IsCacheable      = MPU_ACCESS_NOT_CACHEABLE;
     MPU_InitStruct.IsBufferable     = MPU_ACCESS_BUFFERABLE;
+
+    HAL_MPU_ConfigRegion( &MPU_InitStruct );
+    /** Initializes and configures the Region and the memory to be protected
+     */
+    MPU_InitStruct.Number      = MPU_REGION_NUMBER1;
+    MPU_InitStruct.BaseAddress = 0xC0000000;
+    MPU_InitStruct.Size        = MPU_REGION_SIZE_32MB;
 
     HAL_MPU_ConfigRegion( &MPU_InitStruct );
     /* Enables the MPU */

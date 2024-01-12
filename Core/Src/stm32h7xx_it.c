@@ -240,7 +240,7 @@ void DCMI_IRQHandler( void ) {
 void HAL_DCMI_FrameEventCallback( DCMI_HandleTypeDef* hdcmi ) {
     __HAL_DCMI_CLEAR_FLAG( hdcmi, DCMI_FLAG_FRAMERI ); /* 清除帧中断 */
     // jpeg_data_process();                               /* jpeg数据处理 */
-    HAL_GPIO_TogglePin( LED_GPIO_Port, LED_Pin );      /* LED1闪烁 */
+    HAL_GPIO_TogglePin( LED_GPIO_Port, LED_Pin ); /* LED1闪烁 */
     g_ov_frame++;
 
     /* 重新使能帧中断,因为HAL_DCMI_IRQHandler()函数会关闭帧中断 */
