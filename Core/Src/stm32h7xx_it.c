@@ -29,6 +29,8 @@
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN TD */
 
+uint8_t g_ov_frame = 0; /* 帧率 */
+
 /* USER CODE END TD */
 
 /* Private define ------------------------------------------------------------*/
@@ -57,6 +59,8 @@
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
+extern DMA_HandleTypeDef  hdma_dcmi;
+extern DCMI_HandleTypeDef hdcmi;
 extern UART_HandleTypeDef huart1;
 /* USER CODE BEGIN EV */
 
@@ -187,6 +191,19 @@ void SysTick_Handler( void ) {
 /******************************************************************************/
 
 /**
+ * @brief This function handles DMA1 stream1 global interrupt.
+ */
+void DMA1_Stream1_IRQHandler( void ) {
+    /* USER CODE BEGIN DMA1_Stream1_IRQn 0 */
+
+    /* USER CODE END DMA1_Stream1_IRQn 0 */
+    HAL_DMA_IRQHandler( &hdma_dcmi );
+    /* USER CODE BEGIN DMA1_Stream1_IRQn 1 */
+
+    /* USER CODE END DMA1_Stream1_IRQn 1 */
+}
+
+/**
  * @brief This function handles USART1 global interrupt.
  */
 void USART1_IRQHandler( void ) {
@@ -199,7 +216,36 @@ void USART1_IRQHandler( void ) {
     /* USER CODE END USART1_IRQn 1 */
 }
 
+/**
+ * @brief This function handles DCMI global interrupt.
+ */
+void DCMI_IRQHandler( void ) {
+    /* USER CODE BEGIN DCMI_IRQn 0 */
+
+    /* USER CODE END DCMI_IRQn 0 */
+    HAL_DCMI_IRQHandler( &hdcmi );
+    /* USER CODE BEGIN DCMI_IRQn 1 */
+
+    /* USER CODE END DCMI_IRQn 1 */
+}
+
 /* USER CODE BEGIN 1 */
+
+/**
+ * @brief       DCMI中断回调服务函数
+ * @param       hdcmi:DCMI句柄
+ * @note        捕获到一帧图像处理
+ * @retval      无
+ */
+void HAL_DCMI_FrameEventCallback( DCMI_HandleTypeDef* hdcmi ) {
+    __HAL_DCMI_CLEAR_FLAG( hdcmi, DCMI_FLAG_FRAMERI ); /* 清除帧中断 */
+    // jpeg_data_process();                               /* jpeg数据处理 */
+    HAL_GPIO_TogglePin( LED_GPIO_Port, LED_Pin );      /* LED1闪烁 */
+    g_ov_frame++;
+
+    /* 重新使能帧中断,因为HAL_DCMI_IRQHandler()函数会关闭帧中断 */
+    __HAL_DCMI_ENABLE_IT( hdcmi, DCMI_IT_FRAME );
+}
 
 /* USER CODE END 1 */
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

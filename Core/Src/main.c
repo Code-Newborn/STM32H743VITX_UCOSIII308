@@ -19,6 +19,8 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "dcmi.h"
+#include "dma.h"
 #include "fmc.h"
 #include "gpio.h"
 #include "spi.h"
@@ -26,13 +28,35 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "dcmi.h"
 #include "delay.h"
 #include "lcd.h"
+#include "ov5640.h"
 #include "touch.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
+
+uint8_t  g_ov_mode = 0; /* bit0: 0, RGB565模式;  1, JPEG模式 */
+uint16_t g_curline = 0; /* 摄像头输出数据,当前行编号 */
+uint16_t g_yoffset = 0; /* y方向的偏移量 */
+
+#define jpeg_buf_size  1 * 1024 * 1024 /* 定义JPEG数据缓存jpeg_buf的大小(*4字节) */
+#define jpeg_line_size 4 * 1024        /* 定义DMA接收数据时,一行数据的最大值 */
+
+uint32_t g_dcmi_line_buf[ 2 ][ jpeg_line_size ]; /* RGB屏时,摄像头采用一行一行读取,定义行缓存 */
+
+uint32_t g_jpeg_data_buf[ jpeg_buf_size ] __attribute__( ( at( 0XC0000000 + 1280 * 800 * 2 ) ) ); /* JPEG数据缓存buf,定义在LCD帧缓存之后 */
+
+volatile uint32_t g_jpeg_data_len = 0; /* buf中的JPEG有效数据长度 */
+
+/**
+ * 0,数据没有采集完;
+ * 1,数据采集完了,但是还没处理;
+ * 2,数据已经处理完成了,可以开始下一帧接收
+ */
+volatile uint8_t g_jpeg_data_ok = 0; /* JPEG数据采集完成标志 */
 
 /* USER CODE END PTD */
 
@@ -231,6 +255,159 @@ void ctp_test( void ) {
     }
 }
 
+/**
+ * @brief       处理JPEG数据
+ * @ntoe        在DCMI_IRQHandler中断服务函数里面被调用
+ *              当采集完一帧JPEG数据后,调用此函数,切换JPEG BUF.开始下一帧采集.
+ *
+ * @param       无
+ * @retval      无
+ */
+void jpeg_data_process( void ) {
+    uint16_t  i;
+    uint16_t  rlen; /* 剩余数据长度 */
+    uint32_t* pbuf;
+    g_curline = g_yoffset;
+
+    if ( g_ov_mode & 0X01 ) /* 只有在JPEG格式下,才需要做处理. */
+    {
+        if ( g_jpeg_data_ok == 0 ) /* jpeg数据还未采集完? */
+        {
+            __HAL_DMA_DISABLE( &hdma_dcmi ); /* 关闭DMA */
+
+            rlen = jpeg_line_size - __HAL_DMA_GET_COUNTER( &hdma_dcmi ); /* 得到剩余长度 */
+            pbuf = g_jpeg_data_buf + g_jpeg_data_len;                    /* 偏移到有效数据末尾,继续添加 */
+
+            if ( DMA1_Stream1->CR & ( 1 << 19 ) ) {
+                for ( i = 0; i < rlen; i++ ) {
+                    pbuf[ i ] = g_dcmi_line_buf[ 1 ][ i ]; /* 读取buf1里面的剩余数据 */
+                }
+            } else {
+                for ( i = 0; i < rlen; i++ ) {
+                    pbuf[ i ] = g_dcmi_line_buf[ 0 ][ i ]; /* 读取buf0里面的剩余数据 */
+                }
+            }
+            g_jpeg_data_len += rlen; /* 加上剩余长度 */
+            g_jpeg_data_ok = 1;      /* 标记JPEG数据采集完成,等待其他函数处理 */
+        }
+        if ( g_jpeg_data_ok == 2 ) /* 上一次的jpeg数据已经被处理了 */
+        {
+            __HAL_DMA_SET_COUNTER( &hdma_dcmi, jpeg_line_size ); /* 传输长度为jpeg_buf_size*4字节 */
+            __HAL_DMA_ENABLE( &hdma_dcmi );                      /* 重新传输 */
+            g_jpeg_data_ok  = 0;                                 /* 标记数据未采集 */
+            g_jpeg_data_len = 0;                                 /* 数据重新开始 */
+        }
+    } else {
+        lcd_set_cursor( 0, 0 );
+        lcd_write_ram_prepare(); /* 开始写入GRAM */
+    }
+}
+
+/**
+ * @brief       RGB565测试
+ * @ntoe        RGB数据直接显示在LCD上面
+ * @param       无
+ * @retval      无
+ */
+void rgb565_test( void ) {
+    uint8_t  key;
+    float    fac    = 0;
+    uint8_t  effect = 0, contrast = 2;
+    uint8_t  scale = 1;    /* 默认是全尺寸缩放 */
+    uint8_t  msgbuf[ 15 ]; /* 消息缓存区 */
+    uint16_t outputheight = 0;
+
+    // LCD_Clear( WHITE );
+    // LCD_ShowString( 30, 50, 200, 16, 16, "STM32" );
+    // LCD_ShowString( 30, 70, 200, 16, 16, "OV5640 RGB565 Mode" );
+    // LCD_ShowString( 30, 100, 200, 16, 16, "KEY0:Contrast" );         /* 对比度 */
+    // LCD_ShowString( 30, 120, 200, 16, 16, "KEY1:AUTO Focus" );       /* 执行自动对焦 */
+    // LCD_ShowString( 30, 140, 200, 16, 16, "KEY2:Effects" );          /* 特效 */
+    // LCD_ShowString( 30, 160, 200, 16, 16, "KEY_UP:FullSize/Scale" ); /* 1:1尺寸(显示真实尺寸)/全尺寸缩放 */
+
+    /* 自动对焦初始化 */
+    ov5640_rgb565_mode(); /* RGB565模式 */
+    ov5640_focus_init();
+
+    ov5640_light_mode( 0 );        /* 自动模式 */
+    ov5640_color_saturation( 10 ); /* 色彩饱和度0  */
+    ov5640_brightness( 4 );        /* 亮度0 */
+    ov5640_contrast( 3 );          /* 对比度0 */
+    ov5640_sharpness( 33 );        /* 自动锐度 */
+    ov5640_focus_constant();       /* 启动持续对焦 */
+    // dcmi_init();                                                                                 /* DCMI配置 */
+    // dcmi_dma_init( ( uint32_t )&LCD->LCD_RAM, 0, 1, DMA_MDATAALIGN_HALFWORD, DMA_MINC_DISABLE ); /* MCU 屏 */
+
+    if ( lcddev.height == 1024 ) {
+        g_yoffset    = ( lcddev.height - 800 ) / 2;
+        outputheight = 800;
+        ov5640_write_reg( 0x3035, 0X51 ); /* 降低输出帧率，否则可能抖动 */
+    } else if ( lcddev.height == 1280 ) {
+        g_yoffset    = ( lcddev.height - 600 ) / 2;
+        outputheight = 600;
+        ov5640_write_reg( 0x3035, 0X51 ); /* 降低输出帧率，否则可能抖动 */
+    } else {
+        g_yoffset    = 0;
+        outputheight = lcddev.height;
+    }
+
+    g_curline = g_yoffset;                                  /* 行数复位 */
+    ov5640_outsize_set( 4, 0, lcddev.width, outputheight ); /* 满屏缩放显示 */
+    dcmi_start();                                           /* 启动传输 */
+    // LCD_Clear( WHITE );
+
+    // while ( 1 ) {
+    //     key = key_scan( 0 );
+
+    //     if ( key ) {
+    //         if ( key != KEY1_PRES )
+    //             dcmi_stop(); /* 非KEY1按下,停止显示 */
+    //         switch ( key ) {
+    //         case KEY0_PRES: /* 对比度设置 */
+    //             contrast++;
+    //             if ( contrast > 6 ) {
+    //                 contrast = 0;
+    //             }
+    //             ov5640_contrast( contrast );
+    //             sprintf( ( char* )msgbuf, "Contrast:%d", ( signed char )contrast - 3 );
+    //             break;
+
+    //         case KEY1_PRES: /* 执行一次自动对焦 */
+    //             ov5640_focus_single();
+    //             break;
+
+    //         case KEY2_PRES: /* 特效设置 */
+    //             effect++;
+    //             if ( effect > 6 ) {
+    //                 effect = 0;
+    //             }
+    //             ov5640_special_effects( effect ); /* 设置特效 */
+    //             sprintf( ( char* )msgbuf, "%s", EFFECTS_TBL[ effect ] );
+    //             break;
+
+    //         case WKUP_PRES: /* 1:1尺寸(显示真实尺寸)/缩放 */
+    //             scale = !scale;
+    //             if ( scale == 0 ) {
+    //                 fac = ( float )800 / outputheight; /* 得到比例因子 */
+    //                 ov5640_outsize_set( ( 1280 - fac * lcddev.width ) / 2, ( 800 - fac * outputheight ) / 2, lcddev.width, outputheight );
+    //                 sprintf( ( char* )msgbuf, "Full Size 1:1" );
+    //             } else {
+    //                 ov5640_outsize_set( 4, 0, lcddev.width, outputheight );
+    //                 sprintf( ( char* )msgbuf, "Scale" );
+    //             }
+    //             break;
+    //         }
+    //         if ( key != KEY1_PRES ) /* 非KEY1按下 */
+    //         {
+    //             lcd_show_string( 30, 50, 210, 16, 16, ( char* )msgbuf, RED ); /* 显示提示内容  */
+    //             delay_ms( 800 );
+    //             dcmi_start(); /* 重新开始传输 */
+    //         }
+    //     }
+    //     delay_ms( 10 );
+    // }
+}
+
 /* USER CODE END 0 */
 
 /**
@@ -239,6 +416,9 @@ void ctp_test( void ) {
  */
 int main( void ) {
     /* USER CODE BEGIN 1 */
+
+    uint8_t  key = 0;
+    uint16_t t   = 0;
 
     /* USER CODE END 1 */
 
@@ -263,38 +443,59 @@ int main( void ) {
 
     /* Initialize all configured peripherals */
     MX_GPIO_Init();
+    MX_DMA_Init();
     MX_USART1_UART_Init();
     MX_FMC_Init();
     MX_SPI2_Init();
+    MX_DCMI_Init();
     /* USER CODE BEGIN 2 */
 
-    tp_dev.init();  // 触摸屏初始化
+    // tp_dev.init();  // 触摸屏初始化
     POINT_COLOR = RED;
-    LCD_ShowString( 30, 50, 200, 16, 16, "Apollo STM32f4/F7" );
-    LCD_ShowString( 30, 70, 200, 16, 16, "TOUCH TEST" );
-    LCD_ShowString( 30, 90, 200, 16, 16, "ATOM@ALIENTEK" );
-    LCD_ShowString( 30, 110, 200, 16, 16, "2016/1/16" );
-    if ( tp_dev.touchtype != 0XFF ) {
-        LCD_ShowString( 30, 130, 200, 16, 16, "Press KEY0 to Adjust" );  // 电阻屏才显示
-    }
-    delay_ms( 1500 );
-    Load_Drow_Dialog();
 
-    if ( tp_dev.touchtype & 0X80 )
-        ctp_test();  // 电容屏测试
-    else
-        rtp_test();  // 电阻屏测试
+    LCD_ShowString( 30, 50, 200, 16, 16, "STM32" );
+    LCD_ShowString( 30, 70, 200, 16, 16, "OV5640 TEST" );
+    LCD_ShowString( 30, 90, 200, 16, 16, "ATOM@ALIENTEK" );
+
+    while ( ov5640_init() ) /* 初始化OV5640 */
+    {
+        LCD_ShowString( 30, 130, 240, 16, 16, "OV5640 ERROR" );
+        delay_ms( 200 );
+        LCD_Color_Fill( 30, 130, 239, 170, WHITE );
+        delay_ms( 200 );
+    }
+
+    LCD_ShowString( 30, 130, 200, 16, 16, "OV5640 OK" );
 
     /* USER CODE END 2 */
 
     /* Infinite loop */
     /* USER CODE BEGIN WHILE */
     while ( 1 ) {
+
+        g_ov_mode = 0; /* RGB565模式 */
+
+        // t++;
+
+        // if ( t == 100 ) {
+        //     LCD_ShowString( 30, 150, 230, 16, 16, "KEY0:RGB565  KEY1:JPEG" ); /* 闪烁显示提示信息 */
+        // }
+
+        // if ( t == 200 ) {
+        //     LCD_Color_Fill( 30, 150, 210, 150 + 16, WHITE );
+        //     t = 0;
+        //     HAL_GPIO_TogglePin( LED_GPIO_Port, LED_Pin );
+        //     HAL_Delay( 1000 );
+        // }
+        delay_ms( 5 );
+
+        rgb565_test();
+
         /* USER CODE END WHILE */
 
         /* USER CODE BEGIN 3 */
-        HAL_GPIO_TogglePin( LED_GPIO_Port, LED_Pin );
-        HAL_Delay( 1000 );
+        // HAL_GPIO_TogglePin( LED_GPIO_Port, LED_Pin );
+        // HAL_Delay( 1000 );
     }
     /* USER CODE END 3 */
 }

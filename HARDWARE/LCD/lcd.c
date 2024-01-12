@@ -227,6 +227,65 @@ void LCD_SetCursor( uint16_t Xpos, uint16_t Ypos ) {
         LCD_WR_DATA( ( lcddev.height - 1 ) & 0XFF );
     }
 }
+
+/**
+ * @brief       准备写GRAM
+ * @param       无
+ * @retval      无
+ */
+void lcd_write_ram_prepare( void ) {
+    LCD->LCD_REG = lcddev.wramcmd;
+}
+
+/**
+ * @brief       设置光标位置(对RGB屏无效)
+ * @param       x,y: 坐标
+ * @retval      无
+ */
+void lcd_set_cursor( uint16_t x, uint16_t y ) {
+    if ( lcddev.id == 0x1963 ) {
+        if ( lcddev.dir == 0 ) /* 竖屏模式, x坐标需要变换 */
+        {
+            x = lcddev.width - 1 - x;
+            LCD_WR_REG( lcddev.setxcmd );
+            LCD_WR_DATA( 0 );
+            LCD_WR_DATA( 0 );
+            LCD_WR_DATA( x >> 8 );
+            LCD_WR_DATA( x & 0xFF );
+        } else /* 横屏模式 */
+        {
+            LCD_WR_REG( lcddev.setxcmd );
+            LCD_WR_DATA( x >> 8 );
+            LCD_WR_DATA( x & 0xFF );
+            LCD_WR_DATA( ( lcddev.width - 1 ) >> 8 );
+            LCD_WR_DATA( ( lcddev.width - 1 ) & 0xFF );
+        }
+
+        LCD_WR_REG( lcddev.setycmd );
+        LCD_WR_DATA( y >> 8 );
+        LCD_WR_DATA( y & 0xFF );
+        LCD_WR_DATA( ( lcddev.height - 1 ) >> 8 );
+        LCD_WR_DATA( ( lcddev.height - 1 ) & 0xFF );
+    } else if ( lcddev.id == 0x5510 ) {
+        LCD_WR_REG( lcddev.setxcmd );
+        LCD_WR_DATA( x >> 8 );
+        LCD_WR_REG( lcddev.setxcmd + 1 );
+        LCD_WR_DATA( x & 0xFF );
+        LCD_WR_REG( lcddev.setycmd );
+        LCD_WR_DATA( y >> 8 );
+        LCD_WR_REG( lcddev.setycmd + 1 );
+        LCD_WR_DATA( y & 0xFF );
+    } else /* 9341/5310/7789/7796/9806 等 设置坐标 */
+    {
+        LCD_WR_REG( lcddev.setxcmd );
+        LCD_WR_DATA( x >> 8 );
+        LCD_WR_DATA( x & 0xFF );
+        LCD_WR_REG( lcddev.setycmd );
+        LCD_WR_DATA( y >> 8 );
+        LCD_WR_DATA( y & 0xFF );
+    }
+}
+
 // 设置LCD的自动扫描方向(对RGB屏无效)
 // 注意:其他函数可能会受到此函数设置的影响(尤其是9341),
 // 所以,一般设置为L2R_U2D即可,如果设置为其他扫描方式,可能导致显示不正常.

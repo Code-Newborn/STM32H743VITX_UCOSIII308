@@ -58,16 +58,29 @@ void Error_Handler( void );
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define ILI_RST_Pin       GPIO_PIN_3
-#define ILI_RST_GPIO_Port GPIOE
-#define LED_Pin           GPIO_PIN_1
-#define LED_GPIO_Port     GPIOA
-#define T_PEN_Pin         GPIO_PIN_0
-#define T_PEN_GPIO_Port   GPIOB
-#define T_CS_Pin          GPIO_PIN_1
-#define T_CS_GPIO_Port    GPIOB
-#define ILI_CTR_Pin       GPIO_PIN_5
-#define ILI_CTR_GPIO_Port GPIOB
+#define mem0addr            0
+#define mem1addr            0
+#define memsize             0
+#define memblen             0
+#define meminc              0
+#define ILI_RST_Pin         GPIO_PIN_3
+#define ILI_RST_GPIO_Port   GPIOE
+#define LED_Pin             GPIO_PIN_1
+#define LED_GPIO_Port       GPIOA
+#define DCMI_PWDN_Pin       GPIO_PIN_7
+#define DCMI_PWDN_GPIO_Port GPIOA
+#define DCMI_RST_Pin        GPIO_PIN_4
+#define DCMI_RST_GPIO_Port  GPIOC
+#define T_PEN_Pin           GPIO_PIN_0
+#define T_PEN_GPIO_Port     GPIOB
+#define T_CS_Pin            GPIO_PIN_1
+#define T_CS_GPIO_Port      GPIOB
+#define SCCB_SCL_Pin        GPIO_PIN_10
+#define SCCB_SCL_GPIO_Port  GPIOB
+#define SCCB_SDA_Pin        GPIO_PIN_11
+#define SCCB_SDA_GPIO_Port  GPIOB
+#define ILI_CTR_Pin         GPIO_PIN_5
+#define ILI_CTR_GPIO_Port   GPIOB
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */
