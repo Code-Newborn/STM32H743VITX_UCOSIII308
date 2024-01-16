@@ -20,12 +20,14 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "gpio.h"
+#include "i2c.h"
 #include "usart.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
 #include "delay.h"
+#include "mpu6050.h"
 
 /* USER CODE END Includes */
 
@@ -67,6 +69,10 @@ void SystemClock_Config( void );
 int main( void ) {
     /* USER CODE BEGIN 1 */
 
+    static short Acel[ 3 ];
+    static short Gyro[ 3 ];
+    static float Temp;
+
     /* USER CODE END 1 */
 
     /* MCU Configuration--------------------------------------------------------*/
@@ -88,19 +94,38 @@ int main( void ) {
     /* Initialize all configured peripherals */
     MX_GPIO_Init();
     MX_USART1_UART_Init();
+    MX_I2C2_Init();
     /* USER CODE BEGIN 2 */
 
-    /* USER CODE END 2 */
+    printf( "\r\n 欢迎使用野火  STM32 H743 开发板。\r\n" );
+    printf( "\r\n 这是一个I2C外设(MPU6050)读写测试例程 \r\n" );
+    // MPU6050初始化
+    MPU6050_Init();
 
-    /* Infinite loop */
-    /* USER CODE BEGIN WHILE */
-    while ( 1 ) {
-        /* USER CODE END WHILE */
+    // 检测MPU6050
+    if ( MPU6050ReadID() == 1 ) {
+        /* USER CODE END 2 */
 
-        /* USER CODE BEGIN 3 */
+        /* Infinite loop */
+        /* USER CODE BEGIN WHILE */
+        while ( 1 ) {
+            /* USER CODE END WHILE */
+
+            /* USER CODE BEGIN 3 */
+            MPU6050ReadAcc( Acel );
+            printf( "Acel: %7d%7d%7d", Acel[ 0 ], Acel[ 1 ], Acel[ 2 ] );
+            MPU6050ReadGyro( Gyro );
+            printf( "    Gyro: %7d%7d%7d", Gyro[ 0 ], Gyro[ 1 ], Gyro[ 2 ] );
+            MPU6050_ReturnTemp( &Temp );
+            printf( "    Temp: %5.2f\r\n", Temp );
+            HAL_Delay( 500 );
+        }
+    } else {
+        printf( "\r\n没有检测到MPU6050传感器！\r\n" );
         HAL_GPIO_TogglePin( LED_GPIO_Port, LED_Pin );
         HAL_Delay( 1000 );
-        printf( "Hello World!\r\n" );
+        while ( 1 )
+            ;
     }
     /* USER CODE END 3 */
 }
@@ -116,12 +141,14 @@ void SystemClock_Config( void ) {
     /** Supply configuration update enable
      */
     HAL_PWREx_ConfigSupply( PWR_LDO_SUPPLY );
+
     /** Configure the main internal regulator output voltage
      */
     __HAL_PWR_VOLTAGESCALING_CONFIG( PWR_REGULATOR_VOLTAGE_SCALE1 );
 
     while ( !__HAL_PWR_GET_FLAG( PWR_FLAG_VOSRDY ) ) {
     }
+
     /** Initializes the RCC Oscillators according to the specified parameters
      * in the RCC_OscInitTypeDef structure.
      */
@@ -141,6 +168,7 @@ void SystemClock_Config( void ) {
     if ( HAL_RCC_OscConfig( &RCC_OscInitStruct ) != HAL_OK ) {
         Error_Handler();
     }
+
     /** Initializes the CPU, AHB and APB buses clocks
      */
     RCC_ClkInitStruct.ClockType      = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2 | RCC_CLOCKTYPE_D3PCLK1 | RCC_CLOCKTYPE_D1PCLK1;
@@ -189,5 +217,3 @@ void assert_failed( uint8_t* file, uint32_t line ) {
     /* USER CODE END 6 */
 }
 #endif /* USE_FULL_ASSERT */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
