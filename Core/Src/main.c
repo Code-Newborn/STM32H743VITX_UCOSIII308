@@ -44,7 +44,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-uint8_t Pin_state = 0;
+
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -249,6 +249,8 @@ const uint32_t TUNE[] = {
     TONE_REPEAT
 
 };  // 旋律
+
+unsigned int Task_Delay[ NumOfTask ] = { 0 };
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -266,13 +268,15 @@ void c_setup() {
 #endif
 
     // Yaogan_Init();
-    buttons_init();                                  // 按键初始化
-    LCD_Init();                                      // 初始化OLED接口
+    buttons_init();  // 按键初始化
+
     memset( &oledBuffer, 0x00, FRAME_BUFFER_SIZE );  // 清空显存
     milliseconds = 0;
 
-    appconfig_init();
-    // led_init();    // 初始化LED
+    appconfig_init();  // 初始化配置
+    loadFlip();        // 屏幕是否翻转
+
+    // led_init();  // 初始化LED
     // buzzer_init(); // 初始化蜂鸣器
     // global_init();
 
@@ -356,6 +360,11 @@ int main( void ) {
     /* USER CODE BEGIN WHILE */
     while ( 1 ) {
         /* USER CODE END WHILE */
+
+        if ( Task_Delay[ 0 ] == 0 ) {
+            DHT11();
+            Task_Delay[ 0 ] = 500;
+        }
 
         /* USER CODE BEGIN 3 */
         c_loop();  // 循环

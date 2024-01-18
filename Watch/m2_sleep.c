@@ -20,10 +20,10 @@ static void setMenuOptions( void );
 static display_t mDraw( void );
 
 void mSleepOpen() {
-    menuData.func.draw = mDraw;
-
     setMenuInfo( OPTION_COUNT, MENU_TYPE_ICON, PSTR( STR_SLEEPMENU ) );
     setMenuFuncs( MENUFUNC_NEXT, mSelect, MENUFUNC_PREV, itemLoader );
+
+    menuData.func.draw = mDraw;
     setPrevMenuOpen( &prevMenuData, mSleepOpen );
 
     beginAnimation2( NULL );

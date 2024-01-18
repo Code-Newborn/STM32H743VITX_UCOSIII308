@@ -19,10 +19,10 @@ static millis_t          lastMS;
 static bool      btnReset( void );
 static bool      btnStartStop( void );
 static bool      btnExit( void );
-static display_t draw( void );
+static display_t thisdraw( void );
 
 void stopwatch_open() {
-    display_setDrawFunc( draw );                          // 设置绘图功能函数
+    display_setDrawFunc( thisdraw );                      // 设置绘图功能函数
     buttons_setFuncs( btnReset, btnStartStop, btnExit );  // 设置按键功能，重置、启停、退出
     beginAnimation2( NULL );                              // 打开动画动画过度
 }
@@ -69,14 +69,14 @@ static bool btnExit() {
 #define TIME_POS_X 1
 #define TIME_POS_Y 20
 
-static display_t draw() {
+static display_t thisdraw() {
     // Draw battery icon
     drawBattery();
 
     byte  num1;
     byte  num2;
     byte  num3;
-    ulong timer1 = timer / 2.32;  // 模拟一秒的时间
+    ulong timer1 = timer / 1;  // 模拟一秒的时间
     ulong secs   = timer1 / 1000;
 
     if ( timer1 < 3600000 ) {
@@ -97,7 +97,7 @@ static display_t draw() {
     draw_bitmap( 116, 20 - 4 + 12, small2Font[ mod10( num3 ) ], FONT_SMALL2_WIDTH, FONT_SMALL2_HEIGHT, NOINVERT, 0 );
     draw_bitmap( TIME_POS_X + 46 + 2, TIME_POS_Y, colon, FONT_COLON_WIDTH, FONT_COLON_HEIGHT, NOINVERT, 0 );
 
-    // Draw time
+    // 顶部显示实际时间
     draw_string( time_timeStr(), NOINVERT, 48, 0 );
 
     return DISPLAY_BUSY;

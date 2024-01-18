@@ -36,6 +36,7 @@
 #include "m1_settings.h"
 #include "m1_stopwatch.h"
 #include "m1_torch.h"
+#include "m1_temphumi.h"
 #include "m2_diag.h"
 #include "m2_display.h"
 #include "m2_game1.h"

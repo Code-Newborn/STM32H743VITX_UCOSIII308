@@ -11,13 +11,58 @@
 #include "english.h"
 #include "typedefs.h"
 
+// 默认
 extern const byte menu_default[];
+
+// 一级菜单 闹钟
 extern const byte menu_alarm[];
-extern const byte menu_stopwatch[];
+
+// 一级菜单 手电筒
 extern const byte menu_torch[];
+
+// 一级菜单 秒表
+extern const byte menu_stopwatch[];
+
+// 一级菜单 音乐
+extern const byte menu_tunemaker[];
+
+// 一级菜单 游戏
+extern const byte menu_games[];
+// 二级菜单 游戏1
+extern const byte menu_game1[];
+// 二级菜单 游戏2
+extern const byte menu_game2[];
+// 二级菜单 游戏3
+extern const byte menu_game3[];
+
+// 一级菜单 设置
 extern const byte menu_settings[];
+// 二级菜单 时间日期
+extern const byte menu_timedate[];
+// 二级菜单 睡眠
+extern const byte menu_sleep[];
+// 二级菜单 设置
+extern const byte menu_sound[];
+// 二级菜单 显示
+extern const byte menu_display[];
+// 三级菜单 亮度
+extern const byte menu_brightness[][ 128 ];
+// 三级菜单 翻转
+extern const byte menu_invert[];
+// 三级菜单 旋转
+extern const byte menu_rotate[];
+// 三级菜单 动画
+extern const byte menu_anim[][ 128 ];
+// 三级菜单 帧率
+extern const byte menu_setfps[];
+// 三级菜单 LED
+extern const byte menu_LEDs[][ 128 ];
+// 二级菜单 分析
 extern const byte menu_diagnostic[];
+
+// 一级菜单 退出
 extern const byte menu_exit[];
+
 extern const byte selectbar_bottom[];
 extern const byte selectbar_top[];
 
@@ -31,24 +76,11 @@ extern const byte stopwatch[];
 
 extern const byte dowImg[ 7 ][ 8 ];
 
-extern const byte menu_tunemaker[];
+extern const byte menu_TandH[];
 
-extern const byte menu_timedate[];
-extern const byte menu_sleep[];
-extern const byte menu_sound[];
-extern const byte menu_games[];
-
-extern const byte menu_game1[];
-extern const byte menu_game2[];
-extern const byte menu_game3[];
-// extern const byte menu_calc[];
-extern const byte menu_brightness[][ 128 ];
-extern const byte menu_LEDs[][ 128 ];
-extern const byte menu_invert[];
-extern const byte menu_anim[][ 128 ];
+// 二级菜单
 extern const byte menu_volume[][ 128 ];
-extern const byte menu_rotate[];
-extern const byte menu_display[];
+
 extern const byte menu_sleeptimeout[];
 
 extern const byte usbIcon[];
@@ -59,8 +91,6 @@ extern const byte battIconLow[];
 extern const byte battIconHigh[];
 extern const byte battIconFull[];
 
-// 我的新增加图标
-extern const byte menu_setfps[];
 // Alarm icon
 // extern const byte smallFontAlarm[];
 
@@ -83,5 +113,9 @@ extern const byte small2Font[][ 22 ];
 #define FONT_COLON_WIDTH  6
 #define FONT_COLON_HEIGHT 24
 extern const byte colon[];
+
+#define FONT_CELSIUS_WIDTH  16
+#define FONT_CELSIUS_HEIGHT 16
+extern const byte celsius[];
 
 #endif /* RESOURCES_H_ */

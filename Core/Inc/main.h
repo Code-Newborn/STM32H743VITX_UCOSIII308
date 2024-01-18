@@ -75,7 +75,10 @@ void Error_Handler( void );
 #define KEY_RST_Pin        GPIO_PIN_6
 #define KEY_RST_GPIO_Port  GPIOD
 /* USER CODE BEGIN Private defines */
-extern uint8_t Pin_state;
+
+#define NumOfTask 2
+extern unsigned int Task_Delay[ NumOfTask ];
+
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

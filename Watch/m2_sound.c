@@ -28,12 +28,8 @@ void mSoundOpen() {
     setMenuInfo( OPTION_COUNT, MENU_TYPE_ICON, PSTR( STR_SOUNDMENU ) );
     setMenuFuncs( MENUFUNC_NEXT, mSelect, MENUFUNC_PREV, itemLoader );
 
-    //	setMenuOptions();
-
-    menuData.func.draw = thisdraw;  // 绑定菜单画图函数，不知道退出时，这个函数并没有继续执行的原因
-
+    menuData.func.draw = thisdraw;  // 绑定菜单画图函数
     setPrevMenuOpen( &prevMenuData, mSoundOpen );
-
     beginAnimation2( NULL );
 }
 
@@ -88,26 +84,22 @@ static display_t thisdraw() {
 
     switch ( menuData.selected ) {
     case 0:
-        sprintf( name, "%d", appConfig.volUI );
+        sprintf( name, "%d", 1 );
         break;
     case 1:
-        sprintf( name, "%d", appConfig.volAlarm );
+        sprintf( name, "%d", 2 );
         break;
     case 2:
-        sprintf( name, "%d", appConfig.volHour );
+        sprintf( name, "%d", 3 );
         break;
     }
 
-    draw_string( ( char* )name, false, 122, 0 );
+    draw_string( ( char* )name, false, 122, 0 );  // 右上角绘制
     return DISPLAY_DONE;
 }
 
 static void setMenuOptions() {
-    //	setMenuOption_P(0, PSTR(STR_UI), menu_volume[volUI], setVolumeUI);
-    //	setMenuOption_P(1, PSTR(STR_ALARMS), menu_volume[volAlarm], setVolumeAlarm);
-    //	setMenuOption_P(2, PSTR(STR_HOURBEEPS), menu_volume[volHour], setVolumeHour);
-
-    setMenuOption_P( 0, PSTR( STR_UI ), menu_volume[ appConfig.volUI ], setVolumeUI );
-    setMenuOption_P( 1, PSTR( STR_ALARMS ), menu_volume[ appConfig.volAlarm ], setVolumeAlarm );
-    setMenuOption_P( 2, PSTR( STR_HOURBEEPS ), menu_volume[ appConfig.volHour ], setVolumeHour );
+    setMenuOption_P( 0, PSTR( STR_SOUND1 ), menu_volume[ 0 ], setVolumeUI );
+    setMenuOption_P( 1, PSTR( STR_SOUND2 ), menu_volume[ 1 ], setVolumeAlarm );
+    setMenuOption_P( 2, PSTR( STR_SOUND3 ), menu_volume[ 2 ], setVolumeHour );
 }

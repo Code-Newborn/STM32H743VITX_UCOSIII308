@@ -580,15 +580,13 @@ void OLED_DrawLine( uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2 ) {
     }
 }
 
-void LCD_Init( void ) {
-    // InitGraph();
-
-    if ( !appConfig.display180 ) {
-        OLED_WR_Byte( 0xA1, 0 );
-        OLED_WR_Byte( 0xC8, 0 );
+void loadFlip( void ) {
+    if ( !appConfig.display180 ) {  // 正常显示
+        WriteCmd( 0xA1 );
+        WriteCmd( 0xC8 );
     } else {
-        OLED_WR_Byte( 0xA0, 0 );
-        OLED_WR_Byte( 0xC0, 0 );
+        WriteCmd( 0xA0 );  // 翻转显示
+        WriteCmd( 0xC0 );
     }
 }
 

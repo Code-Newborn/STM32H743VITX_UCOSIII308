@@ -8,7 +8,7 @@
 
 #include "common.h"
 
-#define OPTION_COUNT 8  // 当前菜单界面选项数
+#define OPTION_COUNT 5  // 当前菜单界面选项数
 
 static prev_menu_s prevMenuData;
 
@@ -58,7 +58,7 @@ static void itemLoader( byte num ) {
 
     setMenuOption_P( 3, PSTR( "FW    " FW_VERSION ), NULL, NULL );
     setMenuOption_P( 4, PSTR( "User     " USER_NAME ), NULL, NULL );
-    setMenuOption_P( menuData.optionCount - 1, menuBack, menu_exit, back );  // 添加返回选项
+    setMenuOption_P( menuData.optionCount - 1, menuBack, menu_exit, back );  // 添加退出选项
 }
 
 static void updateTemperature() {

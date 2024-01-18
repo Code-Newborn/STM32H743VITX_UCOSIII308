@@ -25,10 +25,10 @@
 // 3 = PCB 1.3 - 1.4
 #define HW_VERSION 3
 
-#define USER_NAME  "ChenZhao" // 用户名
+#define USER_NAME "ChenZhao"  // 用户名
 
 // Firmware version 固件信息
-#define FW_VERSION "  2023/5/29" // 软件版本日期
+#define FW_VERSION "  2023/5/29"  // 软件版本日期
 
 // Language
 // 0 = English
@@ -37,13 +37,15 @@
 #define LANGUAGE 0
 
 // 编译选项，决定主菜单选项数
-#define COMPILE_GAME1      1 // 游戏Breakout
-#define COMPILE_GAME2      1 // 游戏Car dodge
-#define COMPILE_GAME3      1 // 游戏Flappy thing (not finished) 有bug  未完成，实在做不来
-#define COMPILE_ANIMATIONS 1 // 动画
-#define COMPILE_STOPWATCH  1 // 秒表
-#define COMPILE_TORCH      1 // 手电筒
-#define COMPILE_TUNEMAKER  1 // 3D滚动
+#define COMPILE_GAME1      1  // 游戏Breakout
+#define COMPILE_GAME2      1  // 游戏Car dodge
+#define COMPILE_GAME3      1  // 游戏Flappy thing (not finished) 有bug  未完成，实在做不来
+#define COMPILE_ANIMATIONS 1  // 动画
+#define COMPILE_STOPWATCH  1  // 秒表
+#define COMPILE_TORCH      1  // 手电筒
+#define COMPILE_TUNEMAKER  1  // 3D滚动
+
+#define COMPILE_TEMPHUMI 1  // 温湿度
 
 // 这个两个开启后可以串口打印调试信息
 #define COMPILE_UART 0

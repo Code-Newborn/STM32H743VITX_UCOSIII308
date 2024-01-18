@@ -748,6 +748,11 @@
               <FileType>1</FileType>
               <FilePath>..\Watch\m2_timedate.c</FilePath>
             </File>
+            <File>
+              <FileName>m1_temphumi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Watch\m1_temphumi.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

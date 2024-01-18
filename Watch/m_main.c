@@ -18,7 +18,7 @@ static void mSelect( void );
 static void itemLoader( byte );
 
 static uint8_t getItemCount() {
-    uint8_t cnt = 2;
+    uint8_t cnt = 2;  // 两个菜单基本项不变（菜单和退出）
 #if COMPILE_GAME1 || COMPILE_GAME2 || COMPILE_GAME3
     ++cnt;
 #endif
@@ -34,10 +34,14 @@ static uint8_t getItemCount() {
 #if COMPILE_TUNEMAKER
     ++cnt;
 #endif
+#if COMPILE_TEMPHUMI
+    ++cnt;
+#endif
+
     return cnt;
 }
 
-void mMainOpen() {
+void mMainOpen() {                                // INFO 打开主菜单
     buttons_setFuncs( NULL, menu_select, NULL );  // 为按键注册函数
     beginAnimation( mOpen );                      // 设置动画初始状态，并执行注册的函数
 }
@@ -62,25 +66,29 @@ static void mSelect() {
 // 主菜单加载项
 static void itemLoader( byte num ) {
     num = 0;
-    setMenuOption_P( num++, PSTR( STR_ALARMS ), menu_alarm, mAlarmsOpen );  // 打开闹钟
+    setMenuOption_P( num++, PSTR( STR_ALARMS ), menu_alarm, mAlarmsOpen );  // INFO 打开闹钟
 #if COMPILE_TORCH
-    setMenuOption_P( num++, PSTR( STR_FLASHLIGHT ), menu_torch, torch_open );  // 打开手电
+    setMenuOption_P( num++, PSTR( STR_FLASHLIGHT ), menu_torch, torch_open );  // INFO 打开手电
 #endif
 #if COMPILE_STOPWATCH
-    setMenuOption_P( num++, PSTR( STR_STOPWATCH ), menu_stopwatch, stopwatch_open );  // 打开秒表
+    setMenuOption_P( num++, PSTR( STR_STOPWATCH ), menu_stopwatch, stopwatch_open );  // INFO 打开秒表
 #endif
 #if COMPILE_BTRCCAR
     setMenuOption_P( num++, PSTR( STR_BTRCCAR ), menu_stopwatch, btrccar_open );
 #endif
 // 音乐选项
 #if COMPILE_TUNEMAKER
-    setMenuOption_P( num++, PSTR( STR_TUNEMAKER ), menu_tunemaker, tunemakerOpen );  // 打开音乐
+    setMenuOption_P( num++, PSTR( STR_TUNEMAKER ), menu_tunemaker, tunemakerOpen );  // INFO 打开音乐
 #endif
 // 游戏选项
 #if COMPILE_GAME1 || COMPILE_GAME2 || COMPILE_GAME3
-    setMenuOption_P( num++, PSTR( STR_GAMES ), menu_games, mGamesOpen );  // 打开游戏
+    setMenuOption_P( num++, PSTR( STR_GAMES ), menu_games, mGamesOpen );  // INFO 打开游戏
+#endif
+// 温湿度选项
+#if COMPILE_TEMPHUMI
+    setMenuOption_P( num++, PSTR( STR_TEMPHUMI ), menu_TandH, temphumi_open );  // INFO 打开温湿度传感器
 #endif
     // setMenuOption_P(num++, PSTR(STR_CALCULATORS), menu_calc, calcOpen);
-    setMenuOption_P( num++, PSTR( STR_SETTINGS ), menu_settings, mSettingsOpen );
-    setMenuOption_P( OPTION_COUNT, PSTR( STR_EXIT ), menu_exit, menu_close );
+    setMenuOption_P( num++, PSTR( STR_SETTINGS ), menu_settings, mSettingsOpen );  // INFO 打开设置
+    setMenuOption_P( OPTION_COUNT, PSTR( STR_EXIT ), menu_exit, menu_close );      // INFO 退出
 }

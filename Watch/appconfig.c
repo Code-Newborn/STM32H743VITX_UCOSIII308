@@ -79,9 +79,9 @@ void appconfig_save() {
     // STMFLASH_Write(appConfig_SAVE_ADDR,(u32*)(&appConfig),LENTH(appconfig_s));
 }
 
-// 应用默认配置
+// INFO 应用默认配置
 void appconfig_reset() {
-    appConfig.sleepTimeout = 1;
+    appConfig.sleepTimeout = 0;  // 默认不息屏
     appConfig.invert       = false;
 #if COMPILE_ANIMATIONS
     appConfig.animations = true;
