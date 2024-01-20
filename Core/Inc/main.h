@@ -74,6 +74,7 @@ void Error_Handler( void );
 #define KEY_SET_GPIO_Port  GPIOC
 #define KEY_RST_Pin        GPIO_PIN_6
 #define KEY_RST_GPIO_Port  GPIOD
+
 /* USER CODE BEGIN Private defines */
 
 #define NumOfTask 2
@@ -86,5 +87,3 @@ extern unsigned int Task_Delay[ NumOfTask ];
 #endif
 
 #endif /* __MAIN_H */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

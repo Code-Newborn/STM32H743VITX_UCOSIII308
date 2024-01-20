@@ -116,6 +116,14 @@ extern const byte colon[];
 
 #define FONT_CELSIUS_WIDTH  16
 #define FONT_CELSIUS_HEIGHT 16
-extern const byte celsius[];
+extern const byte celsius16x16[];
+
+#define FONT_HUMIUNIT_WIDTH  16
+#define FONT_HUMIUNIT_HEIGHT 16
+extern const byte humiUnit16x16[];
+
+#define FONT_DOT_WIDTH  11
+#define FONT_DOT_HEIGHT 16
+extern const byte dot_11x16[];
 
 #endif /* RESOURCES_H_ */

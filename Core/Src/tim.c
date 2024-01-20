@@ -1,3 +1,4 @@
+/* USER CODE BEGIN Header */
 /**
  ******************************************************************************
  * @file    tim.c
@@ -6,22 +7,23 @@
  ******************************************************************************
  * @attention
  *
- * <h2><center>&copy; Copyright (c) 2023 STMicroelectronics.
- * All rights reserved.</center></h2>
+ * Copyright (c) 2024 STMicroelectronics.
+ * All rights reserved.
  *
- * This software component is licensed by ST under BSD 3-Clause license,
- * the "License"; You may not use this file except in compliance with the
- * License. You may obtain a copy of the License at:
- *                        opensource.org/licenses/BSD-3-Clause
+ * This software is licensed under terms that can be found in the LICENSE file
+ * in the root directory of this software component.
+ * If no LICENSE file comes with this software, it is provided AS-IS.
  *
  ******************************************************************************
  */
-
+/* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "tim.h"
 
 /* USER CODE BEGIN 0 */
 #include "time.h"
+#include "DHT11.h"
+#include "main.h"
 #include "millis.h"
 #include "typedefs.h"
 /* USER CODE END 0 */
@@ -110,6 +112,21 @@ void        HAL_TIM_PeriodElapsedCallback( TIM_HandleTypeDef* htim ) {
         milliseconds++;
         update = true;
 
+        // 温湿度任务
+        if ( Task_Delay[ 0 ] == 0 ) {
+            if ( DHT11_run ) {
+                DHT11();
+            }
+            Task_Delay[ 0 ] = 100;  // 采样间隔100ms
+        }
+
+        // 更新任务
+        for ( uint8_t i = 0; i < NumOfTask; i++ ) {
+            if ( Task_Delay[ i ] != 0 ) {
+                Task_Delay[ i ]--;
+            }
+        }
+
 #ifdef RTC_SRC
         update = true;
 #else
@@ -124,16 +141,15 @@ void        HAL_TIM_PeriodElapsedCallback( TIM_HandleTypeDef* htim ) {
                 // mpu_dmp_get_data(&pitch, &roll, &yaw);
             }
         }
+
+        // if ( milliseconds % 10 == 0 ) {  // 间隔过短影响界面刷新
+        //     if ( DHT11_run ) {
+        //         DHT11();  // 获取温湿度数据
+        //     }
+        // }
+
 #endif
-        // 更新任务
-        for ( uint8_t i = 0; i < NumOfTask; i++ ) {
-            if ( Task_Delay[ i ]!=0 ) {
-                Task_Delay[ i ]--;
-            }
-        }
     }
 }
 
 /* USER CODE END 1 */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

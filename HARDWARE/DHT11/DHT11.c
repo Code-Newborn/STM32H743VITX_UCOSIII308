@@ -1,6 +1,7 @@
 #include "DHT11.h"
 #include "delay.h"
 #include "gpio.h"
+#include "main.h"
 
 uint8_t humi         = 0;
 uint8_t temp         = 0;
@@ -16,18 +17,18 @@ static void DHT11_GPIO_MODE_SET( uint8_t mode ) {
     if ( mode ) {
         /*  输入  */
         GPIO_InitTypeDef GPIO_InitStruct;
-        GPIO_InitStruct.Pin  = GPIO_PIN_1;       //  11号引脚
+        GPIO_InitStruct.Pin  = DHT11_DQ_Pin;     //  11号引脚
         GPIO_InitStruct.Mode = GPIO_MODE_INPUT;  //  输入模式
         GPIO_InitStruct.Pull = GPIO_PULLUP;      //  上拉输入
-        HAL_GPIO_Init( GPIOB, &GPIO_InitStruct );
+        HAL_GPIO_Init( DHT11_DQ_GPIO_Port, &GPIO_InitStruct );
     } else {
         /*  输出  */
         GPIO_InitTypeDef GPIO_InitStructure;
-        GPIO_InitStructure.Pin   = GPIO_PIN_1;            //  11号引脚
+        GPIO_InitStructure.Pin   = DHT11_DQ_Pin;          //  11号引脚
         GPIO_InitStructure.Mode  = GPIO_MODE_OUTPUT_PP;   //  Push Pull 推挽输出模式
         GPIO_InitStructure.Pull  = GPIO_PULLUP;           //  上拉输出
         GPIO_InitStructure.Speed = GPIO_SPEED_FREQ_HIGH;  //  高速
-        HAL_GPIO_Init( GPIOB, &GPIO_InitStructure );
+        HAL_GPIO_Init( DHT11_DQ_GPIO_Port, &GPIO_InitStructure );
     }
 }
 
@@ -127,6 +128,8 @@ uint8_t DHT11_Init( void ) {
     return DHT11_Check();  // 检查DHT11传感是否存在
 }
 
+uint8_t DHT11_run = 0;
+
 /**
  * @brief  温湿度传感器主函数
  * @param  void
@@ -134,5 +137,5 @@ uint8_t DHT11_Init( void ) {
  */
 void DHT11( void ) {
     DHT11_Read_Data();  // 读取温湿度
-    HAL_Delay( 100 );   // 主机连续采样间隔建议不小于100ms
+    // HAL_Delay( 100 );   // 主机连续采样间隔建议不小于100ms
 }

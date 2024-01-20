@@ -5,6 +5,8 @@
 
 // 采用定时器TIM2作为微秒级延时的来源
 
+extern uint8_t DHT11_run;
+
 extern uint8_t humi;
 extern uint8_t temp;
 extern uint8_t temp_decimal;
