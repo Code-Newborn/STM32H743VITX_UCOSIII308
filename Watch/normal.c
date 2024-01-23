@@ -215,10 +215,6 @@ static display_t ticker() {
             else if ( yPos_secs <= 16 + TICKER_GAP )
                 yPos_secs++;
 
-            // 秒数字移动到位
-            if ( yPos_secs >= FONT_SMALL2_HEIGHT + TICKER_GAP )
-                yPos_secs = 255;
-
             // 时、分、秒数字 是否 都移动到位，若否则重复上述移动规律
             if ( yPos_secs > FONT_SMALL2_HEIGHT + TICKER_GAP && yPos > MIDFONT_HEIGHT + TICKER_GAP ) {
                 yPos      = 0;
@@ -320,6 +316,7 @@ static void drawTickerNum( tickerData_t* data ) {
         if ( prev == 255 )  // 前一数字为0
             prev = data->maxVal;
 
+        // 分两部分显示，上一数字与本数字混合
         draw_bitmap( x, y, bitmap, data->w, data->h, NOINVERT, yPos - data->h - TICKER_GAP );
         draw_bitmap( x, y, &data->bitmap[ prev * arraySize ], data->w, data->h, NOINVERT, yPos );
     }

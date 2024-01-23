@@ -122,6 +122,14 @@ extern const byte celsius16x16[];
 #define FONT_HUMIUNIT_HEIGHT 16
 extern const byte humiUnit16x16[];
 
+#define FONT_CLOSE_WIDTH  32
+#define FONT_CLOSE_HEIGHT 16
+extern const byte close32x16[];
+
+#define FONT_OPEN_WIDTH  32
+#define FONT_OPEN_HEIGHT 16
+extern const byte open32x16[];
+
 #define FONT_DOT_WIDTH  11
 #define FONT_DOT_HEIGHT 16
 extern const byte dot_11x16[];

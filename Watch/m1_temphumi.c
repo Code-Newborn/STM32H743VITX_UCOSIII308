@@ -6,8 +6,6 @@
 
 typedef enum { STATE_STOPPED = 0, STATE_RUNING } temphumi_state_t;  // 温湿度采集状态
 static temphumi_state_t state;
-static ulong            timer;
-static millis_t         lastMS;
 
 // 3个按键对应的功能
 static bool btnReset( void );      // 重置
@@ -48,6 +46,12 @@ static bool btnExit( void ) {
 #define SHOW_POS_X 25
 #define SHOW_POS_Y 20
 static display_t thisdraw() {
+
+    if ( DHT11_run )  // 状态指示
+        draw_bitmap( 48, 0, close32x16, FONT_CLOSE_WIDTH, FONT_CLOSE_HEIGHT, NOINVERT, 0 );
+    else
+        draw_bitmap( 48, 0, open32x16, FONT_CLOSE_WIDTH, FONT_CLOSE_HEIGHT, NOINVERT, 0 );
+
     draw_bitmap( SHOW_POS_X + 1, SHOW_POS_Y, small2Font[ div10( temp ) ], FONT_SMALL2_WIDTH, FONT_SMALL2_HEIGHT, NOINVERT, 0 );
     draw_bitmap( SHOW_POS_X + 13, SHOW_POS_Y, small2Font[ mod10( temp ) ], FONT_SMALL2_WIDTH, FONT_SMALL2_HEIGHT, NOINVERT, 0 );
     draw_bitmap( SHOW_POS_X + 25, SHOW_POS_Y, dot_11x16, FONT_DOT_WIDTH, FONT_DOT_HEIGHT, NOINVERT, 0 );
