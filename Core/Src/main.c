@@ -19,9 +19,9 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include <stdio.h>
 #include "gpio.h"
 #include "spi.h"
+#include "tim.h"
 #include "usart.h"
 
 /* Private includes ----------------------------------------------------------*/
@@ -31,6 +31,9 @@
 #include "lcd.h"
 #include "pic.h"
 #include "sys.h"
+
+#include "lvgl.h"
+#include "porting/lv_port_disp.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -63,6 +66,59 @@ void SystemClock_Config( void );
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
+void lv_ex_label( void ) {
+    char*     github_addr = "lvgl_test";
+    lv_obj_t* label       = lv_label_create( lv_scr_act() );
+    lv_label_set_recolor( label, true );
+    lv_label_set_long_mode( label, LV_LABEL_LONG_SCROLL_CIRCULAR ); /*Circular scroll*/
+    lv_obj_set_width( label, 120 );
+    lv_label_set_text_fmt( label, "test", github_addr );
+    lv_obj_align( label, LV_ALIGN_CENTER, 0, 10 );
+
+    lv_obj_t* label2 = lv_label_create( lv_scr_act() );
+    lv_label_set_recolor( label2, true );
+    lv_label_set_long_mode( label2, LV_LABEL_LONG_SCROLL_CIRCULAR ); /*Circular scroll*/
+    lv_obj_set_width( label2, 120 );
+    lv_label_set_text_fmt( label2, "123" );
+    lv_obj_align( label2, LV_ALIGN_CENTER, 0, -10 );
+}
+
+void lv_example_led_1( void ) {
+    /*Create a LED and switch it OFF*/
+    lv_obj_t* led1 = lv_led_create( lv_scr_act() );
+    lv_obj_align( led1, LV_ALIGN_CENTER, -80, 0 );
+    lv_led_off( led1 );
+
+    /*Copy the previous LED and set a brightness*/
+    lv_obj_t* led2 = lv_led_create( lv_scr_act() );
+    lv_obj_align( led2, LV_ALIGN_CENTER, 0, 0 );
+    lv_led_set_brightness( led2, 150 );
+    lv_led_set_color( led2, lv_palette_main( LV_PALETTE_RED ) );
+
+    /*Copy the previous LED and switch it ON*/
+    lv_obj_t* led3 = lv_led_create( lv_scr_act() );
+    lv_obj_align( led3, LV_ALIGN_CENTER, 80, 0 );
+    lv_led_on( led3 );
+}
+
+void Lvgl_Lable_Demo( void ) {
+    lv_obj_t* scr    = lv_scr_act();
+    lv_obj_t* label1 = lv_label_create( scr );
+    lv_label_set_long_mode( label1, LV_LABEL_LONG_WRAP );
+    lv_label_set_recolor( label1, true );
+    lv_label_set_text( label1, "#0000ff Re-color# #ff00ff words# #ff0000 of a# label, align the lines to the center "
+                               "and wrap long text automatically." );
+    lv_obj_set_width( label1, 150 );
+    lv_obj_set_style_text_align( label1, LV_TEXT_ALIGN_CENTER, 0 );
+    lv_obj_align( label1, LV_ALIGN_CENTER, 0, -40 );
+
+    lv_obj_t* label2 = lv_label_create( scr );
+    lv_label_set_long_mode( label2, LV_LABEL_LONG_SCROLL_CIRCULAR );
+    lv_obj_set_width( label2, 150 );
+    lv_label_set_text( label2, "It is a circularly scrolling text. " );
+    lv_obj_align( label2, LV_ALIGN_CENTER, 0, 40 );
+}
+
 /* USER CODE END 0 */
 
 /**
@@ -94,12 +150,20 @@ int main( void ) {
     MX_GPIO_Init();
     MX_USART1_UART_Init();
     MX_SPI1_Init();
+    MX_TIM3_Init();
     /* USER CODE BEGIN 2 */
     delay_init( 400 );
-    uint8_t i, j;
-    float   t = 0;
+
     LCD_Init();  // LCD初始化
-    LCD_Fill( 0, 0, LCD_W, LCD_H, WHITE );
+    HAL_TIM_Base_Start_IT( &htim3 );
+    // LCD_Fill( 0, 0, LCD_W, LCD_H, WHITE );
+
+    lv_init();
+    lv_port_disp_init();
+
+    lv_ex_label();
+    Lvgl_Lable_Demo();
+    lv_example_led_1();
 
     /* USER CODE END 2 */
 
@@ -109,46 +173,7 @@ int main( void ) {
         /* USER CODE END WHILE */
 
         /* USER CODE BEGIN 3 */
-
-        // =============== 灯LED翻转闪烁 ===============
-        // HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
-        // HAL_Delay(200);
-
-        // =============== DHT11温湿度传感器 读取 BEGIN ===============
-        // OLED_Clear();
-        DHT11();  // 获取温湿度
-
-        // uint8_t* arr = "袁";
-        // while ( *arr != 0 ) {
-        //     printf( " 0x%2x ", *arr++ );
-        // }
-
-        // unsigned char* arr = test->Index;
-        // while ( *arr != 0 ) {
-        //     printf( "0x%2x ", *arr++ );
-        // }
-
-        LCD_ShowChinese( 48, 0, "龙腾龘龖", RED, WHITE, 32, 0 );
-        // LCD_ShowChinese( 48, 0, "中景园电子", RED, WHITE, 32, 0 );
-        LCD_ShowString( 0, 40, "LCD_W:", RED, WHITE, 16, 0 );
-        LCD_ShowIntNum( 48, 40, LCD_W, 3, RED, WHITE, 16 );
-        LCD_ShowString( 80, 40, "LCD_H:", RED, WHITE, 16, 0 );
-        LCD_ShowIntNum( 128, 40, LCD_H, 3, RED, WHITE, 16 );
-        LCD_ShowString( 80, 40, "LCD_H:", RED, WHITE, 16, 0 );
-        LCD_ShowString( 0, 70, "Increaseing Nun:", RED, WHITE, 16, 0 );
-        LCD_ShowFloatNum1( 128, 70, t, 4, RED, WHITE, 16 );
-
-        LCD_ShowString( 0, 88, "Temp:", RED, WHITE, 16, 0 );
-        LCD_ShowFloatNum1( 48, 88, temp + ( temp_decimal / 100.0f ), 4, WHITE, DARKBLUE, 16 );
-        LCD_ShowString( 96, 88, "Humi:", RED, WHITE, 16, 0 );
-        LCD_ShowFloatNum1( 144, 88, humi + ( humi_decimal / 100.0f ), 4, WHITE, LIGHTGREEN, 16 );
-
-        t += 0.11f;
-        for ( j = 0; j < 3; j++ ) {
-            for ( i = 0; i < 6; i++ ) {
-                LCD_ShowPicture( 40 * i, 120 + j * 40, 40, 40, gImage_1 );
-            }
-        }
+        lv_task_handler();
     }
     /* USER CODE END 3 */
 }
@@ -164,12 +189,20 @@ void SystemClock_Config( void ) {
     /** Supply configuration update enable
      */
     HAL_PWREx_ConfigSupply( PWR_LDO_SUPPLY );
+
     /** Configure the main internal regulator output voltage
      */
+    __HAL_PWR_VOLTAGESCALING_CONFIG( PWR_REGULATOR_VOLTAGE_SCALE1 );
+
+    while ( !__HAL_PWR_GET_FLAG( PWR_FLAG_VOSRDY ) ) {
+    }
+
+    __HAL_RCC_SYSCFG_CLK_ENABLE();
     __HAL_PWR_VOLTAGESCALING_CONFIG( PWR_REGULATOR_VOLTAGE_SCALE0 );
 
     while ( !__HAL_PWR_GET_FLAG( PWR_FLAG_VOSRDY ) ) {
     }
+
     /** Initializes the RCC Oscillators according to the specified parameters
      * in the RCC_OscInitTypeDef structure.
      */
@@ -189,6 +222,7 @@ void SystemClock_Config( void ) {
     if ( HAL_RCC_OscConfig( &RCC_OscInitStruct ) != HAL_OK ) {
         Error_Handler();
     }
+
     /** Initializes the CPU, AHB and APB buses clocks
      */
     RCC_ClkInitStruct.ClockType      = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2 | RCC_CLOCKTYPE_D3PCLK1 | RCC_CLOCKTYPE_D1PCLK1;
@@ -237,5 +271,3 @@ void assert_failed( uint8_t* file, uint32_t line ) {
     /* USER CODE END 6 */
 }
 #endif /* USE_FULL_ASSERT */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
