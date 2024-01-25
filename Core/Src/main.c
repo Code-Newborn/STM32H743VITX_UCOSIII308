@@ -91,6 +91,8 @@ int main( void ) {
     MX_USART3_UART_Init();
     /* USER CODE BEGIN 2 */
     delay_init( 400 );
+
+    // 烧写固件版本 Ai-Thinker_ESP8266_DOUT_8Mbit_v1.5.4.1-a_20171130.bin
     ESP8266_Init();
 
     ESP8266_StaTcpClient_UnvarnishTest_LedCtrl();  // 手机连接ESP8266时需断开手机流量网络

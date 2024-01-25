@@ -63,12 +63,18 @@ void ESP8266_Rst( void ) {
 #endif
 }
 
-bool ESP8266_DHCP_CUR() {
+bool ESP8266_AP_DHCP_CUR() {
     char cCmd[ 40 ];
 
-    // AP与STA切换时需修改
-    sprintf( cCmd, "AT+CWDHCP_CUR=0,1" );  // 设置 ESP8266 Station 开启 DHCP
-    // sprintf( cCmd, "AT+CWDHCP_CUR=0,0" );  // 设置 ESP8266 Station 关闭 DHCP
+    sprintf( cCmd, "AT+CWDHCP_CUR=0,0" );  // 设置 ESP8266 AP 关闭 DHCP
+
+    return ESP8266_Cmd( cCmd, "OK", NULL, 500 );
+}
+
+bool ESP8266_STA_DHCP_CUR() {
+    char cCmd[ 40 ];
+
+    sprintf( cCmd, "AT+CWDHCP_CUR=1,0" );  // 设置 ESP8266 STA 关闭 DHCP
 
     return ESP8266_Cmd( cCmd, "OK", NULL, 500 );
 }
@@ -529,7 +535,7 @@ volatile uint8_t ucTcpClosedFlag = 0;
  * @param  无
  * @retval 无
  */
-void ESP8266_StaTcpClient_UnvarnishTest( void ) {
+void ESP8266_StaTcpClient_UnvarnishTest( void ) {  // INFO STA 8266作为连接WiFi的设备
     uint8_t ucStatus;
 
     char cStr[ 100 ] = { 0 };
@@ -540,8 +546,8 @@ void ESP8266_StaTcpClient_UnvarnishTest( void ) {
 
     // macESP8266_CH_ENABLE();
 
-    ESP8266_AT_Test();             // 测试 AT 启动
-    while ( !ESP8266_DHCP_CUR() )  // 动态IP设置成功
+    ESP8266_AT_Test();                 // 测试 AT 启动
+    while ( !ESP8266_STA_DHCP_CUR() )  // 动态IP设置成功
         ;
 
     ESP8266_Net_Mode_Choose( STA );  // Station 站点终端
@@ -608,7 +614,7 @@ void ESP8266_StaTcpClient_UnvarnishTest( void ) {
  * @param  无
  * @retval 无
  */
-void ESP8266_StaTcpClient_UnvarnishTest_LedCtrl( void ) {
+void ESP8266_StaTcpClient_UnvarnishTest_LedCtrl( void ) {  // INFO AP 8266作为提供WiFi的设备
     uint8_t ucId, ucLen;
     uint8_t ucLed1Status = 0, ucLed2Status = 0, ucLed3Status = 0, ucBuzzerStatus = 0;
 
@@ -623,7 +629,7 @@ void ESP8266_StaTcpClient_UnvarnishTest_LedCtrl( void ) {
     // macESP8266_CH_ENABLE();
 
     ESP8266_AT_Test();
-    while ( !ESP8266_DHCP_CUR() )
+    while ( !ESP8266_AP_DHCP_CUR() )  // 设置
         ;
     ESP8266_Net_Mode_Choose( AP );
 
@@ -639,8 +645,8 @@ void ESP8266_StaTcpClient_UnvarnishTest_LedCtrl( void ) {
         ;
 
     ESP8266_Inquire_ApIp( cStr, 20 );
-    printf( "\r\n本模块WIFI为%s，密码开放\r\nAP IP 为：%s，开启的端口为：%s\r\n手机网络助手连接该 IP 和端口，最多可连接5个客户端\r\n", macUser_ESP8266_BulitApSsid, cStr,
-            macUser_ESP8266_TcpServer_Port );
+    printf( "\r\n本模块WIFI为%s，密码开放\r\nAP IP 为：%s，开启的端口为：%s\r\n手机网络助手连接该 IP 和端口，最多可连接5个客户端\r\n发送CMD_LED_1_1 点亮板载LED\r\n发送CMD_LED_1_0 熄灭板载LED",
+            macUser_ESP8266_BulitApSsid, cStr, macUser_ESP8266_TcpServer_Port );
 
     strEsp8266_Fram_Record.InfBit.FramLength     = 0;
     strEsp8266_Fram_Record.InfBit.FramFinishFlag = 0;
@@ -755,4 +761,21 @@ void ESP8266_StaTcpClient_UnvarnishTest_LedCtrl( void ) {
             strEsp8266_Fram_Record.InfBit.FramFinishFlag = 0;
         }
     }
+}
+
+void ESP8266_ConnectWiFi( void ) {
+    char cStr[ 100 ] = { 0 };
+
+    printf( "\r\n正在配置 ESP8266 ......\r\n" );
+
+    ESP8266_AT_Test();
+
+    ESP8266_Net_Mode_Choose( STA_AP );
+
+    while ( !ESP8266_JoinAP( macUser_ESP8266_ApSsid, macUser_ESP8266_ApPwd ) )  // 连接目标AP成功
+        ;
+
+    ESP8266_Inquire_ApIp( cStr, 20 );  // 查询ESP8266的IP
+
+    printf( "成功连接Wifi\r\n" );
 }

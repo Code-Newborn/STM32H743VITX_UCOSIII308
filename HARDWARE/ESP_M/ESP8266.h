@@ -33,7 +33,7 @@ extern volatile uint8_t ucTcpClosedFlag;
 /********************************** 测试函数声明 ***************************************/
 void ESP8266_StaTcpClient_UnvarnishTest( void );
 void ESP8266_StaTcpClient_UnvarnishTest_LedCtrl( void );
-void ESP8266_StaTcpClient_UnvarnishTest_mobile( void );
+void ESP8266_ConnectWiFi( void );
 
 // extern UART_HandleTypeDef ESP8266_UartHandle;
 #if defined( __CC_ARM )
@@ -144,7 +144,8 @@ bool    ESP8266_UnvarnishSend( void );
 void    ESP8266_ExitUnvarnishSend( void );
 bool    ESP8266_SendString( FunctionalState enumEnUnvarnishTx, char* pStr, uint32_t ulStrLength, ENUM_ID_NO_TypeDef ucId );
 char*   ESP8266_ReceiveString( FunctionalState enumEnUnvarnishTx );
-bool    ESP8266_DHCP_CUR( void );
+bool    ESP8266_AP_DHCP_CUR( void );
+bool    ESP8266_STA_DHCP_CUR( void );
 
 uint8_t ESP8266_CWLIF( char* pStaIp );
 uint8_t ESP8266_CIPAP( char* pApIp );
