@@ -466,12 +466,11 @@ char* ESP8266_ReceiveString( FunctionalState enumEnUnvarnishTx ) {
 
     if ( enumEnUnvarnishTx )
         pRecStr = strEsp8266_Fram_Record.Data_RX_BUF;
-
     else {
         if ( strstr( strEsp8266_Fram_Record.Data_RX_BUF, "+IPD" ) )
             pRecStr = strEsp8266_Fram_Record.Data_RX_BUF;
     }
-
+    // json 解析 https://zhuanlan.zhihu.com/p/54574542
     return pRecStr;
 }
 
@@ -763,10 +762,14 @@ void ESP8266_StaTcpClient_UnvarnishTest_LedCtrl( void ) {  // INFO AP 8266作为
     }
 }
 
-void ESP8266_ConnectWiFi( void ) {
+bool ESP8266_ConnectWiFi( void ) {
     char cStr[ 100 ] = { 0 };
 
     printf( "\r\n正在配置 ESP8266 ......\r\n" );
+
+    ESP8266_ExitUnvarnishSend();
+
+    ESP8266_Rst();
 
     ESP8266_AT_Test();
 
@@ -778,4 +781,20 @@ void ESP8266_ConnectWiFi( void ) {
     ESP8266_Inquire_ApIp( cStr, 20 );  // 查询ESP8266的IP
 
     printf( "成功连接Wifi\r\n" );
+
+    ESP8266_Enable_MultipleId( DISABLE );
+
+    // 建立TCP连接，参数为 连接类型 远端IP 远端端口号
+    while ( !ESP8266_Link_Server( enumTCP, "api.seniverse.com", "80", Single_ID_0 ) )
+        ;
+
+    printf( "访问网站API" );
+
+    if ( !ESP8266_UnvarnishSend() )  // 设置透传
+    {
+        printf( "未成功设置透传\r\n" );
+        return false;
+    }
+
+    return true;
 }

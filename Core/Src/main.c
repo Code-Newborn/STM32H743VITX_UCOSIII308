@@ -25,6 +25,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include <stdio.h>
+#include <string.h>
 #include "ESP8266.h"
 #include "delay.h"
 /* USER CODE END Includes */
@@ -95,8 +96,10 @@ int main( void ) {
     // 烧写固件版本 Ai-Thinker_ESP8266_DOUT_8Mbit_v1.5.4.1-a_20171130.bin
     ESP8266_Init();
 
-    ESP8266_StaTcpClient_UnvarnishTest_LedCtrl();  // 手机连接ESP8266时需断开手机流量网络
-                                                   /* USER CODE END 2 */
+    // ESP8266_StaTcpClient_UnvarnishTest_LedCtrl();  // 手机连接ESP8266时需断开手机流量网络
+    ESP8266_ConnectWiFi();  // 连接WIFI
+
+    /* USER CODE END 2 */
 
     /* Infinite loop */
     /* USER CODE BEGIN WHILE */
@@ -104,8 +107,17 @@ int main( void ) {
         /* USER CODE END WHILE */
 
         /* USER CODE BEGIN 3 */
-        // HAL_GPIO_TogglePin( LED_GPIO_Port, LED_Pin );
-        // HAL_Delay( 500 );
+
+        // 私钥才能访问
+        // 中文 https://api.seniverse.com/v3/weather/now.json?key=SNnoJymqbUTJCXYiX&location=beijing&language=zh-Hans&unit=c
+        // 英文 GET https://api.seniverse.com/v3/weather/now.json?key=SNnoJymqbUTJCXYiX&location=zhaoqing&language=en&unit=c
+        char* request_url = "GET https://api.seniverse.com/v3/weather/now.json?key=SNnoJymqbUTJCXYiX&location=haerbin&language=zh-Hans&unit=c\r\n";
+        int   str_len     = strlen( request_url );
+        ESP8266_SendString( ENABLE, request_url, str_len, Single_ID_0 );
+
+        printf( ESP8266_ReceiveString( ENABLE ) );  // 接受API返回数据
+
+        delay_ms( 5000 );  // 延时时间加大，连续获取
     }
     /* USER CODE END 3 */
 }
