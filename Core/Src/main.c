@@ -59,6 +59,8 @@ void SystemClock_Config( void );
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
+int str_len;
+
 /* USER CODE END 0 */
 
 /**
@@ -111,8 +113,9 @@ int main( void ) {
         // 私钥才能访问
         // 中文 https://api.seniverse.com/v3/weather/now.json?key=SNnoJymqbUTJCXYiX&location=beijing&language=zh-Hans&unit=c
         // 英文 GET https://api.seniverse.com/v3/weather/now.json?key=SNnoJymqbUTJCXYiX&location=zhaoqing&language=en&unit=c
+        // 包含最后2字节转义符号共112+2=114字节
         char* request_url = "GET https://api.seniverse.com/v3/weather/now.json?key=SNnoJymqbUTJCXYiX&location=haerbin&language=zh-Hans&unit=c\r\n";
-        int   str_len     = strlen( request_url );
+        str_len           = strlen( request_url );
         ESP8266_SendString( ENABLE, request_url, str_len, Single_ID_0 );
 
         printf( ESP8266_ReceiveString( ENABLE ) );  // 接受API返回数据
