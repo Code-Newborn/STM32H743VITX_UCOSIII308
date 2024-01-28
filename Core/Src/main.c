@@ -27,6 +27,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "ESP8266.h"
+#include "cJSON/cJSON.h"
 #include "delay.h"
 /* USER CODE END Includes */
 
@@ -118,7 +119,61 @@ int main( void ) {
         str_len           = strlen( request_url );
         ESP8266_SendString( ENABLE, request_url, str_len, Single_ID_0 );
 
-        printf( ESP8266_ReceiveString( ENABLE ) );  // 接受API返回数据
+        char* weather_str = ESP8266_ReceiveString( ENABLE );
+
+        printf( weather_str );  // 打印API返回数据
+        printf( "\r\n\n" );
+        printf( "【解析数据】 \r\n" );
+
+        // cJson解析库使用 https://zhuanlan.zhihu.com/p/54574542
+
+        cJSON* root;
+        cJSON* results;
+        cJSON* last_update;
+        cJSON *loc_json, *now_json;
+        char * loc_tmp, *weather_tmp, *update_tmp;
+
+        root = cJSON_Parse( ( const char* )weather_str );
+        if ( root ) {
+            // printf( "JSON格式正确:\n%s\n\n", cJSON_Print( root ) );  // 输出json字符串
+            results = cJSON_GetObjectItem( root, "results" );
+            results = cJSON_GetArrayItem( results, 0 );
+            if ( results ) {
+                loc_json = cJSON_GetObjectItem( results, "location" );  // 得到location键对应的值，是一个对象
+                if ( loc_json ) {
+                    loc_tmp = cJSON_GetObjectItem( loc_json, "id" )->valuestring;
+                    printf( "城市ID:%s\r\n", loc_tmp );
+                    loc_tmp = cJSON_GetObjectItem( loc_json, "name" )->valuestring;
+                    printf( "城市名称:%s\r\n", loc_tmp );
+                    loc_tmp = cJSON_GetObjectItem( loc_json, "timezone" )->valuestring;
+                    printf( "城市时区:%s\r\n", loc_tmp );
+                } else
+                    printf( "daily json格式错误\r\n" );
+
+                now_json = cJSON_GetObjectItem( results, "now" );
+                if ( now_json ) {
+                    weather_tmp = cJSON_GetObjectItem( now_json, "text" )->valuestring;
+                    printf( "天气:%s\r\n", weather_tmp );
+                    weather_tmp = cJSON_GetObjectItem( now_json, "code" )->valuestring;
+                    printf( "天气代码:%s\r\n", weather_tmp );
+                    weather_tmp = cJSON_GetObjectItem( now_json, "temperature" )->valuestring;
+                    printf( "温度:%s\r\n", weather_tmp );
+                } else
+                    printf( "daily json格式错误\r\n" );
+
+                last_update = cJSON_GetObjectItem( results, "last_update" );
+                update_tmp  = last_update->valuestring;
+                if ( last_update ) {
+                    printf( "更新时间:%s\r\n", update_tmp );
+                }
+            } else {
+                printf( "results格式错误:%s\r\n", cJSON_GetErrorPtr() );
+            }
+        } else {
+            printf( "JSON格式错误\r\n" );
+        }
+
+        cJSON_Delete( root );
 
         delay_ms( 5000 );  // 延时时间加大，连续获取
     }
