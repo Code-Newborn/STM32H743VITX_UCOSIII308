@@ -20,6 +20,8 @@
 #include <string.h>
 #include "delay.h"
 
+#include "cJSON/cJSON.h"
+
 // 禁止编译器输出中文字符警告
 #pragma diag_suppress 870
 
@@ -53,7 +55,7 @@ void ESP8266_Init( void ) {
  */
 void ESP8266_Rst( void ) {
 #if 1
-    ESP8266_Cmd( "AT+RST", "OK", "ready", 2500 );
+    ESP8266_Cmd( "AT+RST", "OK", "ready", 1000 );
 
 #else
     // macESP8266_RST_LOW_LEVEL();
@@ -151,13 +153,13 @@ void ESP8266_AT_Test( void ) {
 bool ESP8266_Net_Mode_Choose( ENUM_Net_ModeTypeDef enumMode ) {
     switch ( enumMode ) {
     case STA:
-        return ESP8266_Cmd( "AT+CWMODE=1", "OK", "no change", 2500 );
+        return ESP8266_Cmd( "AT+CWMODE=1", "OK", "no change", 1000 );
 
     case AP:
-        return ESP8266_Cmd( "AT+CWMODE=2", "OK", "no change", 2500 );
+        return ESP8266_Cmd( "AT+CWMODE=2", "OK", "no change", 1000 );
 
     case STA_AP:
-        return ESP8266_Cmd( "AT+CWMODE=3", "OK", "no change", 2500 );
+        return ESP8266_Cmd( "AT+CWMODE=3", "OK", "no change", 1000 );
 
     default:
         return false;
@@ -178,7 +180,7 @@ bool ESP8266_JoinAP( char* pSSID, char* pPassWord ) {
 
     sprintf( cCmd, "AT+CWJAP=\"%s\",\"%s\"", pSSID, pPassWord );  // 设置 ESP8266 Station 需连接的 AP
 
-    return ESP8266_Cmd( cCmd, "OK", NULL, 5000 );
+    return ESP8266_Cmd( cCmd, "OK", NULL, 1000 );
 }
 
 /*
@@ -291,16 +293,19 @@ bool ESP8266_StartOrShutServer( FunctionalState enumMode, char* pPortNum, char* 
  */
 uint8_t ESP8266_Get_LinkStatus( void ) {
     if ( ESP8266_Cmd( "AT+CIPSTATUS", "OK", 0, 500 ) ) {
-        if ( strstr( strEsp8266_Fram_Record.Data_RX_BUF, "STATUS:2\r\n" ) )
+        if ( strstr( strEsp8266_Fram_Record.Data_RX_BUF, "STATUS:0\r\n" ) )
+            return 0;
+        else if ( strstr( strEsp8266_Fram_Record.Data_RX_BUF, "STATUS:1\r\n" ) )
+            return 1;
+        else if ( strstr( strEsp8266_Fram_Record.Data_RX_BUF, "STATUS:2\r\n" ) )
             return 2;
-
         else if ( strstr( strEsp8266_Fram_Record.Data_RX_BUF, "STATUS:3\r\n" ) )
             return 3;
-
         else if ( strstr( strEsp8266_Fram_Record.Data_RX_BUF, "STATUS:4\r\n" ) )
             return 4;
+        else if ( strstr( strEsp8266_Fram_Record.Data_RX_BUF, "STATUS:5\r\n" ) )
+            return 5;
     }
-
     return 0;
 }
 
@@ -765,9 +770,9 @@ void ESP8266_StaTcpClient_UnvarnishTest_LedCtrl( void ) {  // INFO AP 8266作为
 bool ESP8266_ConnectWiFi( void ) {
     char cStr[ 100 ] = { 0 };
 
-    printf( "\r\n正在配置 ESP8266 ......\r\n" );
+    printf( "[LOG]正在配置 ESP8266 ......\r\n" );
 
-    ESP8266_ExitUnvarnishSend();
+    ESP8266_ExitUnvarnishSend();  // 退出透传模式
 
     ESP8266_Rst();
 
@@ -780,7 +785,7 @@ bool ESP8266_ConnectWiFi( void ) {
 
     ESP8266_Inquire_ApIp( cStr, 20 );  // 查询ESP8266的IP
 
-    printf( "成功连接Wifi\r\n" );
+    printf( "[LOG]成功连接Wifi\r\n" );
 
     ESP8266_Enable_MultipleId( DISABLE );
 
@@ -788,13 +793,84 @@ bool ESP8266_ConnectWiFi( void ) {
     while ( !ESP8266_Link_Server( enumTCP, "api.seniverse.com", "80", Single_ID_0 ) )
         ;
 
-    printf( "访问网站API" );
+    printf( "[LOG]访问网站API\r\n" );
 
     if ( !ESP8266_UnvarnishSend() )  // 设置透传
     {
-        printf( "未成功设置透传\r\n" );
+        printf( "[LOG]未成功设置透传\r\n" );
         return false;
     }
 
+    return true;
+}
+
+bool Get_Weather( void ) {
+    ESP8266_UnvarnishSend();  // 进入透传模式
+
+    // 私钥才能访问
+    // 中文 https://api.seniverse.com/v3/weather/now.json?key=SNnoJymqbUTJCXYiX&location=beijing&language=zh-Hans&unit=c
+    // 英文 GET https://api.seniverse.com/v3/weather/now.json?key=SNnoJymqbUTJCXYiX&location=zhaoqing&language=en&unit=c
+    // 包含最后2字节转义符号共112+2=114字节
+    char*   request_url = "GET https://api.seniverse.com/v3/weather/now.json?key=SNnoJymqbUTJCXYiX&location=haerbin&language=zh-Hans&unit=c\r\n";
+    uint8_t str_len     = strlen( request_url );
+    ESP8266_SendString( ENABLE, request_url, str_len, Single_ID_0 );
+
+    char* weather_str = ESP8266_ReceiveString( ENABLE );
+    printf( weather_str );  // 打印API返回数据
+    printf( "\r\n\n" );
+    printf( "[LOG]开始解析数据 \r\n" );
+
+    // cJson解析库使用 https://zhuanlan.zhihu.com/p/54574542
+
+    cJSON* root;
+    cJSON* results;
+    cJSON* last_update;
+    cJSON *loc_json, *now_json;
+    char * loc_tmp, *weather_tmp, *update_tmp;
+
+    root = cJSON_Parse( ( const char* )weather_str );
+    if ( root ) {
+        // printf( "JSON格式正确:\n%s\n\n", cJSON_Print( root ) );  // 输出json字符串
+        results = cJSON_GetObjectItem( root, "results" );
+        results = cJSON_GetArrayItem( results, 0 );
+        if ( results ) {
+            loc_json = cJSON_GetObjectItem( results, "location" );  // 得到location键对应的值，是一个对象
+            if ( loc_json ) {
+                loc_tmp = cJSON_GetObjectItem( loc_json, "id" )->valuestring;
+                printf( "城市ID:%s\r\n", loc_tmp );
+                loc_tmp = cJSON_GetObjectItem( loc_json, "name" )->valuestring;
+                printf( "城市名称:%s\r\n", loc_tmp );
+                loc_tmp = cJSON_GetObjectItem( loc_json, "timezone" )->valuestring;
+                printf( "城市时区:%s\r\n", loc_tmp );
+            } else
+                printf( "daily json格式错误\r\n" );
+
+            now_json = cJSON_GetObjectItem( results, "now" );
+            if ( now_json ) {
+                weather_tmp = cJSON_GetObjectItem( now_json, "text" )->valuestring;
+                printf( "天气:%s\r\n", weather_tmp );
+                weather_tmp = cJSON_GetObjectItem( now_json, "code" )->valuestring;
+                printf( "天气代码:%s\r\n", weather_tmp );
+                weather_tmp = cJSON_GetObjectItem( now_json, "temperature" )->valuestring;
+                printf( "温度:%s\r\n", weather_tmp );
+            } else
+                printf( "daily json格式错误\r\n" );
+
+            last_update = cJSON_GetObjectItem( results, "last_update" );
+            update_tmp  = last_update->valuestring;
+            if ( last_update ) {
+                printf( "更新时间:%s\r\n", update_tmp );
+            }
+        } else {
+            printf( "[LOG]results格式错误:%s\r\n", cJSON_GetErrorPtr() );
+            return false;
+        }
+    } else {
+        printf( "[LOG]JSON格式错误\r\n" );
+        return false;
+    }
+    cJSON_Delete( root );
+
+    ESP8266_ExitUnvarnishSend();  // 退出透传模式
     return true;
 }

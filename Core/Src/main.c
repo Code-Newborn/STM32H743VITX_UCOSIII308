@@ -60,7 +60,7 @@ void SystemClock_Config( void );
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
-int str_len;
+uint8_t linkStatus;
 
 /* USER CODE END 0 */
 
@@ -111,71 +111,44 @@ int main( void ) {
 
         /* USER CODE BEGIN 3 */
 
-        // 私钥才能访问
-        // 中文 https://api.seniverse.com/v3/weather/now.json?key=SNnoJymqbUTJCXYiX&location=beijing&language=zh-Hans&unit=c
-        // 英文 GET https://api.seniverse.com/v3/weather/now.json?key=SNnoJymqbUTJCXYiX&location=zhaoqing&language=en&unit=c
-        // 包含最后2字节转义符号共112+2=114字节
-        char* request_url = "GET https://api.seniverse.com/v3/weather/now.json?key=SNnoJymqbUTJCXYiX&location=haerbin&language=zh-Hans&unit=c\r\n";
-        str_len           = strlen( request_url );
-        ESP8266_SendString( ENABLE, request_url, str_len, Single_ID_0 );
+        ESP8266_ExitUnvarnishSend();  // 退出透传模式
+        linkStatus = ESP8266_Get_LinkStatus();
+        switch ( linkStatus ) {
+        case 0:
+            printf( "[LOG]连接状态0：ESP station 为未初始化状态\r\n" );
+            ESP8266_ExitUnvarnishSend();  // 退出透传模式
+            ESP8266_Net_Mode_Choose( STA_AP );
+            ESP8266_JoinAP( macUser_ESP8266_ApSsid, macUser_ESP8266_ApPwd );
+            ESP8266_Enable_MultipleId( DISABLE );
+            ESP8266_Link_Server( enumTCP, "api.seniverse.com", "80", Single_ID_0 );
+            break;
+        case 1:
+            printf( "[LOG]连接状态1：ESP station 为已初始化状态，但还未开始Wi-Fi连接\r\n" );
+            break;
+        case 2:
+            printf( "[LOG]连接状态2：ESP station 已连接AP，获得IP地址\r\n" );
+            break;
+        case 3:
+            printf( "[LOG]连接状态3：ESP station 已建立TCP、UDP 或SSL 传输\r\n" );
+            Get_Weather();
+            break;
+        case 4:
+            printf( "[LOG]连接状态4：ESP 设备所有的TCP、UDP 和SSL 均断开\r\n" );
+            break;
+        case 5:
+            printf( "[LOG]连接状态5：ESP station 开始过Wi-Fi 连接，但尚未连接上AP 或从AP 断开\r\n" );
+            printf( "[LOG] ESP station 未建立TCP、UDP 或SSL 传输\r\n" );
+            // 重新连接
+            printf( "[LOG]尝试重新连接!\r\n" );
+            ESP8266_JoinAP( macUser_ESP8266_ApSsid, macUser_ESP8266_ApPwd );
+            ESP8266_Link_Server( enumTCP, "api.seniverse.com", "80", Single_ID_0 );
+            break;
+        default:
+            printf( "[LOG]未知状态！！！\r\n" );
+            break;
+        };
 
-        char* weather_str = ESP8266_ReceiveString( ENABLE );
-
-        printf( weather_str );  // 打印API返回数据
-        printf( "\r\n\n" );
-        printf( "【解析数据】 \r\n" );
-
-        // cJson解析库使用 https://zhuanlan.zhihu.com/p/54574542
-
-        cJSON* root;
-        cJSON* results;
-        cJSON* last_update;
-        cJSON *loc_json, *now_json;
-        char * loc_tmp, *weather_tmp, *update_tmp;
-
-        root = cJSON_Parse( ( const char* )weather_str );
-        if ( root ) {
-            // printf( "JSON格式正确:\n%s\n\n", cJSON_Print( root ) );  // 输出json字符串
-            results = cJSON_GetObjectItem( root, "results" );
-            results = cJSON_GetArrayItem( results, 0 );
-            if ( results ) {
-                loc_json = cJSON_GetObjectItem( results, "location" );  // 得到location键对应的值，是一个对象
-                if ( loc_json ) {
-                    loc_tmp = cJSON_GetObjectItem( loc_json, "id" )->valuestring;
-                    printf( "城市ID:%s\r\n", loc_tmp );
-                    loc_tmp = cJSON_GetObjectItem( loc_json, "name" )->valuestring;
-                    printf( "城市名称:%s\r\n", loc_tmp );
-                    loc_tmp = cJSON_GetObjectItem( loc_json, "timezone" )->valuestring;
-                    printf( "城市时区:%s\r\n", loc_tmp );
-                } else
-                    printf( "daily json格式错误\r\n" );
-
-                now_json = cJSON_GetObjectItem( results, "now" );
-                if ( now_json ) {
-                    weather_tmp = cJSON_GetObjectItem( now_json, "text" )->valuestring;
-                    printf( "天气:%s\r\n", weather_tmp );
-                    weather_tmp = cJSON_GetObjectItem( now_json, "code" )->valuestring;
-                    printf( "天气代码:%s\r\n", weather_tmp );
-                    weather_tmp = cJSON_GetObjectItem( now_json, "temperature" )->valuestring;
-                    printf( "温度:%s\r\n", weather_tmp );
-                } else
-                    printf( "daily json格式错误\r\n" );
-
-                last_update = cJSON_GetObjectItem( results, "last_update" );
-                update_tmp  = last_update->valuestring;
-                if ( last_update ) {
-                    printf( "更新时间:%s\r\n", update_tmp );
-                }
-            } else {
-                printf( "results格式错误:%s\r\n", cJSON_GetErrorPtr() );
-            }
-        } else {
-            printf( "JSON格式错误\r\n" );
-        }
-
-        cJSON_Delete( root );
-
-        delay_ms( 5000 );  // 延时时间加大，连续获取
+        delay_ms( 4000 );  // 延时时间加大，连续获取
     }
     /* USER CODE END 3 */
 }

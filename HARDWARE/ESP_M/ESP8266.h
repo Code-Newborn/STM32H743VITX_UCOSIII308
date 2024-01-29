@@ -35,6 +35,8 @@ void ESP8266_StaTcpClient_UnvarnishTest( void );
 void ESP8266_StaTcpClient_UnvarnishTest_LedCtrl( void );
 bool ESP8266_ConnectWiFi( void );
 
+bool Get_Weather( void ) ;
+
 // extern UART_HandleTypeDef ESP8266_UartHandle;
 #if defined( __CC_ARM )
 #pragma anon_unions
