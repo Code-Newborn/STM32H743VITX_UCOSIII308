@@ -124,9 +124,11 @@ int main( void ) {
             break;
         case 1:
             printf( "[LOG]连接状态1：ESP station 为已初始化状态，但还未开始Wi-Fi连接\r\n" );
+            ESP8266_JoinAP( macUser_ESP8266_ApSsid, macUser_ESP8266_ApPwd );
             break;
         case 2:
             printf( "[LOG]连接状态2：ESP station 已连接AP，获得IP地址\r\n" );
+            ESP8266_Link_Server( enumTCP, "api.seniverse.com", "80", Single_ID_0 );
             break;
         case 3:
             printf( "[LOG]连接状态3：ESP station 已建立TCP、UDP 或SSL 传输\r\n" );
@@ -134,10 +136,13 @@ int main( void ) {
             break;
         case 4:
             printf( "[LOG]连接状态4：ESP 设备所有的TCP、UDP 和SSL 均断开\r\n" );
+            // 重新连接
+            printf( "[LOG]尝试重新连接!\r\n" );
+            ESP8266_JoinAP( macUser_ESP8266_ApSsid, macUser_ESP8266_ApPwd );
+            ESP8266_Link_Server( enumTCP, "api.seniverse.com", "80", Single_ID_0 );
             break;
         case 5:
             printf( "[LOG]连接状态5：ESP station 开始过Wi-Fi 连接，但尚未连接上AP 或从AP 断开\r\n" );
-            printf( "[LOG] ESP station 未建立TCP、UDP 或SSL 传输\r\n" );
             // 重新连接
             printf( "[LOG]尝试重新连接!\r\n" );
             ESP8266_JoinAP( macUser_ESP8266_ApSsid, macUser_ESP8266_ApPwd );
