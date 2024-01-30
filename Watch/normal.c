@@ -32,7 +32,6 @@ static bool animateIcon( bool, byte* );
 static display_t ticker( void );
 static void      drawTickerNum( tickerData_t* );
 
-#include "mpu_task.h"
 // 在主界面进入mpu界面
 static bool mpu_show( void ) {
     // beginAnimation(mpu_open);
@@ -62,7 +61,6 @@ static display_t draw() {
     busy = ticker();  // 秒钟滴答刷新绘制
 
     drawBattery();  // 绘制电源图标
-
     byte x = 20;
 
 #if COMPILE_ANIMATIONS
@@ -93,6 +91,11 @@ static display_t draw() {
         x += 12;
     }
 #endif
+
+    if ( animateIcon( 1, &chargeImagePos_y ) ) {
+        draw_bitmap( x, chargeImagePos_y, noSignalIcon, 16, 8, NOINVERT, 0 );
+        x += 20;
+    }
 
 #if COMPILE_STOPWATCH
     // Stopwatch icon

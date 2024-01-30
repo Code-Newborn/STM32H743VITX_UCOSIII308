@@ -22,7 +22,7 @@
 
 /* USER CODE BEGIN 0 */
 #include "time.h"
-#include "DHT11.h"
+#include "DHT11/DHT11.h"
 #include "main.h"
 #include "millis.h"
 #include "typedefs.h"

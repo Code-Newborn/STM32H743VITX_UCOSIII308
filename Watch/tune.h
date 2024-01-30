@@ -8,10 +8,10 @@
 
 #ifndef TUNE_H_
 #define TUNE_H_
+#include "BEEP/beep.h"
 #include "typedefs.h"
-#include "beep.h"
-#define TUNEMEM_RAM 0
-#define TUNEMEM_EEPROM 1
+#define TUNEMEM_RAM     0
+#define TUNEMEM_EEPROM  1
 #define TUNEMEM_PROGMEM 2
 
 // Where to store tunes
@@ -27,7 +27,7 @@
 
 typedef ulong tune_t;
 
-void tune_play(const tune_t *, vol_t, tonePrio_t);
-void tune_stop(tonePrio_t);
+void tune_play( const tune_t*, vol_t, tonePrio_t );
+void tune_stop( tonePrio_t );
 
 #endif /* TUNE_H_ */

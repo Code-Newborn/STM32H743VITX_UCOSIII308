@@ -7,9 +7,6 @@
 */
 
 #include "common.h"
-// #include "lcd.h"
-#include "OLED_SSD1306.h"
-#include "led.h"
 #if COMPILE_TORCH
 
 static uint strobe;

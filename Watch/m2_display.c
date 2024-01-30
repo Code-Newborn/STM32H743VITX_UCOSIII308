@@ -7,9 +7,6 @@
  */
 
 #include "common.h"
-// #include "lcd.h"
-#include "OLED_SSD1306.h"
-#include "led.h"
 
 #define OPTION_COUNT 6
 
@@ -50,7 +47,7 @@ static void itemLoader( byte num ) {
     UNUSED( num );
     setMenuOptions();
 }
-#include "draw_api.h"
+
 static void setBrightness() {
     byte brightness = appConfig.brightness;
     brightness++;

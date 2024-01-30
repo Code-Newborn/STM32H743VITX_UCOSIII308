@@ -215,7 +215,7 @@ void buzzer_buzzb(byte len, tone_t tone, vol_t volType)
 bool buzzer_buzzing() {
     return buzzLen;
 }
-#include "led.h"
+
 // See if its time to stop buzzing
 // void buzzer_update()
 // {

@@ -339,7 +339,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32H743xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../SYSTEM/sys;../SYSTEM/delay;../Drivers/STM32H7xx_HAL_Driver/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32H7xx/Include;../Drivers/CMSIS/Include;../HARDWARE/OLED;../HARDWARE/DHT11;../Watch;../HARDWARE/BEEP;../HARDWARE/LED;../HARDWARE/mpu;../HARDWARE/mpu/eMPL;../HARDWARE/oledlib</IncludePath>
+              <IncludePath>../Core/Inc;../SYSTEM/sys;../SYSTEM/delay;../Drivers/STM32H7xx_HAL_Driver/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32H7xx/Include;../Drivers/CMSIS/Include;../Watch;..\HARDWARE</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -462,6 +462,11 @@
               <FileName>beep.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\HARDWARE\BEEP\beep.c</FilePath>
+            </File>
+            <File>
+              <FileName>ESP8266.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\WIFI\ESP8266.c</FilePath>
             </File>
           </Files>
         </Group>

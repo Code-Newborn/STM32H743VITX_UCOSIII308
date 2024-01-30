@@ -41,7 +41,7 @@ extern const byte menu_settings[];
 extern const byte menu_timedate[];
 // 二级菜单 睡眠
 extern const byte menu_sleep[];
-// 二级菜单 设置
+// 二级菜单 音量
 extern const byte menu_sound[];
 // 二级菜单 显示
 extern const byte menu_display[];
@@ -85,6 +85,8 @@ extern const byte menu_sleeptimeout[];
 
 extern const byte usbIcon[];
 extern const byte chargeIcon[];
+extern const byte signalIcon[];
+extern const byte noSignalIcon[];
 
 extern const byte battIconEmpty[];
 extern const byte battIconLow[];

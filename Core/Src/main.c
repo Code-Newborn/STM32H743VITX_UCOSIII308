@@ -29,12 +29,8 @@
 #include "delay.h"
 #include "sys.h"
 // #include "OLED_SSD1306_BMP.h"
-#include "DHT11.h"
-#include "OLED_SSD1306.h"
 #include "common.h"
-#include "draw_api.h"
-#include "oled_driver.h"
-#include "test.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/

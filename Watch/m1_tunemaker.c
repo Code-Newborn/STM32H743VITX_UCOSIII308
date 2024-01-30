@@ -7,10 +7,7 @@
  */
 
 #include "common.h"
-// #include "lcd.h"
-#include "OLED_SSD1306.h"
 #include "delay.h"
-#include "led.h"
 #include "sys.h"
 #include "usart.h"
 

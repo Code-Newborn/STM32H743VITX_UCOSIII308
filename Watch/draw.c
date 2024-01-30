@@ -6,9 +6,9 @@
  * Web: http://blog.zakkemble.co.uk/diy-digital-wristwatch/
  */
 
-#include "OLED_SSD1306.h"
+#include "LED/led.h"
+#include "OLED/OLED_SSD1306.h"
 #include "common.h"
-#include "led.h"
 // #include "lcd.h"
 
 inline static void setBuffByte( byte*, byte, byte, byte );  //, byte);

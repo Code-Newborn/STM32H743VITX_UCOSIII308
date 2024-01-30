@@ -7,7 +7,6 @@
  */
 
 #include "common.h"
-#include "led.h"
 
 #if COMPILE_GAME3
 

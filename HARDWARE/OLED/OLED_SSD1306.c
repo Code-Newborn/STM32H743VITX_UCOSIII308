@@ -6,7 +6,6 @@
 
 // #include "lcd.h"
 #include "common.h"
-#include "draw_api.h"
 #include "typedefs.h"
 #include "usart.h"
 #include "util.h"

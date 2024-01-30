@@ -7,7 +7,6 @@
  */
 
 #include "common.h"
-#include "led.h"
 #if COMPILE_GAME2
 
 #define UPT_MOVE_NONE 0

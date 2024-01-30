@@ -1,4 +1,3 @@
-#include "DHT11.h"
 #include "common.h"
 #include "main.h"
 

@@ -7,7 +7,6 @@
  */
 
 #include "common.h"
-#include "led.h"
 // #include "stmflash.h"
 
 #define NOALARM UCHAR_MAX
