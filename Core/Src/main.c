@@ -106,9 +106,10 @@ int main( void ) {
         /* USER CODE END WHILE */
 
         /* USER CODE BEGIN 3 */
-        HAL_GPIO_TogglePin( LED_GPIO_Port, LED_Pin );
-        HAL_Delay( 1000 );
-        printf( "Hello World!\r\n" );
+
+        // HAL_GPIO_TogglePin( LED_GPIO_Port, LED_Pin );
+        // HAL_Delay( 1000 );
+        // printf( "Hello World!\r\n" );
 
         for ( uint8_t i = 0; i < 2; i++ ) {
             HAL_ADC_Start( &hadc2 );                                          // 开启ADC1
@@ -118,7 +119,7 @@ int main( void ) {
             printf( "PA%d:%.3f v\r\n", i, AD_value[ i ] * 3.3 / 4096 / 16 );  // 精度16bit 2^16 电压转换值
         }
 
-        HAL_Delay( 500 );
+        HAL_Delay( 50 );
     }
     /* USER CODE END 3 */
 }
