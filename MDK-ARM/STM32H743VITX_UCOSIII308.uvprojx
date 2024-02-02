@@ -339,7 +339,7 @@
               <MiscControls>--locale=english</MiscControls>
               <Define>USE_HAL_DRIVER,STM32H743xx,LV_CONF_INCLUDE_SIMPLE</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../SYSTEM/sys;../SYSTEM/delay;../Drivers/STM32H7xx_HAL_Driver/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32H7xx/Include;../Drivers/CMSIS/Include;../HARDWARE/DHT11;../HARDWARE/LCD_IPS;../HARDWARE/GUI</IncludePath>
+              <IncludePath>../Core/Inc;../SYSTEM/sys;../SYSTEM/delay;../Drivers/STM32H7xx_HAL_Driver/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32H7xx/Include;../Drivers/CMSIS/Include;../HARDWARE/DHT11;../HARDWARE/LCD_IPS;../HARDWARE/GUI;..\HARDWARE\GUI_App\ui</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -1417,6 +1417,31 @@
               <FileName>lv_conf.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\HARDWARE\GUI\lv_conf.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>ui</GroupName>
+          <Files>
+            <File>
+              <FileName>ui.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\GUI_App\ui\ui.c</FilePath>
+            </File>
+            <File>
+              <FileName>ui_helpers.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\GUI_App\ui\ui_helpers.c</FilePath>
+            </File>
+            <File>
+              <FileName>ui_Screen1.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\GUI_App\ui\screens\ui_Screen1.c</FilePath>
+            </File>
+            <File>
+              <FileName>ui_comp_hook.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\GUI_App\ui\components\ui_comp_hook.c</FilePath>
             </File>
           </Files>
         </Group>

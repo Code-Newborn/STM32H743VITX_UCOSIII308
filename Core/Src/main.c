@@ -34,6 +34,7 @@
 
 #include "lvgl.h"
 #include "porting/lv_port_disp.h"
+#include "ui.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -161,10 +162,11 @@ int main( void ) {
 
     lv_init();
     lv_port_disp_init();
+    ui_init();
 
     // lv_ex_label();
     Lvgl_Lable_Demo();
-    lv_example_led_1();
+    // lv_example_led_1();
 
     /* USER CODE END 2 */
 
