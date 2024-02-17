@@ -25,14 +25,14 @@ static void setMenuOptions( void );
 static display_t thisDraw( void );
 
 void mDisplayOpen() {
+    // setMenuOptions();//找到动画移除bug了
+    menuData.func.draw = thisDraw;
+
     setMenuInfo( OPTION_COUNT, MENU_TYPE_ICON, PSTR( STR_DISPLAYMENU ) );
     setMenuFuncs( MENUFUNC_NEXT, mSelect, MENUFUNC_PREV, itemLoader );
 
-    // setMenuOptions();//找到动画移除bug了
-    menuData.func.draw = thisDraw;
     setPrevMenuOpen( &prevMenuData, mDisplayOpen );
-
-    beginAnimation2( NULL );
+    animation_start( NULL, ANIM_MOVE_ON );
 }
 
 static void mSelect() {
@@ -105,7 +105,7 @@ static void setFPS() {
 static display_t thisDraw() {
     if ( menuData.selected == 4 ) {
         char buff[ 4 ];
-        sprintf_P( buff, PSTR( "%hhuS" ), ( unsigned char )MY_FPS );
+        sprintf_P( buff, PSTR( "%hhuS" ), ( unsigned char )MY_FPS );  // 菜单项上绘制字符串
         draw_string( buff, NOINVERT, 56, 40 );
     }
     return DISPLAY_DONE;
@@ -130,7 +130,7 @@ static void setMenuOptions() {
     setMenuOption_P( 3, PSTR( STR_ANIMATIONS ), menu_anim[ appConfig.animations ], setAnimations );
     setMenuOption_P( 4, PSTR( STR_SETFPS ), menu_setfps, setFPS );
 #endif
-    setMenuOption_P( 5, PSTR( STR_LEDS ), menu_LEDs[ appConfig.CTRL_LEDs ], setLEDs );
+    setMenuOption_P( 5, PSTR( STR_LEDS ), menu_LEDs[ appConfig.CTRL_LEDs ], setLEDs );  // 加载不一样的菜单项图片
 
     setMenuOption_P( menuData.optionCount - 1, menuBack, menu_exit, back );
 }

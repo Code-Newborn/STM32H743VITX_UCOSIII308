@@ -69,11 +69,10 @@ static void doBtn( menu_f btn ) {
 display_t menu_draw() {
     display_t busy = DISPLAY_DONE;
     if ( menuData.menuType == MENU_TYPE_STR )
-        menu_drawStr();  // 绘制主菜单界面文字
+        menu_drawStr();  // 绘制菜单界面文字
     else
         busy = menu_drawIcon();
 
-    // menuData.func.draw是菜单运行时绑定的画图函数
     if ( menuData.func.draw != NULL )
         busy = busy || menuData.func.draw() ? DISPLAY_BUSY : DISPLAY_DONE;
 
@@ -201,7 +200,7 @@ void setMenuOption( byte num, const char* name, const byte* icon, menu_f actionF
         break;
     case OPERATION_ACTION:
         if ( actionFunc != NULL )
-            operation.data ? beginAnimation( actionFunc ) : actionFunc();  // 是否采用动画方式
+            operation.data ? animation_start( actionFunc, ANIM_MOVE_OFF ) : actionFunc();  // 是否采用动画方式
         break;
     default:
         break;
@@ -213,21 +212,21 @@ bool menu_isOpen() {
 }
 
 void menu_close() {
-    clear();
+    memset( &menuData.func, 0, sizeof( menuFuncs_t ) );
     menuData.isOpen   = false;
     menuData.prevMenu = NULL;
     display_load();  // Move somewhere else, sometimes we don't want to load the watch face when closing the menu
 }
 // 保存上一次菜单的打开功能函数
 void setPrevMenuOpen( prev_menu_s* prevMenu, menu_f newPrevMenu ) {
-    if ( menuData.prevMenu != newPrevMenu )      // Make sure new and old menu funcs are not the same, otherwise we get stuck in a menu loop
+    if ( menuData.prevMenu != newPrevMenu )      // 确保新旧菜单功能不一样，否则会陷入菜单循环
         prevMenu->last = menuData.prevMenu;      // 保存之前的打开功能函数
     menuData.selected = prevMenu->lastSelected;  //
-    menuData.prevMenu = newPrevMenu;             // Set new menu open func
+    menuData.prevMenu = newPrevMenu;             // 设置新的菜单功能
 }
 // 保存上一次菜单的选项
 void setPrevMenuExit( prev_menu_s* prevMenu ) {
-    if ( !exitSelected() )  // Opened new menu, save selected item
+    if ( !exitSelected() )  // 非最后选项（退出）选项
         prevMenu->lastSelected = menuData.selected;
     else {
         prevMenu->lastSelected = 0;               // Reset selected item
@@ -276,16 +275,6 @@ void addBackOption() {
 // 返回上级菜单，上级只有打开动画过度
 void back() {
     menuData.prevMenu != NULL ? menuData.prevMenu() : mMainOpen();
-    // mMainOpen();
-}
-
-// 带关闭动画的函数，动画执行完后执行onComplete函数
-void beginAnimation( menu_f onComplete ) {
-    animation_start( onComplete, ANIM_MOVE_OFF );
-}
-// 带打开动画的函数，动画执行完后执行onComplete函数
-void beginAnimation2( menu_f onComplete ) {
-    animation_start( onComplete, ANIM_MOVE_ON );
 }
 
 /**
@@ -305,6 +294,7 @@ void setMenuInfo( byte optionCount, menu_type_t menuType, const char* title ) {
     menuData.title       = title;
 }
 
+// 设置菜单功能函数
 void setMenuFuncs( menu_f btn1Func, menu_f btn2Func, menu_f btn3Func, itemLoader_f loader ) {
     menuData.func.btn1   = btn1Func;
     menuData.func.btn2   = btn2Func;

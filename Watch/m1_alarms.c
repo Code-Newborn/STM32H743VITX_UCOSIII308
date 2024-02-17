@@ -42,10 +42,9 @@ static void      makeAlarmStr( char*, alarm_s* );
 void mAlarmsOpen() {
     setMenuInfo( OPTION_COUNT, MENU_TYPE_STR, PSTR( STR_ALARMSMENU ) );
     setMenuFuncs( MENUFUNC_NEXT, mSelect, MENUFUNC_PREV, itemLoader );
-
     setPrevMenuOpen( &prevMenuData, mAlarmsOpen );
 
-    beginAnimation2( NULL );  // 打开动画动画过度
+    animation_start( NULL, ANIM_MOVE_ON );
 }
 
 static void mSelect() {

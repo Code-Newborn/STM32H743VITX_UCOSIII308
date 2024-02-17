@@ -62,12 +62,10 @@ void draw_bitmap_s2( image_s* img ) {
 }
 
 void game3_start() {
-    menu_close();
-
     srand( millis() );
 
     display_setDrawFunc( draw );
-    buttons_setFuncs( btnPause, btnExit, btnBounce );
+    buttons_setFuncs( btnPause, btnBounce, btnExit );  // 设置按键功能
 
     byte a = 0;
 
@@ -88,7 +86,7 @@ static bool btnExit() {
     if ( lives == 255 )
         game3_start();
     else
-        animation_start( display_load, ANIM_MOVE_OFF );
+        animation_start( back, ANIM_MOVE_OFF );  // 返回上一界面
     return true;
 }
 

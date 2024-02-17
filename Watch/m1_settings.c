@@ -21,11 +21,12 @@ static void itemLoader( byte );
  * @return     {*}
  */
 void mSettingsOpen() {
+    display_setDrawFunc( menu_draw );                                       // 注册绘制函数 menu_draw
     setMenuInfo( OPTION_COUNT, MENU_TYPE_ICON, PSTR( STR_SETTINGSMENU ) );  // 设置当前菜单界面信息
     setMenuFuncs( MENUFUNC_NEXT, mSelect, MENUFUNC_PREV, itemLoader );      // 设定按键切换，当前界面加载项
     setPrevMenuOpen( &prevMenuData, mSettingsOpen );                        // 保存上一层菜单的打开功能函数
 
-    beginAnimation2( NULL );  // 设置动画初始状态
+    animation_start( NULL, ANIM_MOVE_ON );
 }
 
 static void mSelect() {

@@ -43,7 +43,7 @@ static uint8_t getItemCount() {
 
 void mMainOpen() {                                // INFO 打开主菜单
     buttons_setFuncs( NULL, menu_select, NULL );  // 为按键注册函数
-    beginAnimation( mOpen );                      // 设置动画初始状态，并执行注册的函数
+    animation_start( mOpen, ANIM_MOVE_OFF );      // 设置动画初始状态，并执行注册的函数
 }
 
 // 打开主菜单界面
@@ -53,13 +53,14 @@ static void mOpen() {
 
     setMenuInfo( OPTION_COUNT, MENU_TYPE_ICON, PSTR( STR_MAINMENU ) );  // 获取当前菜单项的信息（选项个数，菜单显示模式是文字还是图标）
     setMenuFuncs( MENUFUNC_NEXT, mSelect, MENUFUNC_PREV, itemLoader );  // 绑定当前菜单项的函数，如前进、后退、选择确认
-    setPrevMenuOpen( &prevMenuData, mOpen );                            // 储存上级菜单
-    beginAnimation2( NULL );                                            // 开启过度动画
+
+    setPrevMenuOpen( &prevMenuData, mOpen );  // 储存当前的打开函数
+    animation_start( NULL, ANIM_MOVE_ON );
 }
 
 // 选择确认函数
 static void mSelect() {
-    setPrevMenuExit( &prevMenuData );  // 储存上一次菜单的选项
+    setPrevMenuExit( &prevMenuData );  // 储存当前菜单的选择
     doAction( true );
 }
 

@@ -31,8 +31,9 @@ void mDiagOpen() {
 
     setMenuInfo( OPTION_COUNT, MENU_TYPE_STR, PSTR( STR_DIAGNOSTICSMENU ) );
     setMenuFuncs( MENUFUNC_NEXT, mSelect, MENUFUNC_PREV, itemLoader );
+
     setPrevMenuOpen( &prevMenuData, mDiagOpen );
-    beginAnimation2( NULL );
+    animation_start( NULL, ANIM_MOVE_ON );
 }
 
 static void mSelect() {

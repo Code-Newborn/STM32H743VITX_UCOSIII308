@@ -69,8 +69,6 @@ static s_otherCars cars[ CAR_COUNT ];
 // };
 
 void game2_start() {
-    menu_close();
-
     srand( millis() );
 
     display_setDrawFunc( draw );
@@ -94,7 +92,7 @@ static bool btnExit() {
     if ( lives == 255 )
         game2_start();
     else
-        animation_start( display_load, ANIM_MOVE_OFF );
+        animation_start( back, ANIM_MOVE_OFF );  // 返回上一界面
     return true;
 }
 

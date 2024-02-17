@@ -24,7 +24,8 @@ static display_t thisdraw( void );
 void stopwatch_open() {
     display_setDrawFunc( thisdraw );                      // 设置绘图功能函数
     buttons_setFuncs( btnReset, btnStartStop, btnExit );  // 设置按键功能，重置、启停、退出
-    beginAnimation2( NULL );                              // 打开动画动画过度
+
+    animation_start( NULL, ANIM_MOVE_ON );
 }
 
 bool stopwatch_active() {

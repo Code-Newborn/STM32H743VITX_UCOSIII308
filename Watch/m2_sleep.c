@@ -26,7 +26,7 @@ void mSleepOpen() {
     menuData.func.draw = mDraw;
     setPrevMenuOpen( &prevMenuData, mSleepOpen );
 
-    beginAnimation2( NULL );
+    animation_start( NULL, ANIM_MOVE_ON );
 }
 
 static void mSelect() {

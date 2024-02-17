@@ -31,8 +31,6 @@ extern const char       menuBack[];
 display_t menu_draw( void );
 void      addBackOption( void );
 void      back( void );
-void      beginAnimation( menu_f );
-void      beginAnimation2( menu_f );
 void      setMenuInfo( byte, menu_type_t, const char* );
 void      setMenuFuncs( menu_f, menu_f, menu_f, itemLoader_f );
 void      setMenuOption( byte, const char*, const byte*, menu_f );

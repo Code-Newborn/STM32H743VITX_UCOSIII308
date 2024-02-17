@@ -55,9 +55,8 @@ static byte   platformX;
 
 // 游戏开始
 void game1_start() {
-    menu_close();
 
-    srand( millis() );
+    srand( millis() );  // 随机数发生器的初始化
 
     display_setDrawFunc( game1_draw );               // 屏幕绘制
     buttons_setFuncs( btnRight, btnExit, btnLeft );  // 按键函数注册
@@ -83,7 +82,7 @@ static bool btnExit() {
     if ( lives == 255 )  // 生命值变量溢出，即变为零
         game1_start();
     else
-        animation_start( display_load, ANIM_MOVE_OFF );  // 返回表盘界面
+        animation_start( back, ANIM_MOVE_OFF );  // 返回
     return true;
 }
 // 向左移动

@@ -21,7 +21,7 @@ void torch_open() {
     strobe = 0;  // 频闪
     display_setDrawFunc( draw );
     buttons_setFuncs( btnExit, btnFlashRate, btnExit );
-    beginAnimation2( NULL );  // 打开动画动画过度//因为torch没有画位图函数所以动画功能没有作用
+    animation_start( NULL, ANIM_MOVE_ON );  // 打开动画动画过度//因为torch没有画位图函数所以动画功能没有作用
 }
 
 static bool btnExit() {

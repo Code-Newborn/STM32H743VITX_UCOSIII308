@@ -17,8 +17,9 @@ static display_t thisdraw( void );
 void temphumi_open( void ) {
     display_setDrawFunc( thisdraw );                      // 设置绘图功能函数
     buttons_setFuncs( btnReset, btnStartStop, btnExit );  // 绑定按键功能，重置、启停、退出
-    beginAnimation2( NULL );                              // 打开动画动画过度
-    DHT11_run = 1;                                        // 进入界面开启温湿度采集
+
+    animation_start( NULL, ANIM_MOVE_ON );  // 打开动画动画过度
+    DHT11_run = 1;                          // 进入界面开启温湿度采集
 }
 
 bool temphumi_IsActive( void ) {

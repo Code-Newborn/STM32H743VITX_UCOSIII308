@@ -30,12 +30,14 @@ static uint8_t getItemCount() {
 }
 
 void mGamesOpen() {
+    display_setDrawFunc( menu_draw );                     // 注册绘制函数 menu_draw
+    buttons_setFuncs( menu_up, menu_select, menu_down );  // 注册按键功能函数
+
     setMenuInfo( OPTION_COUNT, MENU_TYPE_ICON, PSTR( STR_GAMESMENU ) );
     setMenuFuncs( MENUFUNC_NEXT, mSelect, MENUFUNC_PREV, itemLoader );
+    setPrevMenuOpen( &prevMenuData, mGamesOpen );  // 保存当前菜单打开函数
 
-    setPrevMenuOpen( &prevMenuData, mGamesOpen );
-
-    beginAnimation2( NULL );
+    animation_start( NULL, ANIM_MOVE_ON );
 }
 
 static void mSelect() {

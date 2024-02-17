@@ -72,15 +72,13 @@ void display_update() {
     fpsms    = now - lastDraw;  // 帧率计算
     lastDraw = now;
 
-    // debugPin_draw(HIGH);
-
     display_t busy = DISPLAY_DONE;
 
 #if COMPILE_ANIMATIONS
     // Update animations
     animation_update();  // 动画更新
 
-    // Draw stuff
+    // 界面绘制
     if ( drawFunc != NULL && ( crt_anim.active || ( !crt_anim.active && !crt_anim.closing ) ) )
         busy = drawFunc();
 

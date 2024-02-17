@@ -57,7 +57,7 @@ void mTimeDateOpen() {
 
     menuData.selected = 1;
 
-    beginAnimation2( NULL );
+    animation_start( NULL, ANIM_MOVE_ON );
 }
 
 static void mDown() {
