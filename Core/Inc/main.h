@@ -51,17 +51,21 @@ extern "C" {
 /* USER CODE END EM */
 
 /* Exported functions prototypes ---------------------------------------------*/
-void Error_Handler(void);
+void Error_Handler( void );
 
 /* USER CODE BEGIN EFP */
 
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define LED_Pin GPIO_PIN_1
+#define LED_Pin       GPIO_PIN_1
 #define LED_GPIO_Port GPIOA
 
 /* USER CODE BEGIN Private defines */
+
+extern uint8_t          RxBuffer[ 20 ];
+extern volatile uint8_t RxCounter;
+extern uint8_t          Rx_Temp;
 
 /* USER CODE END Private defines */
 
