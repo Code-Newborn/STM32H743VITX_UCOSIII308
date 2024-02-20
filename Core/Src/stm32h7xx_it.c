@@ -200,10 +200,9 @@ void USART3_IRQHandler( void ) {
         {
             strEsp8266_Fram_Record.Data_RX_BUF[ strEsp8266_Fram_Record.InfBit.FramLength++ ] = ucCh;
         }
-    } else if ( huart3.Instance->ISR >> 4 & 1 ) {  // 中断状态寄存器
+    } else if ( __HAL_UART_GET_FLAG( &huart3, UART_FLAG_IDLE ) ) {  // 空闲状态寄存器
         strEsp8266_Fram_Record.InfBit.FramFinishFlag = 1;
-        /*清除空闲标志位*/
-        huart3.Instance->ICR |= ( ( 1 << 4 ) );
+        __HAL_UART_CLEAR_FLAG( &huart3, UART_FLAG_IDLE ); /*清除空闲标志位*/
     }
 
     /* USER CODE END USART3_IRQn 0 */
