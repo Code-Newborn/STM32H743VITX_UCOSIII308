@@ -11,8 +11,8 @@
 #include "sys.h"
 // #include "yaogan.h"
 
-#define BTN_IS_PRESSED  4
-#define BTN_NOT_PRESSED 4
+#define BTN_IS_PRESSED  1
+#define BTN_NOT_PRESSED 1
 
 typedef struct {
     millis_t pressedTime;   // Time of press
