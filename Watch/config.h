@@ -45,7 +45,8 @@
 #define COMPILE_TORCH      1  // 手电筒
 #define COMPILE_TUNEMAKER  1  // 3D滚动
 
-#define COMPILE_TEMPHUMI 1  // 温湿度
+#define COMPILE_TEMPHUMI    1  // 温湿度
+#define COMPILE_WiFiWeather 1  // WiFI天气
 
 // 这个两个开启后可以串口打印调试信息
 #define COMPILE_UART 0

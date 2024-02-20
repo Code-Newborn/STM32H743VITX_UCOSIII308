@@ -76,7 +76,8 @@ extern const byte stopwatch[];
 
 extern const byte dowImg[ 7 ][ 8 ];
 
-extern const byte menu_TandH[];
+extern const byte menu_TandH[];        // 温湿度图标数据
+extern const byte menu_WiFiWeather[];  // WIFI天气图标数据
 
 // 二级菜单
 extern const byte menu_volume[][ 128 ];

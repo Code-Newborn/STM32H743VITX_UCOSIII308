@@ -73,6 +73,8 @@
 #define STR_TUNEMAKER "Tune maker"
 
 #define STR_TEMPHUMI "Temp Humi"
+
+#define STR_WiFiWeather "WiFi Weather"
 // #define STR_CALCULATORS	"Calculators"
 
 #define STR_ALARMSMENU "< ALARMS >"

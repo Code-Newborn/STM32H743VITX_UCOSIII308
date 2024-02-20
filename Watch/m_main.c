@@ -37,6 +37,9 @@ static uint8_t getItemCount() {
 #if COMPILE_TEMPHUMI
     ++cnt;
 #endif
+#if COMPILE_WiFiWeather
+    ++cnt;
+#endif
 
     return cnt;
 }
@@ -88,6 +91,9 @@ static void itemLoader( byte num ) {
 // 温湿度选项
 #if COMPILE_TEMPHUMI
     setMenuOption_P( num++, PSTR( STR_TEMPHUMI ), menu_TandH, temphumi_open );  // INFO 打开温湿度传感器
+#endif
+#if COMPILE_WiFiWeather
+    setMenuOption_P( num++, PSTR( STR_WiFiWeather ), menu_WiFiWeather, temphumi_open );  // INFO 打开WIFI天气
 #endif
     // setMenuOption_P(num++, PSTR(STR_CALCULATORS), menu_calc, calcOpen);
     setMenuOption_P( num++, PSTR( STR_SETTINGS ), menu_settings, mSettingsOpen );  // INFO 打开设置

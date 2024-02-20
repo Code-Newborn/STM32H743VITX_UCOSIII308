@@ -763,6 +763,11 @@
               <FileType>1</FileType>
               <FilePath>..\Watch\tunes.c</FilePath>
             </File>
+            <File>
+              <FileName>m1_weather.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Watch\m1_weather.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
