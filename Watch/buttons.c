@@ -118,6 +118,7 @@ static void processButtons() {
     isPressed[ BTN_1 ] = KEY0;
     isPressed[ BTN_2 ] = KEY1;
     isPressed[ BTN_3 ] = KEY2;
+    __HAL_TIM_SET_COUNTER( &htim2, 0 );
 
     // 依次处理每个按键
     LOOPR( BTN_COUNT, i )
