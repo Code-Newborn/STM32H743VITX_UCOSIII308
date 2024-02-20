@@ -26,6 +26,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
+#include <string.h>
 #include "delay.h"
 
 /* USER CODE END Includes */
@@ -48,17 +49,17 @@
 
 /* USER CODE BEGIN PV */
 
-uint8_t          RxBuffer[ 20 ];
-volatile uint8_t RxCounter = 0;
-uint8_t          Rx_Temp;
+// uint8_t          RxBuffer[ 20 ];
+// volatile uint8_t RxCounter = 0;
+// uint8_t          Rx_Temp;
 
+#define LENGTH 100  // 接收缓冲区大小，该值需要大于一帧数据的总字符数
+uint8_t RxBuff[ LENGTH ];
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config( void );
 /* USER CODE BEGIN PFP */
-
-void USER_UART_IDLECallback( UART_HandleTypeDef* huart );
 
 /* USER CODE END PFP */
 
@@ -98,6 +99,9 @@ int main( void ) {
     MX_USART1_UART_Init();
     /* USER CODE BEGIN 2 */
 
+    printf( "****** UART commucition using IDLE IT + DMA ******\r\n" );
+    printf( "Please enter arbitrary length characters:\r\n" );
+    HAL_UARTEx_ReceiveToIdle_DMA( &huart1, ( uint8_t* )RxBuff, LENGTH );  // 启动DMA接收
     /* USER CODE END 2 */
 
     /* Infinite loop */
@@ -166,6 +170,18 @@ void SystemClock_Config( void ) {
 }
 
 /* USER CODE BEGIN 4 */
+
+void HAL_UARTEx_RxEventCallback( UART_HandleTypeDef* huart, uint16_t Size ) {
+    HAL_UARTEx_ReceiveToIdle_DMA( &huart1, ( uint8_t* )RxBuff, LENGTH );
+    HAL_UART_Transmit_DMA( &huart1, ( uint8_t* )RxBuff, Size );
+}
+
+void HAL_UART_ErrorCallback( UART_HandleTypeDef* huart ) {
+    if ( huart->Instance == USART1 ) {
+        HAL_UARTEx_ReceiveToIdle_DMA( &huart1, ( uint8_t* )RxBuff, LENGTH );  // 接收发生错误后重启接收DMA
+        memset( ( uint8_t* )RxBuff, 0, LENGTH );
+    }
+}
 
 /* USER CODE END 4 */
 

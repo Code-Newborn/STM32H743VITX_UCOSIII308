@@ -114,9 +114,6 @@ void MX_USART1_UART_Init( void ) {
     }
     /* USER CODE BEGIN USART1_Init 2 */
 
-    __HAL_UART_ENABLE_IT( &huart1, UART_IT_IDLE );            // 开启空闲中断
-    HAL_UART_Receive_IT( &huart1, ( uint8_t* )&Rx_Temp, 1 );  // 接收中断
-
     /* USER CODE END USART1_Init 2 */
 }
 
@@ -224,5 +221,7 @@ void HAL_UART_MspDeInit( UART_HandleTypeDef* uartHandle ) {
 }
 
 /* USER CODE BEGIN 1 */
+
+
 
 /* USER CODE END 1 */

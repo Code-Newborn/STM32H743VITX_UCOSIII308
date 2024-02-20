@@ -226,25 +226,9 @@ void USART1_IRQHandler( void ) {
     HAL_UART_IRQHandler( &huart1 );
     /* USER CODE BEGIN USART1_IRQn 1 */
 
-    // huart1空闲中断
-    if ( RESET != __HAL_UART_GET_FLAG( &huart1, UART_FLAG_IDLE ) ) {
-        USART1->RDR;                           // 必须要读取数据寄存器中的数据，否则不能清除标志
-        printf( "%s\r\n", RxBuffer );          // 将接收到的数据发送回去
-        __HAL_UART_CLEAR_IDLEFLAG( &huart1 );  // 一定要清楚中断标志
-    }
-
     /* USER CODE END USART1_IRQn 1 */
 }
 
 /* USER CODE BEGIN 1 */
-
-void HAL_UART_RxCpltCallback( UART_HandleTypeDef* huart ) {
-    if ( huart->Instance == USART1 ) {
-        /* Read one byte from the receive data register */
-        RxBuffer[ RxCounter++ ] = Rx_Temp;
-        //		HAL_UART_Transmit(&huart1, (uint8_t*) &Rx_Temp,1,0xFF);
-        HAL_UART_Receive_IT( &huart1, ( uint8_t* )&Rx_Temp, 1 );  // 记得这里一定要重新使能串口接收中断
-    }
-}
 
 /* USER CODE END 1 */
