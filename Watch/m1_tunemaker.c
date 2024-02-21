@@ -158,7 +158,7 @@ static display_t draw() {
     }
 
     draw_bitmap( 0, 0, ( const byte* )OLED_GRAM, 64, 64, NOINVERT, 0 );  // 绘制区域
-    memset( &OLED_GRAM, 0x00, FRAME_BUFFER_SIZE / 2 );                   // 清空显存
+    memset( &OLED_GRAM, 0x00, FRAME_BUFFER_SIZE / 2 );                   // 清空显示，刷新图像（绘制线条是增量绘制）
     draw_string_P( PSTR( "Cube " ), false, 64, 28 );
     draw_string_P( PSTR( "Rotation" ), false, 64, 40 );
 

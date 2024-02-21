@@ -11,6 +11,9 @@
 #include "english.h"
 #include "typedefs.h"
 
+#define Animation1_FrameNum 33
+extern const uint8_t Animation1_Frames[ Animation1_FrameNum ][ 512 ];
+
 // 默认
 extern const byte menu_default[];
 

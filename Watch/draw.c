@@ -17,10 +17,12 @@ inline uint8_t     pgm_read_byte( const uint8_t* abc ) {
 }
 
 void draw_string_P( const char* string, bool invert, byte x, byte y ) {
-    byte len = strlen( string );
-    char buff[ len + 1 ];
+    byte  len = strlen( string );
+    char* buff;
+    buff = ( char* )malloc( ( len + 1 ) * sizeof( char ) );  // 局部数组分配动态内存
     strcpy( buff, string );
     draw_string( buff, invert, x, y );
+    free( buff );  // 释放内存
 }
 
 void draw_string( char* string, bool invert, byte x, byte y ) {
