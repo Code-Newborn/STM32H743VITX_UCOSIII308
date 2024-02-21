@@ -29,9 +29,7 @@
 /********************************** 外部全局变量 ***************************************/
 extern volatile uint8_t ucTcpClosedFlag;
 
-/********************************** 测试函数声明 ***************************************/
-void ESP8266_StaTcpClient_UnvarnishTest( void );
-void ESP8266_StaTcpClient_UnvarnishTest_LedCtrl( void );
+/********************************** 函数声明 ***************************************/
 bool ESP8266_ConnectWiFi( void );
 
 bool Get_Weather( void );

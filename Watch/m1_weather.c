@@ -48,7 +48,7 @@ void weather_Update( void ) {
         millis_t now = millis();
         timer        = now - lastMS;
 
-        if ( timer >= 5000 ) {
+        if ( timer >= 5000 ) {            // 每5s进行api天气查询
             ESP8266_ExitUnvarnishSend();  // 退出透传模式
             linkStatus = ESP8266_Get_LinkStatus();
 
