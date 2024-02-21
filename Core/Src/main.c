@@ -344,6 +344,7 @@ int main( void ) {
     MX_SPI1_Init();
     MX_TIM3_Init();
     MX_TIM2_Init();
+    MX_USART3_UART_Init();
     /* USER CODE BEGIN 2 */
 
     delay_init( 400 );                // 延时函数初始化

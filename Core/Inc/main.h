@@ -68,6 +68,10 @@ void Error_Handler( void );
 #define OLED_CS_GPIO_Port  GPIOB
 #define DHT11_DQ_Pin       GPIO_PIN_11
 #define DHT11_DQ_GPIO_Port GPIOD
+#define WiFi_TX_Pin        GPIO_PIN_10
+#define WiFi_TX_GPIO_Port  GPIOC
+#define WiFi_RX_Pin        GPIO_PIN_11
+#define WiFi_RX_GPIO_Port  GPIOC
 #define KEY_SET_Pin        GPIO_PIN_12
 #define KEY_SET_GPIO_Port  GPIOC
 #define KEY_RST_Pin        GPIO_PIN_6

@@ -34,6 +34,8 @@ extern "C" {
 
 extern UART_HandleTypeDef huart1;
 
+extern UART_HandleTypeDef huart3;
+
 /* USER CODE BEGIN Private defines */
 
 #define buffMaxsize 60                // 环形缓冲区容量(数据帧字节的倍数)
@@ -70,6 +72,7 @@ typedef union {
 /* USER CODE END Private defines */
 
 void MX_USART1_UART_Init( void );
+void MX_USART3_UART_Init( void );
 
 /* USER CODE BEGIN Prototypes */
 
