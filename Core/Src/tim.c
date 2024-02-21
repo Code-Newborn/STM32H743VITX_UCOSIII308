@@ -198,7 +198,8 @@ void HAL_TIM_Base_MspDeInit( TIM_HandleTypeDef* tim_baseHandle ) {
 
 extern char imu_run;
 uint16_t    t3_count;
-void        HAL_TIM_PeriodElapsedCallback( TIM_HandleTypeDef* htim ) {
+
+void HAL_TIM_PeriodElapsedCallback( TIM_HandleTypeDef* htim ) {
     // __HAL_TIM_CLEAR_IT(&htim3, TIM_IT_UPDATE); // 手动清除中断标志位
     if ( htim == &htim3 ) {
         // wifi_wait_data_hander();
@@ -234,12 +235,6 @@ void        HAL_TIM_PeriodElapsedCallback( TIM_HandleTypeDef* htim ) {
                 // mpu_dmp_get_data(&pitch, &roll, &yaw);
             }
         }
-
-        // if ( milliseconds % 10 == 0 ) {  // 间隔过短影响界面刷新
-        //     if ( DHT11_run ) {
-        //         DHT11();  // 获取温湿度数据
-        //     }
-        // }
 
 #endif
     }

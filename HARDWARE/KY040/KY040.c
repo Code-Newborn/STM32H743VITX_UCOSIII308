@@ -1,5 +1,7 @@
 #include "KY040.h"
 
+// 旋转编码器控制
+
 int TimerEncoder;
 int getTimerEncoder( void ) {
     TimerEncoder = ( short )( __HAL_TIM_GET_COUNTER( &htim2 ) );
