@@ -339,7 +339,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32H743xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../SYSTEM/sys;../SYSTEM/delay;../Drivers/STM32H7xx_HAL_Driver/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32H7xx/Include;../Drivers/CMSIS/Include;../Watch;../HARDWARE</IncludePath>
+              <IncludePath>../Core/Inc;../SYSTEM/sys;../SYSTEM/delay;../Drivers/STM32H7xx_HAL_Driver/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32H7xx/Include;../Drivers/CMSIS/Include;../HARDWARE;../Watch</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -472,6 +472,16 @@
               <FileName>KY040.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\HARDWARE\KY040\KY040.c</FilePath>
+            </File>
+            <File>
+              <FileName>cJSON.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\WIFI\cJSON.c</FilePath>
+            </File>
+            <File>
+              <FileName>common_print.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\WIFI\common_print.c</FilePath>
             </File>
           </Files>
         </Group>

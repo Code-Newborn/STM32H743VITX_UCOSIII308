@@ -5,6 +5,8 @@
 
 void weatherOpen( void );
 
+void weather_Update( void );
+
 #endif
 
 #endif /* __M1_WEATHER_H */

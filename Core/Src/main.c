@@ -51,6 +51,7 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
+
 enum {
     LA = 262,
     LB = 294,
@@ -286,6 +287,9 @@ void c_setup() {
 }
 
 void c_loop() {
+
+    weather_Update();  // 天气更新
+
     time_update();  // 时间更新
     if ( pwrmgr_userActive() ) {
         // battery_update(); // 检测电量
@@ -350,7 +354,12 @@ int main( void ) {
     delay_init( 400 );                // 延时函数初始化
     OLED_Init();                      // OLED初始化
     HAL_TIM_Base_Start_IT( &htim3 );  // 时基中断开启
-    c_setup();                        // 初始化
+
+    c_setup();  // 初始化
+
+    // 烧写固件版本 Ai-Thinker_ESP8266_DOUT_8Mbit_v1.5.4.1-a_20171130.bin
+    ESP8266_Init();
+    ESP8266_ConnectWiFi();  // 连接WIFI
 
     /* USER CODE END 2 */
 

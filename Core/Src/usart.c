@@ -255,6 +255,9 @@ void HAL_UART_MspInit( UART_HandleTypeDef* uartHandle ) {
         HAL_NVIC_EnableIRQ( USART3_IRQn );
         /* USER CODE BEGIN USART3_MspInit 1 */
 
+        __HAL_UART_ENABLE_IT( &huart3, UART_IT_RXNE );  // 开启接收数据寄存器非空中断
+        __HAL_UART_ENABLE_IT( &huart3, UART_IT_IDLE );  // 开启串口空闲中断
+
         /* USER CODE END USART3_MspInit 1 */
     }
 }

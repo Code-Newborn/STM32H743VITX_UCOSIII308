@@ -24,6 +24,8 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
+#include "WIFI/ESP8266.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -219,6 +221,18 @@ void USART1_IRQHandler( void ) {
  */
 void USART3_IRQHandler( void ) {
     /* USER CODE BEGIN USART3_IRQn 0 */
+
+    uint8_t ucCh;
+    if ( __HAL_UART_GET_IT( &huart3, UART_IT_RXNE ) != RESET ) {                  // 中断接收
+        ucCh = huart3.Instance->RDR;                                              // 读取数据接收寄存器
+        if ( strEsp8266_Fram_Record.InfBit.FramLength < ( RX_BUF_MAX_LEN - 1 ) )  // 预留1个字节写结束符
+        {
+            strEsp8266_Fram_Record.Data_RX_BUF[ strEsp8266_Fram_Record.InfBit.FramLength++ ] = ucCh;
+        }
+    } else if ( __HAL_UART_GET_FLAG( &huart3, UART_FLAG_IDLE ) ) {  // 空闲状态寄存器
+        strEsp8266_Fram_Record.InfBit.FramFinishFlag = 1;
+        __HAL_UART_CLEAR_FLAG( &huart3, UART_FLAG_IDLE ); /*清除空闲标志位*/
+    }
 
     /* USER CODE END USART3_IRQn 0 */
     HAL_UART_IRQHandler( &huart3 );
