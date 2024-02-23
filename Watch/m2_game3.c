@@ -110,15 +110,18 @@ static display_t draw()  // 还差一部是无法判断人物和管道是否重�
         if ( bounce ) {
             yVel   = -1.2;
             bounce = false;
-        } else if ( ( byte )y > 200 ) {
+        }
+        else if ( ( byte )y > 200 ) {
             yVel = 0;
             y    = 0;
-        } else if ( ( byte )y < FRAME_HEIGHT - 8 ) {
+        }
+        else if ( ( byte )y < FRAME_HEIGHT - 8 ) {
             if ( yVel < 0 )
                 yVel += 0.1;
             else
                 yVel += 0.06;
-        } else {
+        }
+        else {
             yVel = 0;
             y    = FRAME_HEIGHT - 8;
         }
@@ -183,7 +186,8 @@ static display_t draw()  // 还差一部是无法判断人物和管道是否重�
         // Draw lives
         LOOP( lives, i )
         draw_bitmap( 32 + ( 8 * i ), 1, livesImg, 7, 8, NOINVERT, 0 );
-    } else {
+    }
+    else {
         // Draw end game stuff
 
         draw_string_P( PSTR( STR_GAMEOVER ), false, 20, 0 );
@@ -243,12 +247,14 @@ static void judgeOverlap( void ) {
             if ( score > highscore ) {
                 highscore    = score;
                 newHighscore = true;
-            } else
+            }
+            else
                 newHighscore = false;
 
             // led_flash(LED_RED, 250, 255);
             //							buzzer_buzz(250, TONE_2KHZ, VOL_UI, PRIO_UI, NULL);
-        } else {
+        }
+        else {
             // led_flash(LED_GREEN, 30, 255);
             //							buzzer_buzz(100, TONE_2KHZ, VOL_UI, PRIO_UI, NULL);
         }

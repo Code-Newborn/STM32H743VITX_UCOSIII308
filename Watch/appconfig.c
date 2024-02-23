@@ -29,7 +29,7 @@ extern void eeprom_write_word (uint16_t *addr, uint16_t val);//向指定地址�
 
 #define EEPROM_CHECK_NUM 0xFF  // Any 8 bit number that isn't 0 or 255
 
-#define eepCheck_SAVE_ADDR 0X080E0000  // 设置FLASH 保存地址(必须为偶数，且所在扇区,要大于本代码所占用到的扇区.
+#define eepCheck_SAVE_ADDR  0X080E0000  // 设置FLASH 保存地址(必须为偶数，且所在扇区,要大于本代码所占用到的扇区.
 // 否则,写操作的时候,可能会导致擦除整个扇区,从而引起部分程序丢失.引起死机.
 #define appConfig_SAVE_ADDR eepCheck_SAVE_ADDR + 16  // 设置FLASH 保存地址(必须为偶数，且所在扇区,要大于本代码所占用到的扇区.
 // 否则,写操作的时候,可能会导致擦除整个扇区,从而引起部分程序丢失.引起死机.
