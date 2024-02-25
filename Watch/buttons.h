@@ -13,12 +13,12 @@
 #include "typedefs.h"
 
 /*下面的方式是通过直接操作库函数方式读取IO*/
-// #define KEY0 HAL_GPIO_ReadPin(KEY_RST_GPIO_Port, KEY_RST_Pin) // right
+#define KEY0 HAL_GPIO_ReadPin( KEY_RST_GPIO_Port, KEY_RST_Pin )  // right
 #define KEY1 HAL_GPIO_ReadPin( KEY_MID_GPIO_Port, KEY_MID_Pin )  // ok
-// #define KEY2 HAL_GPIO_ReadPin(KEY_SET_GPIO_Port, KEY_SET_Pin) // left
+#define KEY2 HAL_GPIO_ReadPin( KEY_SET_GPIO_Port, KEY_SET_Pin )  // left
 
-#define KEY0 GetEncodeStep_Clockwise()         // 顺时针触发
-#define KEY2 GetEncodeStep_CounterClockwise()  // 逆时针触发
+// #define KEY0 GetEncodeStep_Clockwise()         // 顺时针触发
+// #define KEY2 GetEncodeStep_CounterClockwise()  // 逆时针触发
 
 /*下面方式是通过位带操作方式读取IO*/
 /*
@@ -46,7 +46,7 @@ void     buttons_shutdown( void );
 button_f buttons_setFunc( btn_t, button_f );
 void     buttons_setFuncs( button_f, button_f, button_f );
 // millis_t buttons_pressTime(btn_t);
-bool buttons_isActive( void );
-void buttons_wake( void );
+bool     buttons_isActive( void );
+void     buttons_wake( void );
 
 #endif /* BUTTONS_H_ */

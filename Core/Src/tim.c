@@ -54,11 +54,11 @@ void MX_TIM2_Init( void ) {
     sConfig.IC1Polarity          = TIM_ICPOLARITY_RISING;
     sConfig.IC1Selection         = TIM_ICSELECTION_DIRECTTI;
     sConfig.IC1Prescaler         = TIM_ICPSC_DIV1;
-    sConfig.IC1Filter            = 2;
+    sConfig.IC1Filter            = 10;
     sConfig.IC2Polarity          = TIM_ICPOLARITY_RISING;
     sConfig.IC2Selection         = TIM_ICSELECTION_DIRECTTI;
     sConfig.IC2Prescaler         = TIM_ICPSC_DIV1;
-    sConfig.IC2Filter            = 2;
+    sConfig.IC2Filter            = 10;
     if ( HAL_TIM_Encoder_Init( &htim2, &sConfig ) != HAL_OK ) {
         Error_Handler();
     }

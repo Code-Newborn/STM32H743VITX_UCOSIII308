@@ -58,16 +58,16 @@ void Error_Handler( void );
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define KEY_MID_Pin        GPIO_PIN_13
+#define KEY_MID_GPIO_Port  GPIOC
 #define OLED_RST_Pin       GPIO_PIN_6
 #define OLED_RST_GPIO_Port GPIOA
 #define OLED_DC_Pin        GPIO_PIN_4
 #define OLED_DC_GPIO_Port  GPIOC
-#define KEY_MID_Pin        GPIO_PIN_5
-#define KEY_MID_GPIO_Port  GPIOC
 #define OLED_CS_Pin        GPIO_PIN_0
 #define OLED_CS_GPIO_Port  GPIOB
-#define DHT11_DQ_Pin       GPIO_PIN_11
-#define DHT11_DQ_GPIO_Port GPIOD
+#define DHT11_DQ_Pin       GPIO_PIN_12
+#define DHT11_DQ_GPIO_Port GPIOB
 #define WiFi_TX_Pin        GPIO_PIN_10
 #define WiFi_TX_GPIO_Port  GPIOC
 #define WiFi_RX_Pin        GPIO_PIN_11

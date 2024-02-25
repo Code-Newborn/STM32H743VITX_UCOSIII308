@@ -15,13 +15,13 @@
 #define BTN_NOT_PRESSED 1
 
 typedef struct {
-    millis_t pressedTime;   // Time of press
-    bool     processed;     // Time of press has been stored (don't store again until
-                            // next press)
-    byte         counter;   // Debounce counter
-    bool         funcDone;  // Function has been ran (don't run again until next press)
-    button_f     onPress;   // Function to run when pressed
-    const ulong* tune;      // Tune to play when pressed
+    millis_t     pressedTime;  // Time of press
+    bool         processed;    // Time of press has been stored (don't store again until
+                               // next press)
+    byte         counter;      // Debounce counter
+    bool         funcDone;     // Function has been ran (don't run again until next press)
+    button_f     onPress;      // Function to run when pressed
+    const ulong* tune;         // Tune to play when pressed
 } s_button;
 
 static s_button buttons[ BTN_COUNT ];
@@ -118,7 +118,7 @@ static void processButtons() {
     isPressed[ BTN_1 ] = KEY0;
     isPressed[ BTN_2 ] = KEY1;
     isPressed[ BTN_3 ] = KEY2;
-    __HAL_TIM_SET_COUNTER( &htim2, 0 );
+    // __HAL_TIM_SET_COUNTER( &htim2, 0 );
 
     // 依次处理每个按键
     LOOPR( BTN_COUNT, i )
@@ -146,7 +146,8 @@ static void processButton( s_button* button, BOOL isPressed ) {
                 // LED1=!LED1;
             }
         }
-    } else {
+    }
+    else {
         // 未达到按下的稳定状态
         if ( bitCount( button->counter ) <= BTN_NOT_PRESSED ) {
             button->processed = false;

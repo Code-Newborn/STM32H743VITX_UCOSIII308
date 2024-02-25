@@ -229,7 +229,8 @@ void USART3_IRQHandler( void ) {
         {
             strEsp8266_Fram_Record.Data_RX_BUF[ strEsp8266_Fram_Record.InfBit.FramLength++ ] = ucCh;
         }
-    } else if ( __HAL_UART_GET_FLAG( &huart3, UART_FLAG_IDLE ) ) {  // 空闲状态寄存器
+    }
+    else if ( __HAL_UART_GET_FLAG( &huart3, UART_FLAG_IDLE ) ) {  // 空闲状态寄存器
         strEsp8266_Fram_Record.InfBit.FramFinishFlag = 1;
         __HAL_UART_CLEAR_FLAG( &huart3, UART_FLAG_IDLE ); /*清除空闲标志位*/
     }

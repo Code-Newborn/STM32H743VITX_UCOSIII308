@@ -222,7 +222,8 @@ void HAL_UART_MspInit( UART_HandleTypeDef* uartHandle ) {
         /* USER CODE BEGIN USART1_MspInit 1 */
 
         /* USER CODE END USART1_MspInit 1 */
-    } else if ( uartHandle->Instance == USART3 ) {
+    }
+    else if ( uartHandle->Instance == USART3 ) {
         /* USER CODE BEGIN USART3_MspInit 0 */
 
         /* USER CODE END USART3_MspInit 0 */
@@ -282,7 +283,8 @@ void HAL_UART_MspDeInit( UART_HandleTypeDef* uartHandle ) {
         /* USER CODE BEGIN USART1_MspDeInit 1 */
 
         /* USER CODE END USART1_MspDeInit 1 */
-    } else if ( uartHandle->Instance == USART3 ) {
+    }
+    else if ( uartHandle->Instance == USART3 ) {
         /* USER CODE BEGIN USART3_MspDeInit 0 */
 
         /* USER CODE END USART3_MspDeInit 0 */
@@ -360,7 +362,8 @@ void HAL_UART_RxCpltCallback( UART_HandleTypeDef* huart ) {
 
                     framecount = ( framecount + 1 ) % 256;  // 收到帧数据循环计数
                     framecount_get++;                       // 收到帧计数
-                } else {
+                }
+                else {
                     verify_err_cnt++;  // 校验不通过
                     for ( uint8_t i = 0; i < 16; i++ ) {
                         error_frame[ i ] = circleBuff[ ( r_Ptr + i ) % buffMaxsize ];  // 保存 校验不通过时的 数据内容
@@ -369,7 +372,8 @@ void HAL_UART_RxCpltCallback( UART_HandleTypeDef* huart ) {
                     r_Ptr = ( r_Ptr + 1 ) % buffMaxsize;  // 帧验证窗口滑移1字节
                     usart1_rx_datalength--;
                 }
-            } else  // 未检测到帧头帧尾
+            }
+            else  // 未检测到帧头帧尾
             {
                 for ( uint8_t i = 0; i < 16; i++ ) {
                     error_frame[ i ] = circleBuff[ ( r_Ptr + i ) % buffMaxsize ];  // 保存 未检测到帧头帧尾的 数据内容
