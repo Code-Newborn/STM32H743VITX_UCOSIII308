@@ -93,7 +93,8 @@ static void selectAlarm() {
         wasPM = ( alarm.hour >= 12 );
 
         break;
-    case SETTING_NOW_HOUR: {
+    case SETTING_NOW_HOUR:
+    {
         byte hour = setting.val;
         byte max  = appConfig.timeMode == TIMEMODE_12HR ? 12 : 23;
         if ( hour > max )
@@ -117,13 +118,15 @@ static void selectAlarm() {
         if ( appConfig.timeMode == TIMEMODE_12HR ) {
             setting.now = SETTING_NOW_AMPM;
             setting.val = wasPM;
-        } else {
+        }
+        else {
             setting.now = SETTING_NOW_DAY_MON;
             setting.val = alarm.mon;
         }
         dayBit = 0;
         break;
-    case SETTING_NOW_AMPM: {
+    case SETTING_NOW_AMPM:
+    {
         time_s time;
         time.hour = alarm.hour;
         time.ampm = setting.val ? CHAR_PM : CHAR_AM;
@@ -159,6 +162,7 @@ static void selectAlarm() {
     }
 }
 
+
 static display_t alarmsDraw() {
     byte w = 5;
     byte x;
@@ -187,7 +191,8 @@ static display_t alarmsDraw() {
     case SETTING_NOW_DAY_THUR:
     case SETTING_NOW_DAY_FRI:
     case SETTING_NOW_DAY_SAT:
-    case SETTING_NOW_DAY_SUN: {
+    case SETTING_NOW_DAY_SUN:
+    {
         byte dow  = setting.now - SETTING_NOW_DAY_MON;
         x         = 70 + ( 7 * dow );
         buff[ 0 ] = setting.val ? dowChars[ dow ] : '-';

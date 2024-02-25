@@ -43,7 +43,8 @@ bool menu_select() {
         if ( !menuData.isOpen ) {
             menuData.isOpen = true;
             mMainOpen();
-        } else if ( menuData.func.btn2 != NULL )  // 打开后再次按下确认功能
+        }
+        else if ( menuData.func.btn2 != NULL )  // 打开后再次按下确认功能
         {
             menuData.func.btn2();
         }
@@ -133,7 +134,8 @@ static display_t menu_drawIcon() {
                 animX = x;
             else
                 busy = DISPLAY_BUSY;
-        } else if ( x < animX ) {
+        }
+        else if ( x < animX ) {
             speed = ( ( animX - x ) / 4 ) + 1;
             if ( speed > 16 )
                 speed = 16;
@@ -143,7 +145,8 @@ static display_t menu_drawIcon() {
             else
                 busy = DISPLAY_BUSY;
         }
-    } else
+    }
+    else
 #endif
         animX = x;
 
@@ -181,8 +184,9 @@ void setMenuOption( byte num, const char* name, const byte* icon, menu_f actionF
         return;
 
     switch ( operation.op ) {
-    case OPERATION_DRAWICON: {
-        byte a = operation.data;
+    case OPERATION_DRAWICON:
+    {
+        byte  a = operation.data;
         // if(a > FRAME_WIDTH)
         //	a -= (FRAME_WIDTH+32);
         float x = ( ( a / ( float )( FRAME_WIDTH - 32 ) ) * ( M_PI / 2 ) ) + ( M_PI / 4 );
