@@ -339,7 +339,7 @@
               <MiscControls>--locale=english</MiscControls>
               <Define>USE_HAL_DRIVER,STM32H743xx,LV_CONF_INCLUDE_SIMPLE</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../SYSTEM/sys;../SYSTEM/delay;../Drivers/STM32H7xx_HAL_Driver/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32H7xx/Include;../Drivers/CMSIS/Include;../HARDWARE/DHT11;../HARDWARE/LCD_IPS;../HARDWARE/GUI;..\HARDWARE\GUI_App\ui</IncludePath>
+              <IncludePath>../Core/Inc;../SYSTEM/sys;../SYSTEM/delay;../Drivers/STM32H7xx_HAL_Driver/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32H7xx/Include;../Drivers/CMSIS/Include;../HARDWARE/DHT11;../HARDWARE/LCD_IPS;../HARDWARE/GUI;../HARDWARE/GUI_App/ui</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
