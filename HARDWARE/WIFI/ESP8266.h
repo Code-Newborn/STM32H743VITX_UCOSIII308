@@ -18,11 +18,14 @@
 #define macUser_ESP8266_TcpServer_OverTime "1800"       // 服务器超时时间（单位：秒）
 
 // 要连接的WIFI名称，密码
-#define macUser_ESP8266_ApSsid "Redmi K50 Ultra"
-#define macUser_ESP8266_ApPwd  "12345678"
+// #define macUser_ESP8266_ApSsid "Redmi K50 Ultra"
+// #define macUser_ESP8266_ApPwd  "12345678"
+
+#define macUser_ESP8266_ApSsid "cz1253709179"  // 电脑作为热点
+#define macUser_ESP8266_ApPwd  "11111111"
 
 // 要连接的服务器的 IP，即电脑的IP，通过cmd输入命令ipconfig查看IPv4地址
-#define macUser_ESP8266_TcpServer_IP "192.168.205.94"  // 连接手机热点用
+#define macUser_ESP8266_TcpServer_IP   "192.168.205.94"  // 连接手机热点用
 // 要连接的服务器的端口，网络调试助手设置
 #define macUser_ESP8266_TcpServer_Port "8080"
 

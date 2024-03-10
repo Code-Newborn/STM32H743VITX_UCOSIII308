@@ -140,7 +140,7 @@
         <SetRegEntry>
           <Number>0</Number>
           <Key>CMSIS_AGDI</Key>
-          <Name>-X"CMSIS-DAP v2" -UBC7708E4C284 -O206 -S8 -C0 -P00000000 -N00("ARM CoreSight SW-DP") -D00(6BA02477) -L00(0) -TO65554 -TC200000000 -TT10000000 -TP20 -TDS8007 -TDT0 -TDC1F -TIEFFFFFFFF -TIP8 -FO7 -FD20000000 -FC8000 -FN1 -FF0STM32H7x_2048.FLM -FS08000000 -FL0200000 -FP0($$Device:STM32H743VITx$CMSIS\Flash\STM32H7x_2048.FLM)</Name>
+          <Name>-X"CMSIS-DAP v2" -U267608E4C284 -O206 -S8 -C0 -P00000000 -N00("ARM CoreSight SW-DP") -D00(6BA02477) -L00(0) -TO65554 -TC200000000 -TT10000000 -TP20 -TDS8007 -TDT0 -TDC1F -TIEFFFFFFFF -TIP8 -FO7 -FD20000000 -FC8000 -FN1 -FF0STM32H7x_2048.FLM -FS08000000 -FL0200000 -FP0($$Device:STM32H743VITx$CMSIS\Flash\STM32H7x_2048.FLM)</Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
@@ -157,22 +157,6 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>74</LineNumber>
-          <EnabledFlag>0</EnabledFlag>
-          <Address>134263064</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\Watch\menu.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\STM32H743VITX_UCOSIII308\../Watch/menu.c\74</Expression>
-        </Bp>
-        <Bp>
-          <Number>1</Number>
-          <Type>0</Type>
           <LineNumber>37</LineNumber>
           <EnabledFlag>0</EnabledFlag>
           <Address>134261868</Address>
@@ -187,7 +171,7 @@
           <Expression>\\STM32H743VITX_UCOSIII308\../Watch/m1_games.c\37</Expression>
         </Bp>
         <Bp>
-          <Number>2</Number>
+          <Number>1</Number>
           <Type>0</Type>
           <LineNumber>66</LineNumber>
           <EnabledFlag>0</EnabledFlag>
@@ -203,7 +187,7 @@
           <Expression>\\STM32H743VITX_UCOSIII308\../Watch/m2_game1.c\66</Expression>
         </Bp>
         <Bp>
-          <Number>3</Number>
+          <Number>2</Number>
           <Type>0</Type>
           <LineNumber>38</LineNumber>
           <EnabledFlag>0</EnabledFlag>
@@ -219,7 +203,7 @@
           <Expression>\\STM32H743VITX_UCOSIII308\../Watch/animation.c\38</Expression>
         </Bp>
         <Bp>
-          <Number>4</Number>
+          <Number>3</Number>
           <Type>0</Type>
           <LineNumber>44</LineNumber>
           <EnabledFlag>0</EnabledFlag>
@@ -235,7 +219,7 @@
           <Expression>\\STM32H743VITX_UCOSIII308\../Watch/animation.c\44</Expression>
         </Bp>
         <Bp>
-          <Number>5</Number>
+          <Number>4</Number>
           <Type>0</Type>
           <LineNumber>53</LineNumber>
           <EnabledFlag>0</EnabledFlag>
@@ -251,7 +235,7 @@
           <Expression>\\STM32H743VITX_UCOSIII308\../Watch/animation.c\53</Expression>
         </Bp>
         <Bp>
-          <Number>6</Number>
+          <Number>5</Number>
           <Type>0</Type>
           <LineNumber>50</LineNumber>
           <EnabledFlag>0</EnabledFlag>
@@ -267,7 +251,7 @@
           <Expression>\\STM32H743VITX_UCOSIII308\../Watch/animation.c\50</Expression>
         </Bp>
         <Bp>
-          <Number>7</Number>
+          <Number>6</Number>
           <Type>0</Type>
           <LineNumber>36</LineNumber>
           <EnabledFlag>0</EnabledFlag>
