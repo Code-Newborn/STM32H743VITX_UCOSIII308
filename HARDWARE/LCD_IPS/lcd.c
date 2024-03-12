@@ -15,7 +15,7 @@ void LCD_Writ_Bus( uint8_t dat ) {
 }
 
 /******************************************************************************
-      函数说明：LCD写入数据
+      函数说明：LCD写入 8bit 数据
       入口数据：dat 写入的数据
       返回值：  无
 ******************************************************************************/
@@ -24,7 +24,7 @@ void LCD_WR_DATA8( uint8_t dat ) {
 }
 
 /******************************************************************************
-      函数说明：LCD写入数据
+      函数说明：LCD写入 16bit 数据
       入口数据：dat 写入的数据
       返回值：  无
 ******************************************************************************/
@@ -59,7 +59,8 @@ void LCD_Address_Set( uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2 ) {
         LCD_WR_DATA( y1 + 20 );
         LCD_WR_DATA( y2 + 20 );
         LCD_WR_REG( 0x2c );  // 储存器写
-    } else if ( USE_HORIZONTAL == 1 ) {
+    }
+    else if ( USE_HORIZONTAL == 1 ) {
         LCD_WR_REG( 0x2a );  // 列地址设置
         LCD_WR_DATA( x1 );
         LCD_WR_DATA( x2 );
@@ -67,7 +68,8 @@ void LCD_Address_Set( uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2 ) {
         LCD_WR_DATA( y1 + 20 );
         LCD_WR_DATA( y2 + 20 );
         LCD_WR_REG( 0x2c );  // 储存器写
-    } else if ( USE_HORIZONTAL == 2 ) {
+    }
+    else if ( USE_HORIZONTAL == 2 ) {
         LCD_WR_REG( 0x2a );  // 列地址设置
         LCD_WR_DATA( x1 + 20 );
         LCD_WR_DATA( x2 + 20 );
@@ -75,7 +77,8 @@ void LCD_Address_Set( uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2 ) {
         LCD_WR_DATA( y1 );
         LCD_WR_DATA( y2 );
         LCD_WR_REG( 0x2c );  // 储存器写
-    } else {
+    }
+    else {
         LCD_WR_REG( 0x2a );  // 列地址设置
         LCD_WR_DATA( x1 + 20 );
         LCD_WR_DATA( x2 + 20 );
@@ -360,7 +363,8 @@ void LCD_ShowChinese12x12( uint16_t x, uint16_t y, uint8_t* s, uint16_t fc, uint
                             m = 0;
                             break;
                         }
-                    } else  // 叠加方式
+                    }
+                    else  // 叠加方式
                     {
                         if ( tfont12[ k ].Msk[ i ] & ( 0x01 << j ) )
                             LCD_DrawPoint( x, y, fc );  // 画一个点
@@ -412,7 +416,8 @@ void LCD_ShowChinese16x16( uint16_t x, uint16_t y, uint8_t* s, uint16_t fc, uint
                             m = 0;
                             break;
                         }
-                    } else  // 叠加方式
+                    }
+                    else  // 叠加方式
                     {
                         if ( tfont16[ k ].Msk[ i ] & ( 0x01 << j ) )
                             LCD_DrawPoint( x, y, fc );  // 画一个点
@@ -464,7 +469,8 @@ void LCD_ShowChinese24x24( uint16_t x, uint16_t y, uint8_t* s, uint16_t fc, uint
                             m = 0;
                             break;
                         }
-                    } else  // 叠加方式
+                    }
+                    else  // 叠加方式
                     {
                         if ( tfont24[ k ].Msk[ i ] & ( 0x01 << j ) )
                             LCD_DrawPoint( x, y, fc );  // 画一个点
@@ -516,7 +522,8 @@ void LCD_ShowChinese32x32( uint16_t x, uint16_t y, uint8_t* s, uint16_t fc, uint
                             m = 0;
                             break;
                         }
-                    } else  // 叠加方式
+                    }
+                    else  // 叠加方式
                     {
                         if ( tCustom32[ k ].Msk[ i ] & ( 0x01 << j ) )
                             LCD_DrawPoint( x, y, fc );  // 画一个点
@@ -575,7 +582,8 @@ void LCD_ShowChar( uint16_t x, uint16_t y, uint8_t num, uint16_t fc, uint16_t bc
                     m = 0;
                     break;
                 }
-            } else  // 叠加模式
+            }
+            else  // 叠加模式
             {
                 if ( temp & ( 0x01 << t ) )
                     LCD_DrawPoint( x, y, fc );  // 画一个点
@@ -619,11 +627,13 @@ void Show_Str( uint16_t x, uint16_t y, uint16_t fc, uint16_t bc, uint8_t* str, u
                     y += size;
                     x = x0;
                     str++;
-                } else {
+                }
+                else {
                     if ( size == 12 || size == 16 ) {
                         LCD_ShowChar( x, y, fc, bc, *str, size, mode );
                         x += size / 2;  // 字符,为全字的一半
-                    } else              // 字库中没有集成16X32的英文字体,用8X16代替
+                    }
+                    else  // 字库中没有集成16X32的英文字体,用8X16代替
                     {
                         LCD_ShowChar( x, y, fc, bc, *str, 16, mode );
                         x += 8;  // 字符,为全字的一半
@@ -631,7 +641,8 @@ void Show_Str( uint16_t x, uint16_t y, uint16_t fc, uint16_t bc, uint8_t* str, u
                 }
                 str++;
             }
-        } else  // 中文
+        }
+        else  // 中文
         {
             if ( x > ( LCD_W - size ) || y > ( LCD_H - size ) )
                 return;
@@ -700,7 +711,8 @@ void LCD_ShowIntNum( uint16_t x, uint16_t y, uint16_t num, uint8_t len, uint16_t
             if ( temp == 0 ) {
                 LCD_ShowChar( x + t * sizex, y, ' ', fc, bc, sizey, 0 );
                 continue;
-            } else
+            }
+            else
                 enshow = 1;
         }
         LCD_ShowChar( x + t * sizex, y, temp + 48, fc, bc, sizey, 0 );
