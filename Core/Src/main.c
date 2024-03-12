@@ -19,9 +19,10 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include <stdio.h>
+#include "dma.h"
 #include "gpio.h"
 #include "spi.h"
+#include "tim.h"
 #include "usart.h"
 
 /* Private includes ----------------------------------------------------------*/
@@ -63,6 +64,9 @@ void SystemClock_Config( void );
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
+uint32_t FPS_count = 0;
+uint32_t FPS       = 0;
+
 /* USER CODE END 0 */
 
 /**
@@ -92,14 +96,16 @@ int main( void ) {
 
     /* Initialize all configured peripherals */
     MX_GPIO_Init();
+    MX_DMA_Init();
     MX_USART1_UART_Init();
     MX_SPI1_Init();
+    MX_TIM1_Init();
     /* USER CODE BEGIN 2 */
     delay_init( 400 );
     uint8_t i, j;
     float   t = 0;
     LCD_Init();  // LCD初始化
-    LCD_Fill( 0, 0, LCD_W, LCD_H, WHITE );
+    LCD_Fill( 0, 0, LCD_W, LCD_H, RED );
 
     /* USER CODE END 2 */
 
@@ -110,45 +116,14 @@ int main( void ) {
 
         /* USER CODE BEGIN 3 */
 
-        // =============== 灯LED翻转闪烁 ===============
-        // HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
-        // HAL_Delay(200);
-
-        // =============== DHT11温湿度传感器 读取 BEGIN ===============
-        // OLED_Clear();
-        DHT11();  // 获取温湿度
-
-        // uint8_t* arr = "袁";
-        // while ( *arr != 0 ) {
-        //     printf( " 0x%2x ", *arr++ );
-        // }
-
-        // unsigned char* arr = test->Index;
-        // while ( *arr != 0 ) {
-        //     printf( "0x%2x ", *arr++ );
-        // }
-
-        LCD_ShowChinese( 48, 0, "龙腾龘龖", RED, WHITE, 32, 0 );
-        // LCD_ShowChinese( 48, 0, "中景园电子", RED, WHITE, 32, 0 );
-        LCD_ShowString( 0, 40, "LCD_W:", RED, WHITE, 16, 0 );
-        LCD_ShowIntNum( 48, 40, LCD_W, 3, RED, WHITE, 16 );
-        LCD_ShowString( 80, 40, "LCD_H:", RED, WHITE, 16, 0 );
-        LCD_ShowIntNum( 128, 40, LCD_H, 3, RED, WHITE, 16 );
-        LCD_ShowString( 80, 40, "LCD_H:", RED, WHITE, 16, 0 );
-        LCD_ShowString( 0, 70, "Increaseing Nun:", RED, WHITE, 16, 0 );
-        LCD_ShowFloatNum1( 128, 70, t, 4, RED, WHITE, 16 );
-
-        LCD_ShowString( 0, 88, "Temp:", RED, WHITE, 16, 0 );
-        LCD_ShowFloatNum1( 48, 88, temp + ( temp_decimal / 100.0f ), 4, WHITE, DARKBLUE, 16 );
-        LCD_ShowString( 96, 88, "Humi:", RED, WHITE, 16, 0 );
-        LCD_ShowFloatNum1( 144, 88, humi + ( humi_decimal / 100.0f ), 4, WHITE, LIGHTGREEN, 16 );
-
-        t += 0.11f;
-        for ( j = 0; j < 3; j++ ) {
-            for ( i = 0; i < 6; i++ ) {
-                LCD_ShowPicture( 40 * i, 120 + j * 40, 40, 40, gImage_1 );
-            }
-        }
+        LCD_Fill( 0, 0, LCD_W, LCD_H, GREEN );
+        FPS_count++;
+        LCD_Fill( 0, 0, LCD_W, LCD_H, WHITE );
+        FPS_count++;
+        LCD_Fill( 0, 0, LCD_W, LCD_H, BLUE );
+        FPS_count++;
+        LCD_Fill( 0, 0, LCD_W, LCD_H, RED );
+        FPS_count++;
     }
     /* USER CODE END 3 */
 }
@@ -164,12 +139,20 @@ void SystemClock_Config( void ) {
     /** Supply configuration update enable
      */
     HAL_PWREx_ConfigSupply( PWR_LDO_SUPPLY );
+
     /** Configure the main internal regulator output voltage
      */
+    __HAL_PWR_VOLTAGESCALING_CONFIG( PWR_REGULATOR_VOLTAGE_SCALE1 );
+
+    while ( !__HAL_PWR_GET_FLAG( PWR_FLAG_VOSRDY ) ) {
+    }
+
+    __HAL_RCC_SYSCFG_CLK_ENABLE();
     __HAL_PWR_VOLTAGESCALING_CONFIG( PWR_REGULATOR_VOLTAGE_SCALE0 );
 
     while ( !__HAL_PWR_GET_FLAG( PWR_FLAG_VOSRDY ) ) {
     }
+
     /** Initializes the RCC Oscillators according to the specified parameters
      * in the RCC_OscInitTypeDef structure.
      */
@@ -189,6 +172,7 @@ void SystemClock_Config( void ) {
     if ( HAL_RCC_OscConfig( &RCC_OscInitStruct ) != HAL_OK ) {
         Error_Handler();
     }
+
     /** Initializes the CPU, AHB and APB buses clocks
      */
     RCC_ClkInitStruct.ClockType      = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2 | RCC_CLOCKTYPE_D3PCLK1 | RCC_CLOCKTYPE_D1PCLK1;
@@ -237,5 +221,3 @@ void assert_failed( uint8_t* file, uint32_t line ) {
     /* USER CODE END 6 */
 }
 #endif /* USE_FULL_ASSERT */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

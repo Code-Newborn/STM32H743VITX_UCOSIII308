@@ -38,6 +38,9 @@ extern "C" {
 /* Exported types ------------------------------------------------------------*/
 /* USER CODE BEGIN ET */
 
+extern uint32_t FPS_count;
+extern uint32_t FPS;
+
 /* USER CODE END ET */
 
 /* Exported constants --------------------------------------------------------*/
@@ -70,6 +73,7 @@ void Error_Handler( void );
 #define LCD_CS_GPIO_Port   GPIOB
 #define DHT11_DQ_Pin       GPIO_PIN_11
 #define DHT11_DQ_GPIO_Port GPIOD
+
 /* USER CODE BEGIN Private defines */
 extern uint8_t Pin_state;
 /* USER CODE END Private defines */
@@ -79,5 +83,3 @@ extern uint8_t Pin_state;
 #endif
 
 #endif /* __MAIN_H */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
