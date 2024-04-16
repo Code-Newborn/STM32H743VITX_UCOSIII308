@@ -28,7 +28,7 @@ void LCD_WR_DATA8( uint8_t dat ) {
       入口数据：dat 写入的数据
       返回值：  无
 ******************************************************************************/
-void LCD_WR_DATA( uint16_t dat ) {
+void LCD_WR_DATA16( uint16_t dat ) {
     LCD_Writ_Bus( dat >> 8 );
     LCD_Writ_Bus( dat );
 }
@@ -53,38 +53,38 @@ void LCD_WR_REG( uint8_t dat ) {
 void LCD_Address_Set( uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2 ) {
     if ( USE_HORIZONTAL == 0 ) {
         LCD_WR_REG( 0x2a );  // 列地址设置
-        LCD_WR_DATA( x1 );
-        LCD_WR_DATA( x2 );
+        LCD_WR_DATA16( x1 );
+        LCD_WR_DATA16( x2 );
         LCD_WR_REG( 0x2b );  // 行地址设置
-        LCD_WR_DATA( y1 + 20 );
-        LCD_WR_DATA( y2 + 20 );
+        LCD_WR_DATA16( y1 + 20 );
+        LCD_WR_DATA16( y2 + 20 );
         LCD_WR_REG( 0x2c );  // 储存器写
     }
     else if ( USE_HORIZONTAL == 1 ) {
         LCD_WR_REG( 0x2a );  // 列地址设置
-        LCD_WR_DATA( x1 );
-        LCD_WR_DATA( x2 );
+        LCD_WR_DATA16( x1 );
+        LCD_WR_DATA16( x2 );
         LCD_WR_REG( 0x2b );  // 行地址设置
-        LCD_WR_DATA( y1 + 20 );
-        LCD_WR_DATA( y2 + 20 );
+        LCD_WR_DATA16( y1 + 20 );
+        LCD_WR_DATA16( y2 + 20 );
         LCD_WR_REG( 0x2c );  // 储存器写
     }
     else if ( USE_HORIZONTAL == 2 ) {
         LCD_WR_REG( 0x2a );  // 列地址设置
-        LCD_WR_DATA( x1 + 20 );
-        LCD_WR_DATA( x2 + 20 );
+        LCD_WR_DATA16( x1 + 20 );
+        LCD_WR_DATA16( x2 + 20 );
         LCD_WR_REG( 0x2b );  // 行地址设置
-        LCD_WR_DATA( y1 );
-        LCD_WR_DATA( y2 );
+        LCD_WR_DATA16( y1 );
+        LCD_WR_DATA16( y2 );
         LCD_WR_REG( 0x2c );  // 储存器写
     }
     else {
         LCD_WR_REG( 0x2a );  // 列地址设置
-        LCD_WR_DATA( x1 + 20 );
-        LCD_WR_DATA( x2 + 20 );
+        LCD_WR_DATA16( x1 + 20 );
+        LCD_WR_DATA16( x2 + 20 );
         LCD_WR_REG( 0x2b );  // 行地址设置
-        LCD_WR_DATA( y1 );
-        LCD_WR_DATA( y2 );
+        LCD_WR_DATA16( y1 );
+        LCD_WR_DATA16( y2 );
         LCD_WR_REG( 0x2c );  // 储存器写
     }
 }
@@ -188,15 +188,42 @@ void LCD_Init( void ) {
                                 color       要填充的颜色
       返回值：  无
 ******************************************************************************/
+
+uint8_t frame[ LCD_W * LCD_H * 2 ];  // 显示数据缓存Bytes
+
 void LCD_Fill( uint16_t xsta, uint16_t ysta, uint16_t xend, uint16_t yend, uint16_t color ) {
-    uint16_t i, j;
     LCD_Address_Set( xsta, ysta, xend - 1, yend - 1 );  // 设置显示范围
-    for ( i = ysta; i < yend; i++ ) {
-        for ( j = xsta; j < xend; j++ ) {
-            LCD_WR_DATA( color );
-        }
+
+    for ( int i = 0; i < LCD_W * LCD_H * 2 / 2; i++ ) {
+        frame[ 2 * i ]     = color >> 8;
+        frame[ 2 * i + 1 ] = color;
+    }
+
+    LCD_SPI_Send( frame, LCD_W * LCD_H * 2 );
+}
+
+uint8_t SPI_WriteData( uint8_t* data, uint16_t size ) {
+    LCD_CS_Clr();  // 必须开启
+    uint8_t isok = HAL_SPI_Transmit( &hspi1, data, size, 1000 );
+    LCD_CS_Set();
+    return isok;
+}
+
+static void LCD_SPI_Send( uint8_t* data, uint32_t size ) {
+    uint32_t i;
+    uint32_t delta;
+
+    delta = size / 0xFFFF;
+
+    for ( i = 0; i <= delta; i++ ) {
+        if ( i == delta ) /* 发送最后一帧数据 */
+            SPI_WriteData( &data[ i * 0xFFFF ], size % 0xFFFF );
+
+        else /* 超长数据一次发送0xFFFF字节数据 */
+            SPI_WriteData( &data[ i * 0xFFFF ], 0xFFFF );
     }
 }
+
 
 /******************************************************************************
       函数说明：在指定位置画点
@@ -206,7 +233,7 @@ void LCD_Fill( uint16_t xsta, uint16_t ysta, uint16_t xend, uint16_t yend, uint1
 ******************************************************************************/
 void LCD_DrawPoint( uint16_t x, uint16_t y, uint16_t color ) {
     LCD_Address_Set( x, y, x, y );  // 设置光标位置
-    LCD_WR_DATA( color );
+    LCD_WR_DATA16( color );
 }
 
 /******************************************************************************
@@ -355,9 +382,9 @@ void LCD_ShowChinese12x12( uint16_t x, uint16_t y, uint8_t* s, uint16_t fc, uint
                     if ( !mode )  // 非叠加方式
                     {
                         if ( tfont12[ k ].Msk[ i ] & ( 0x01 << j ) )
-                            LCD_WR_DATA( fc );
+                            LCD_WR_DATA16( fc );
                         else
-                            LCD_WR_DATA( bc );
+                            LCD_WR_DATA16( bc );
                         m++;
                         if ( m % sizey == 0 ) {
                             m = 0;
@@ -408,9 +435,9 @@ void LCD_ShowChinese16x16( uint16_t x, uint16_t y, uint8_t* s, uint16_t fc, uint
                     if ( !mode )  // 非叠加方式
                     {
                         if ( tfont16[ k ].Msk[ i ] & ( 0x01 << j ) )
-                            LCD_WR_DATA( fc );
+                            LCD_WR_DATA16( fc );
                         else
-                            LCD_WR_DATA( bc );
+                            LCD_WR_DATA16( bc );
                         m++;
                         if ( m % sizey == 0 ) {
                             m = 0;
@@ -461,9 +488,9 @@ void LCD_ShowChinese24x24( uint16_t x, uint16_t y, uint8_t* s, uint16_t fc, uint
                     if ( !mode )  // 非叠加方式
                     {
                         if ( tfont24[ k ].Msk[ i ] & ( 0x01 << j ) )
-                            LCD_WR_DATA( fc );
+                            LCD_WR_DATA16( fc );
                         else
-                            LCD_WR_DATA( bc );
+                            LCD_WR_DATA16( bc );
                         m++;
                         if ( m % sizey == 0 ) {
                             m = 0;
@@ -514,9 +541,9 @@ void LCD_ShowChinese32x32( uint16_t x, uint16_t y, uint8_t* s, uint16_t fc, uint
                     if ( !mode )  // 非叠加方式
                     {
                         if ( tCustom32[ k ].Msk[ i ] & ( 0x01 << j ) )
-                            LCD_WR_DATA( fc );
+                            LCD_WR_DATA16( fc );
                         else
-                            LCD_WR_DATA( bc );
+                            LCD_WR_DATA16( bc );
                         m++;
                         if ( m % sizey == 0 ) {
                             m = 0;
@@ -574,9 +601,9 @@ void LCD_ShowChar( uint16_t x, uint16_t y, uint8_t num, uint16_t fc, uint16_t bc
             if ( !mode )  // 非叠加模式
             {
                 if ( temp & ( 0x01 << t ) )
-                    LCD_WR_DATA( fc );
+                    LCD_WR_DATA16( fc );
                 else
-                    LCD_WR_DATA( bc );
+                    LCD_WR_DATA16( bc );
                 m++;
                 if ( m % sizex == 0 ) {
                     m = 0;

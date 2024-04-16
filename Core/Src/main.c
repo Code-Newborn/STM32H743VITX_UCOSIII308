@@ -102,8 +102,6 @@ int main( void ) {
     MX_TIM1_Init();
     /* USER CODE BEGIN 2 */
     delay_init( 400 );
-    uint8_t i, j;
-    float   t = 0;
     LCD_Init();  // LCD初始化
     LCD_Fill( 0, 0, LCD_W, LCD_H, RED );
 
@@ -116,12 +114,15 @@ int main( void ) {
 
         /* USER CODE BEGIN 3 */
 
-        LCD_Fill( 0, 0, LCD_W, LCD_H, GREEN );
+        LCD_Fill( 0, 0, LCD_W, LCD_H, CYAN );
         FPS_count++;
-        LCD_Fill( 0, 0, LCD_W, LCD_H, WHITE );
+
+        LCD_Fill( 0, 0, LCD_W, LCD_H, BLACK );
         FPS_count++;
+
         LCD_Fill( 0, 0, LCD_W, LCD_H, BLUE );
         FPS_count++;
+
         LCD_Fill( 0, 0, LCD_W, LCD_H, RED );
         FPS_count++;
     }
