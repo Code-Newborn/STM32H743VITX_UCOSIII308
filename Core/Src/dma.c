@@ -42,9 +42,9 @@ void MX_DMA_Init( void ) {
     __HAL_RCC_DMA1_CLK_ENABLE();
 
     /* DMA interrupt init */
-    /* DMA1_Stream4_IRQn interrupt configuration */
-    HAL_NVIC_SetPriority( DMA1_Stream4_IRQn, 0, 2 );
-    HAL_NVIC_EnableIRQ( DMA1_Stream4_IRQn );
+    /* DMA1_Stream0_IRQn interrupt configuration */
+    HAL_NVIC_SetPriority( DMA1_Stream0_IRQn, 0, 1 );
+    HAL_NVIC_EnableIRQ( DMA1_Stream0_IRQn );
 }
 
 /* USER CODE BEGIN 2 */

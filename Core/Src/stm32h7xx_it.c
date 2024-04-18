@@ -190,16 +190,16 @@ void SysTick_Handler( void ) {
 /******************************************************************************/
 
 /**
- * @brief This function handles DMA1 stream4 global interrupt.
+ * @brief This function handles DMA1 stream0 global interrupt.
  */
-void DMA1_Stream4_IRQHandler( void ) {
-    /* USER CODE BEGIN DMA1_Stream4_IRQn 0 */
+void DMA1_Stream0_IRQHandler( void ) {
+    /* USER CODE BEGIN DMA1_Stream0_IRQn 0 */
 
-    /* USER CODE END DMA1_Stream4_IRQn 0 */
+    /* USER CODE END DMA1_Stream0_IRQn 0 */
     HAL_DMA_IRQHandler( &hdma_spi1_tx );
-    /* USER CODE BEGIN DMA1_Stream4_IRQn 1 */
+    /* USER CODE BEGIN DMA1_Stream0_IRQn 1 */
 
-    /* USER CODE END DMA1_Stream4_IRQn 1 */
+    /* USER CODE END DMA1_Stream0_IRQn 1 */
 }
 
 /**
@@ -242,5 +242,12 @@ void USART1_IRQHandler( void ) {
 }
 
 /* USER CODE BEGIN 1 */
+
+
+extern uint8_t dma_complete;
+
+void HAL_SPI_TxCpltCallback( SPI_HandleTypeDef* hspi ) {
+    dma_complete = 1;
+}
 
 /* USER CODE END 1 */

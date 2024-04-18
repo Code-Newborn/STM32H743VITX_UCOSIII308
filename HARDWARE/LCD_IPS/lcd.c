@@ -202,10 +202,18 @@ void LCD_Fill( uint16_t xsta, uint16_t ysta, uint16_t xend, uint16_t yend, uint1
     LCD_SPI_Send( frame, LCD_W * LCD_H * 2 );
 }
 
+
+uint8_t dma_complete = 0;
 uint8_t SPI_WriteData( uint8_t* data, uint16_t size ) {
-    LCD_CS_Clr();  // 必须开启
-    uint8_t isok = HAL_SPI_Transmit( &hspi1, data, size, 1000 );
-    LCD_CS_Set();
+
+    dma_complete = 0;
+    uint8_t isok = HAL_SPI_Transmit_DMA( &hspi1, data, size );
+    while ( dma_complete == 0 ) {
+        /* code */
+    }
+
+    // uint8_t isok = HAL_SPI_Transmit( &hspi1, data, size, 1000 );
+
     return isok;
 }
 
@@ -215,6 +223,8 @@ static void LCD_SPI_Send( uint8_t* data, uint32_t size ) {
 
     delta = size / 0xFFFF;
 
+    LCD_CS_Clr();  // 必须开启
+
     for ( i = 0; i <= delta; i++ ) {
         if ( i == delta ) /* 发送最后一帧数据 */
             SPI_WriteData( &data[ i * 0xFFFF ], size % 0xFFFF );
@@ -222,6 +232,8 @@ static void LCD_SPI_Send( uint8_t* data, uint32_t size ) {
         else /* 超长数据一次发送0xFFFF字节数据 */
             SPI_WriteData( &data[ i * 0xFFFF ], 0xFFFF );
     }
+
+    LCD_CS_Set();
 }
 
 

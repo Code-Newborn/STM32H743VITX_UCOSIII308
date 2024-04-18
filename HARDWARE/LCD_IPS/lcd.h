@@ -16,6 +16,8 @@
 #define LCD_H 240
 #endif
 
+extern uint8_t dma_complete;
+
 //-----------------LCD端口定义----------------
 
 #define LCD_RES_Clr() HAL_GPIO_WritePin( LCD_RST_GPIO_Port, LCD_RST_Pin, GPIO_PIN_RESET )  // RES
