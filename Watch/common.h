@@ -42,6 +42,7 @@
 #include "m2_game1.h"
 #include "m2_game2.h"
 #include "m2_game3.h"
+#include "m2_game4.h"
 #include "m2_sleep.h"
 #include "m2_sound.h"
 #include "m2_timedate.h"

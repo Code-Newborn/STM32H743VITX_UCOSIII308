@@ -34,6 +34,8 @@ extern const byte menu_game1[];
 extern const byte menu_game2[];
 // 二级菜单 游戏3
 extern const byte menu_game3[];
+// 二级菜单 游戏4
+extern const byte menu_game4[];
 
 // 一级菜单 设置
 extern const byte menu_settings[];
@@ -135,5 +137,7 @@ extern const byte open32x16[];
 #define FONT_DOT_WIDTH  11
 #define FONT_DOT_HEIGHT 16
 extern const byte dot_11x16[];
+
+extern const byte dinoCover[];  // 谷歌恐龙游戏封面
 
 #endif /* RESOURCES_H_ */

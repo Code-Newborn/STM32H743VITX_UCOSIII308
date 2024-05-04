@@ -26,6 +26,9 @@ static uint8_t getItemCount() {
 #if COMPILE_GAME3
     ++cnt;
 #endif
+#if COMPILE_GAME4
+    ++cnt;
+#endif
     return cnt;
 }
 
@@ -55,6 +58,9 @@ static void itemLoader( byte num ) {
 #endif
 #if COMPILE_GAME3
     setMenuOption_P( num++, PSTR( GAME3_NAME ), menu_game3, game3_start );
+#endif
+#if COMPILE_GAME4
+    setMenuOption_P( num++, PSTR( GAME4_NAME ), menu_game4, game4_start );
 #endif
     setMenuOption_P( menuData.optionCount - 1, menuBack, menu_exit, back );  // 返回上级选项
 }

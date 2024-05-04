@@ -624,6 +624,11 @@
               <FilePath>..\Watch\m2_game3.c</FilePath>
             </File>
             <File>
+              <FileName>m2_game4.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Watch\m2_game4.c</FilePath>
+            </File>
+            <File>
               <FileName>m1_torch.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Watch\m1_torch.c</FilePath>
