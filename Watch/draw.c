@@ -17,9 +17,12 @@ inline uint8_t     pgm_read_byte( const uint8_t* abc ) {
 }
 
 void draw_string_P( const char* string, bool invert, byte x, byte y ) {
-    byte len = strlen( string );
-    char buff[ len + 1 ];
+    byte  len = strlen( string );
+    char* buff;
+    buff = ( char* )malloc( ( len + 1 ) * sizeof( char ) );  // 创建动态数组
+    // char buff[ len + 1 ];
     strcpy( buff, string );
+    free( buff );  // 释放动态数组
     draw_string( buff, invert, x, y );
 }
 
@@ -118,7 +121,8 @@ void draw_bitmap( byte x, byte yy, const byte* bitmap, byte w, byte h, bool inve
 
                 oledBuffer[ xx + aa ] |= pixels;
             }
-        } else {
+        }
+        else {
             uint aaa = ( ( hhhh / 8 ) * FRAME_WIDTH );
 
             //
