@@ -13,7 +13,7 @@
 
 #define GAME2_NAME STR_GAME2
 
-void game2_start(void);
+void game2_start( void );
 
 #endif
 

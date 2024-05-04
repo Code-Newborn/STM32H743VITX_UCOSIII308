@@ -96,11 +96,13 @@ static bool btnExit() {
     return true;
 }
 
+// 下 按键
 static bool btnDown() {
     uptMove = UPT_MOVE_DOWN;
     return true;
 }
 
+// 上 按键
 static bool btnUp() {
     uptMove = UPT_MOVE_UP;
     return true;
@@ -166,12 +168,14 @@ static display_t draw() {
                                 newHighscore = true;
                                 highscore    = score;
                                 //	eeprom_update_block(&highscore, (uint*)&eepHighscore, sizeof(uint));
-                            } else
+                            }
+                            else
                                 newHighscore = false;
                             // LED0 = !LED0;
                             // led_flash(LED_RED, 250, 255);
                             // buzzer_buzz(250, TONE_2KHZ, VOL_UI, PRIO_UI, NULL);
-                        } else {
+                        }
+                        else {
                             // LED0 = !LED0;
                             // led_flash(LED_RED, 30, 255);
                             // buzzer_buzz(100, TONE_2KHZ, VOL_UI, PRIO_UI, NULL);
@@ -194,7 +198,8 @@ static display_t draw() {
             quakeY = -2;
         else
             quakeY = 2;
-    } else
+    }
+    else
         quakeY = 0;
 
     // Draw my car
@@ -226,7 +231,8 @@ static display_t draw() {
         // Draw lives
         LOOP( lives, i )
         draw_bitmap( 32 + ( 8 * i ), 1, livesImg, 7, 8, NOINVERT, 0 );
-    } else {
+    }
+    else {
         // Draw end game stuff
 
         draw_string_P( PSTR( STR_GAMEOVER ), false, 20, 0 );
