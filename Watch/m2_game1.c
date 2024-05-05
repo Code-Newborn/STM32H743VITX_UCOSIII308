@@ -175,7 +175,8 @@ display_t game1_draw() {
         if ( ballY > 240 ) {
             // buzzer_buzz(200, TONE_2_5KHZ, VOL_UI, PRIO_UI, NULL);
             ball.y = 0;
-        } else if ( !blockCollide ) {
+        }
+        else if ( !blockCollide ) {
             // buzzer_buzz(200, TONE_2KHZ, VOL_UI, PRIO_UI, NULL);
             ball.y = FRAME_HEIGHT - 1;
             lives--;

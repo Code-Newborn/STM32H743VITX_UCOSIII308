@@ -41,16 +41,20 @@ static bool gameState = false;
 
 static tube_s tubes[ TUBE_COUNT ];
 
+// 宽18 高8 pix 管道头
 static const byte tube_top[] = {
     0xFF, 0xD5, 0xAB, 0xD5, 0x83, 0x81, 0x83, 0x81, 0x83, 0x81, 0x83, 0x81, 0x83, 0x81, 0x83, 0x81, 0xD5, 0xFF,
 };
 
+// 宽16 高8 pix 管道
 static const byte tube[] = {
     0xFF, 0x55, 0xAA, 0x55, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xAA, 0xFF,
 };
 
+// 宽15 高16 pix 小鸟
 static const byte thingImg[] = {
-    0x40, 0xF8, 0xEC, 0x2C, 0x2C, 0x38, 0xF0, 0x10, 0xD0, 0x30, 0xE8, 0x4C, 0x4C, 0x9C, 0xF0, 0x02, 0x1F, 0x37, 0x34, 0x34, 0x1C, 0x0F, 0x08, 0x0B, 0x0C, 0x17, 0x32, 0x32, 0x39, 0x0F,
+    0x40, 0xF8, 0xEC, 0x2C, 0x2C, 0x38, 0xF0, 0x10, 0xD0, 0x30, 0xE8, 0x4C, 0x4C, 0x9C, 0xF0,  //
+    0x02, 0x1F, 0x37, 0x34, 0x34, 0x1C, 0x0F, 0x08, 0x0B, 0x0C, 0x17, 0x32, 0x32, 0x39, 0x0F,  //
 };
 
 void draw_bitmap_set( image_s* img ) {
@@ -107,25 +111,28 @@ static display_t draw()  // 还差一部是无法判断人物和管道是否重�
     static byte   tubeOffset;
 
     if ( gameState ) {
-        if ( bounce ) {
+        if ( bounce ) {  // 跳跃
             yVel   = -1.2;
             bounce = false;
-        } else if ( ( byte )y > 200 ) {
+        }
+        else if ( ( byte )y > 200 ) {  // 触顶
             yVel = 0;
             y    = 0;
-        } else if ( ( byte )y < FRAME_HEIGHT - 8 ) {
+        }
+        else if ( ( byte )y < FRAME_HEIGHT - 8 ) {  // 自然降落
             if ( yVel < 0 )
                 yVel += 0.1;
             else
                 yVel += 0.06;
-        } else {
+        }
+        else {  // 触底
             yVel = 0;
             y    = FRAME_HEIGHT - 8;
         }
 
-        y += yVel;
+        y += yVel;  // 位移
 
-        score++;
+        score++;  // 加分
     }
 
     image_s img = { 16, y, thingImg, 7, 8, NOINVERT, 0 };
@@ -183,8 +190,9 @@ static display_t draw()  // 还差一部是无法判断人物和管道是否重�
         // Draw lives
         LOOP( lives, i )
         draw_bitmap( 32 + ( 8 * i ), 1, livesImg, 7, 8, NOINVERT, 0 );
-    } else {
-        // Draw end game stuff
+    }
+    else {
+        // 绘制结算画面
 
         draw_string_P( PSTR( STR_GAMEOVER ), false, 20, 0 );
         draw_string_P( PSTR( STR_SCORE ), false, 20, 16 );
@@ -243,12 +251,14 @@ static void judgeOverlap( void ) {
             if ( score > highscore ) {
                 highscore    = score;
                 newHighscore = true;
-            } else
+            }
+            else
                 newHighscore = false;
 
             // led_flash(LED_RED, 250, 255);
             //							buzzer_buzz(250, TONE_2KHZ, VOL_UI, PRIO_UI, NULL);
-        } else {
+        }
+        else {
             // led_flash(LED_GREEN, 30, 255);
             //							buzzer_buzz(100, TONE_2KHZ, VOL_UI, PRIO_UI, NULL);
         }
