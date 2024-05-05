@@ -74,10 +74,11 @@ void game2_start() {
     display_setDrawFunc( draw );
     buttons_setFuncs( btnUp, btnExit, btnDown );
 
+    // 障碍物车辆
     LOOP( CAR_COUNT, i ) {
         cars[ i ].y     = i * 16;
         cars[ i ].speed = i + 1;
-        cars[ i ].x     = FRAME_WIDTH;
+        cars[ i ].x     = FRAME_WIDTH;  // 初始位置在宽度范围外
     }
 
     //	eeprom_read_block(&highscore, &eepHighscore, sizeof(uint));
@@ -118,9 +119,9 @@ static display_t draw() {
         myCar.lane++;
     else if ( uptMove == UPT_MOVE_DOWN && myCar.lane > 0 )
         myCar.lane--;
-    uptMove = UPT_MOVE_NONE;
+    uptMove = UPT_MOVE_NONE;  // 车道更改完成
 
-    // Move to new lane
+    // 移动到新车道
     byte y = myCar.lane * 16;
     if ( myCar.y > y )
         myCar.y -= 2;
@@ -128,16 +129,16 @@ static display_t draw() {
         myCar.y += 2;
 
     if ( lives != 255 ) {
-        // Move cars
+        // 移动车辆
         LOOP( CAR_COUNT, i ) {
             // Move car
-            cars[ i ].x -= cars[ i ].speed;
+            cars[ i ].x -= cars[ i ].speed;  // 障碍物车辆（速度）
 
             // Gone off screen
-            if ( cars[ i ].x > 200 && cars[ i ].x < 255 - 16 ) {
-                cars[ i ].x = FRAME_WIDTH;
-                cars[ i ].y = ( rand() % 4 ) * 16;
-                score++;
+            if ( cars[ i ].x > 200 && cars[ i ].x < 255 - 16 ) {  // 障碍物车辆已超出屏幕
+                cars[ i ].x = FRAME_WIDTH;                        // 回到初始位置
+                cars[ i ].y = ( rand() % 4 ) * 16;                // 随机更换车道
+                score++;                                          // 得分
             }
         }
 
@@ -152,17 +153,17 @@ static display_t draw() {
             }
         }
 
-        // Collision
+        // 碰撞
         if ( !myCar.hit ) {
             LOOP( CAR_COUNT, i ) {
-                if ( cars[ i ].x < CAR_LENGTH ) {
+                if ( cars[ i ].x < CAR_LENGTH ) {  // 赛车不可移动，位于底线
                     byte carY   = cars[ i ].y + 2;
                     byte myCarY = myCar.y + 2;
-                    if ( ( carY >= myCarY && carY <= myCarY + CAR_WIDTH ) || ( carY + CAR_WIDTH >= myCarY && carY + CAR_WIDTH <= myCarY + CAR_WIDTH ) ) {
-                        myCar.hit = true;
-                        hitTime   = millis();
-                        lives--;
-                        if ( lives == 255 ) {
+                    if ( ( carY >= myCarY && carY <= myCarY + CAR_WIDTH ) || ( carY + CAR_WIDTH >= myCarY && carY + CAR_WIDTH <= myCarY + CAR_WIDTH ) ) {  // 左右两边的碰撞情况
+                        myCar.hit = true;                                                                                                                  // 碰撞上
+                        hitTime   = millis();                                                                                                              // 碰撞时刻
+                        lives--;                                                                                                                           // 降低血量
+                        if ( lives == 255 ) {                                                                                                              // 血量减为0
                             // Check for new highscore
                             if ( score > highscore ) {
                                 newHighscore = true;
@@ -188,12 +189,12 @@ static display_t draw() {
 
     millis_t now = millis();
 
-    if ( myCar.hit && now - hitTime >= 1000 )
+    if ( myCar.hit && now - hitTime >= 1000 )  // 无敌时间
         myCar.hit = false;
 
     // Quake
     static int8_t quakeY;
-    if ( myCar.hit && now - hitTime < 350 ) {
+    if ( myCar.hit && now - hitTime < 350 ) {  // 震荡提示时间
         if ( quakeY == 2 )
             quakeY = -2;
         else
@@ -202,39 +203,37 @@ static display_t draw() {
     else
         quakeY = 0;
 
-    // Draw my car
+    // 绘制赛车
     if ( !myCar.hit || ( myCar.hit && ( now & 64 ) ) )
         draw_bitmap( 0, myCar.y + quakeY, carImg, 15, 16, NOINVERT, 0 );
 
     char buff[ 6 ];
-    if ( lives != 255 ) {
-        // Draw other cars
+    if ( lives != 255 ) {  // 仍有血量
+        // 绘制其他障碍车辆
         LOOPR( CAR_COUNT, i )
         draw_bitmap( cars[ i ].x, cars[ i ].y + quakeY, carImg, 15, 16, NOINVERT, 0 );
 
-        // Draw road markings
+        // 绘制道路线
         static byte dotX[ 3 ] = { 0, 45, 90 };
         LOOP( 3, i ) {
-            dotX[ i ] -= ROAD_SPEED;
+            dotX[ i ] -= ROAD_SPEED;  // 移动速度
 
-            if ( dotX[ i ] >= FRAME_WIDTH && dotX[ i ] < 255 - 8 )
+            if ( dotX[ i ] >= FRAME_WIDTH && dotX[ i ] < 255 - 8 )  // 循环
                 dotX[ i ] = FRAME_WIDTH;
 
-            LOOP( 3, x )
-            draw_bitmap( dotX[ i ], ( x * 16 ) + quakeY + 16, roadMarking, 8, 8, NOINVERT, 0 );
+            LOOP( 3, idx )  // 三条道路线
+            draw_bitmap( dotX[ i ], ( ( idx + 1 ) * 16 ) + quakeY, roadMarking, 8, 8, NOINVERT, 0 );
         }
 
-        // Draw score
+        // 绘制得分信息
         sprintf_P( buff, PSTR( "%u" ), score );
         draw_string( buff, false, FRAME_WIDTH - ( 7 * 5 ), 1 );
 
-        // Draw lives
+        // 绘制血量
         LOOP( lives, i )
         draw_bitmap( 32 + ( 8 * i ), 1, livesImg, 7, 8, NOINVERT, 0 );
     }
-    else {
-        // Draw end game stuff
-
+    else {  // 血量减为0，绘制游戏结算界面
         draw_string_P( PSTR( STR_GAMEOVER ), false, 20, 0 );
         draw_string_P( PSTR( STR_SCORE ), false, 20, 16 );
         draw_string_P( PSTR( STR_HIGHSCORE ), false, 20, 32 );
