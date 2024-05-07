@@ -135,7 +135,7 @@ static display_t draw()  // 还差一部是无法判断人物和管道是否重�
         score++;  // 加分
     }
 
-    image_s img = { 16, y, thingImg, 7, 8, NOINVERT, 0 };
+    image_s img = { 16, y, thingImg, 15, 16, NOINVERT, 0 };
 
     draw_bitmap_set( &img );  // 绘制人物坐标
 
