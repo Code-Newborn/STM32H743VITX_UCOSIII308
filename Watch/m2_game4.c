@@ -24,6 +24,7 @@ static uint16_t highscore;
 static bool     bounce;
 static bool     newHighscore;
 static bool     overlap;
+static bool     hited;
 static bool     gameState = false;
 
 static uint8_t cactus_x = 128;
@@ -148,11 +149,12 @@ void game4_start( void ) {
 
 static display_t draw() {
 
-    static double y;
-    static double yVel;
-    static byte   tubeOffset;
+    static double y;     // 目标高度
+    static double yVel;  // 跳跃速度
 
-    // 循环裁剪地面贴图
+    static millis_t hitTime;
+
+    // 绘制移动地面
     byte ground_slice[ FRAME_WIDTH ];
     for ( size_t i = 0; i < FRAME_WIDTH; i++ ) {
         ground_slice[ i ] = GROUND[ ( ground_pos + i ) % sizeof( GROUND ) ];
@@ -183,14 +185,12 @@ static display_t draw() {
 
         score++;  // 加分
 
-
-        ground_pos += cur_speed;  // 地面移动速度
-        ground_pos = ( ground_pos % sizeof( GROUND ) );
+        ground_pos += cur_speed;                         // 地面移动速度
+        ground_pos = ( ground_pos % sizeof( GROUND ) );  // 循环
     }
 
-    image_s img = { 16, y, DINO, Dino_width, Dino_height, NOINVERT, 0 };
-
-    draw_bitmap_set( &img );  // 绘制人物坐标
+    image_s img = { 16, y, DINO, Dino_width, Dino_height, NOINVERT, 0 };  // 设置目标属性
+    draw_bitmap_set( &img );                                              // 绘制目标
 
     char buff[ 6 ];
 
@@ -211,6 +211,42 @@ static display_t draw() {
         }
     }
 
+    // 碰撞
+    if ( !hited ) {
+        if ( cactus_x < Dino_width + 16 ) {  // 障碍物到达检测位置
+            byte myCarY = y + yVel * 3;      // 下一时刻到达的高度位置
+
+            if ( FRAME_HEIGHT - 24 >= myCarY && FRAME_HEIGHT - 24 <= myCarY + Dino_height ) {  // 左右两边的碰撞情况
+                hited   = true;                                                                // 碰撞上
+                hitTime = millis();                                                            // 碰撞时刻
+                lives--;                                                                       // 降低血量
+                if ( lives == 255 ) {                                                          // 血量减为0
+                    // Check for new highscore
+                    if ( score > highscore ) {
+                        newHighscore = true;
+                        highscore    = score;
+                        //	eeprom_update_block(&highscore, (uint*)&eepHighscore, sizeof(uint));
+                    }
+                    else
+                        newHighscore = false;
+                    // LED0 = !LED0;
+                    // led_flash(LED_RED, 250, 255);
+                    // buzzer_buzz(250, TONE_2KHZ, VOL_UI, PRIO_UI, NULL);
+                }
+                else {
+                    // LED0 = !LED0;
+                    // led_flash(LED_RED, 30, 255);
+                    // buzzer_buzz(100, TONE_2KHZ, VOL_UI, PRIO_UI, NULL);
+                }
+            }
+        }
+    }
+
+    millis_t now = millis();
+
+    if ( hited && now - hitTime >= 1000 )  // 无敌时间
+        hited = false;
+
 
     // 绘制分数
     sprintf_P( buff, PSTR( "%u" ), score / 80 );
@@ -221,6 +257,22 @@ static display_t draw() {
     draw_bitmap( 32 + ( 8 * i ), 1, livesImg, 7, 8, NOINVERT, 0 );
 
     // draw_bitmap( 0, 0, dinoCover, FRAME_WIDTH, FRAME_HEIGHT, NOINVERT, 0 );  // 绘制DinoRun游戏封面
+
+    if ( lives == 255 ) {
+        // 血量减为0，绘制游戏结算界面
+        draw_string_P( PSTR( STR_GAMEOVER ), false, 20, 0 );
+        draw_string_P( PSTR( STR_SCORE ), false, 20, 16 );
+        draw_string_P( PSTR( STR_HIGHSCORE ), false, 20, 32 );
+
+        if ( newHighscore )
+            draw_string_P( PSTR( STR_NEWHIGHSCORE ), false, 20, 48 );
+
+        sprintf_P( buff, PSTR( "%u" ), score );
+        draw_string( buff, false, 96, 16 );
+
+        sprintf_P( buff, PSTR( "%u" ), highscore );
+        draw_string( buff, false, 96, 32 );
+    }
 
     return DISPLAY_BUSY;
 }
