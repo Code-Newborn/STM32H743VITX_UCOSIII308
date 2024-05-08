@@ -152,9 +152,16 @@ static display_t draw() {
     static double yVel;
     static byte   tubeOffset;
 
+    // 循环裁剪地面贴图
+    byte ground_slice[ FRAME_WIDTH ];
+    for ( size_t i = 0; i < FRAME_WIDTH; i++ ) {
+        ground_slice[ i ] = GROUND[ ( ground_pos + i ) % sizeof( GROUND ) ];
+    }
+    draw_bitmap( 0, FRAME_HEIGHT - Ground_height, ground_slice, FRAME_WIDTH, Ground_height, NOINVERT, 0 );
+
     if ( gameState ) {
         if ( bounce ) {  // 跳跃
-            yVel   = -1.2;
+            yVel   = -1.5;
             bounce = false;
         }
         else if ( ( byte )y > 254 ) {  // 触顶0-2 = 254
@@ -175,6 +182,10 @@ static display_t draw() {
         y += yVel * 3;  // 位移距离
 
         score++;  // 加分
+
+
+        ground_pos += cur_speed;  // 地面移动速度
+        ground_pos = ( ground_pos % sizeof( GROUND ) );
     }
 
     image_s img = { 16, y, DINO, Dino_width, Dino_height, NOINVERT, 0 };
@@ -199,15 +210,6 @@ static display_t draw() {
             cactus_x = FRAME_WIDTH + 16;
         }
     }
-
-    // 循环裁剪地面贴图
-    byte ground_slice[ FRAME_WIDTH ];
-    for ( size_t i = 0; i < FRAME_WIDTH; i++ ) {
-        ground_slice[ i ] = GROUND[ ( ground_pos + i ) % sizeof( GROUND ) ];
-    }
-    draw_bitmap( 0, FRAME_HEIGHT - Ground_height, ground_slice, FRAME_WIDTH, Ground_height, NOINVERT, 0 );
-    ground_pos += cur_speed;  // 地面移动速度
-    ground_pos = ( ground_pos % sizeof( GROUND ) );
 
 
     // 绘制分数
