@@ -6,39 +6,13 @@
 #define UPT_MOVE_UP   1
 #define UPT_MOVE_DOWN 2
 
-unsigned char key_num         = 0;
-unsigned char cactus_category = 0;
-unsigned char cactus_length   = 8;
-unsigned int  score           = 0;
-unsigned int  highest_score   = 0;
-int           height          = 0;
-int           cactus_pos      = 128;
-unsigned char cur_speed       = 2;
-char          failed          = 0;
-char          reset           = 0;
-
-static unsigned int ground_pos = 0;
-
-// Storage Vars
-static uint16_t highscore;
-static bool     bounce;
-static bool     newHighscore;
-static bool     overlap;
-static bool     hited;
-static bool     gameState = false;
-
-static uint8_t cactus_x = 128;
-static uint8_t cactus_x;
-
-static byte uptMove;
-static byte lives;
-
 static bool      btnExit( void );
 static bool      btnJump( void );
 static bool      btnPause( void );
 static display_t draw( void );
 
 // 厚度为8pix的地面
+#define Ground_height 8
 static const byte GROUND[] = {
     0xc8, 0xc8, 0xc8, 0x28, 0x28, 0x28, 0x08, 0xc8, 0xc8, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x48, 0x08, 0x08, 0xc8, 0xc8, 0xc8, 0x08, 0x38, 0x38, 0x08, 0x08,
     0x08, 0x08, 0x08, 0x48, 0x48, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x28, 0x08, 0x48, 0x48, 0x48, 0x08, 0x08, 0x08, 0x28, 0x28, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0xc8, 0x08, 0x08,
@@ -58,20 +32,10 @@ static const byte GROUND[] = {
     0x08, 0x28, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x28, 0x28, 0x28, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x68, 0x68, 0x08, 0xc8, 0xc8, 0xc8, 0x08,
 };
 
-// 厚度为8pix的云朵
+// 宽24 高8 pix
 static const byte CLOUD[] = {
     0x80, 0xC0, 0xE0, 0xF0, 0xB0, 0xB0, 0xB0, 0x98, 0x88, 0x8E, 0x83, 0x83, 0x83, 0x81, 0x81, 0x83, 0x8E, 0x8C, 0x88, 0x88, 0x98, 0xB0, 0xF0, 0xC0,
 };
-
-// 跳跃恐龙和落地恐龙 宽 16 高 32
-static const byte DINO2[] = {
-    0xE0, 0x80, 0x00, 0x00, 0x00, 0x80, 0xC0, 0xE0, 0xFE, 0xFF, 0xFD, 0xBF, 0xAF, 0x2F, 0x2F, 0x0E,  //
-    0x03, 0x07, 0x0F, 0x1E, 0xFF, 0xBF, 0x1F, 0x1F, 0x3F, 0x2F, 0x07, 0x00, 0x01, 0x00, 0x00, 0x00,  //
-    0xE0, 0x80, 0x00, 0x00, 0x00, 0x80, 0xC0, 0xE0, 0xFE, 0xFF, 0xFD, 0xBF, 0xAF, 0x2F, 0x2F, 0x0E,  //
-    0x03, 0x07, 0x0F, 0x1E, 0x3F, 0x7F, 0x5F, 0x3F, 0xFF, 0x8F, 0x07, 0x00, 0x01, 0x00, 0x00, 0x00,  //
-};
-
-#define Ground_height 8
 
 #define Dino_height 16
 #define Dino_width  16
@@ -80,12 +44,10 @@ static const byte DINO[] = {
     0x03, 0x07, 0x0F, 0x1E, 0xFF, 0xBF, 0x1F, 0x1F, 0x3F, 0x2F, 0x07, 0x00, 0x01, 0x00, 0x00, 0x00,  //
 };
 
-
 // 宽16 高8 pix
 const byte CACTUS_1[] = {
     0xF0, 0xF0, 0x00, 0xFF, 0xFF, 0x00, 0xF0, 0xF0, 0x03, 0x07, 0x86, 0xFF, 0xFF, 0x06, 0x03, 0x01,
 };
-
 
 // 宽16 高16 pix
 const byte CACTUS_2[] = {
@@ -105,13 +67,27 @@ const byte CACTUS_4[] = {
     0x43, 0x47, 0x86, 0xFF, 0xFF, 0x26, 0xA3, 0xA0, 0x27, 0x04, 0xFF, 0xFF, 0x00, 0x08, 0xFF, 0x88, 0x2F, 0x00, 0x00, 0xFF, 0xFF, 0x06, 0x23, 0x21,  //
 };
 
+static bool bounce;
+static bool hited;
+static bool gameState;
 
-// 宽15 高16 pix 小鸟
-static const byte thingImg[] = {
-    0x40, 0xF8, 0xEC, 0x2C, 0x2C, 0x38, 0xF0, 0x10, 0xD0, 0x30, 0xE8, 0x4C, 0x4C, 0x9C, 0xF0,  //
-    0x02, 0x1F, 0x37, 0x34, 0x34, 0x1C, 0x0F, 0x08, 0x0B, 0x0C, 0x17, 0x32, 0x32, 0x39, 0x0F,  //
-};
+static uint8_t cactus_category = 0;
+static uint8_t cactus_width    = 8;
+static uint8_t cactus_height   = 8;
+static uint8_t cactus_x;
+static uint8_t cloud_x;
+static uint8_t cloud_y;
 
+static byte     lives;
+static uint32_t score = 0;
+static bool     newHighscore;
+static uint32_t highest_score = 0;
+
+static uint16_t ground_pos   = 0;
+static uint8_t  ground_speed = 3;
+static uint8_t  cloud_speed  = 4;
+
+static double Dino_y = FRAME_HEIGHT - Dino_height - Ground_height;  // 目标高度
 
 // 退出
 static bool btnExit() {
@@ -140,10 +116,13 @@ void game4_start( void ) {
     display_setDrawFunc( draw );                     // 设置绘制函数
     buttons_setFuncs( btnPause, btnJump, btnExit );  // 设置按键功能
 
-    // 显示信息初始化
+    // 初始化
+    cloud_x      = 128 + 16;
+    cactus_x     = 128;
+    bounce       = false;
+    hited        = false;
     score        = 0;
     newHighscore = false;
-    overlap      = false;
     gameState    = true;
     lives        = 4;
 }
@@ -151,13 +130,12 @@ void game4_start( void ) {
 
 static display_t draw() {
 
-    static double y;     // 目标高度
+
     static double yVel;  // 跳跃速度
 
     static millis_t hitTime;
 
-    // 绘制移动地面
-    image_s img = { 16, y, DINO, Dino_width, Dino_height, NOINVERT, 0 };  // 设置目标属性
+
     if ( lives != 255 ) {
         byte ground_slice[ FRAME_WIDTH ];
         for ( size_t i = 0; i < FRAME_WIDTH; i++ ) {
@@ -166,60 +144,68 @@ static display_t draw() {
         draw_bitmap( 0, FRAME_HEIGHT - Ground_height, ground_slice, FRAME_WIDTH, Ground_height, NOINVERT, 0 );
 
         if ( gameState ) {
-            if ( bounce ) {  // 跳跃
-                yVel   = -1.5;
+            if ( bounce ) {                                                       // 跳跃
+                if ( Dino_y > FRAME_HEIGHT - Dino_height - Ground_height - 2 ) {  // 落地后再响应跳跃
+                    yVel = -1.5;
+                }
                 bounce = false;
             }
-            else if ( ( byte )y > 254 ) {  // 触顶0-2 = 254
-                yVel = 0;
-                y    = 0;
+            else if ( ( byte )Dino_y > 254 ) {  // 触顶0-2 = 254
+                yVel   = 0;
+                Dino_y = 0;
             }
-            else if ( ( byte )y < FRAME_HEIGHT - Dino_height - Ground_height ) {
-                if ( yVel < 0 )
-                    yVel += 0.1;  // 减速上升
-                else
-                    yVel += 0.1;  // 加速下降
+            else if ( ( byte )Dino_y < FRAME_HEIGHT - Dino_height - Ground_height ) {
+                yVel += 0.1;  // 重力加速度
             }
             else {  //
-                yVel = 0;
-                y    = FRAME_HEIGHT - Dino_height - Ground_height;
+                yVel   = 0;
+                Dino_y = FRAME_HEIGHT - Dino_height - Ground_height;
             }
 
-            y += yVel * 3;  // 位移距离
+            Dino_y += yVel * 3;  // 位移距离
 
             score++;  // 加分
 
-            ground_pos += cur_speed;                         // 地面移动速度
+            ground_pos += ground_speed;                      // 地面移动速度
             ground_pos = ( ground_pos % sizeof( GROUND ) );  // 循环
         }
-        draw_bitmap_set( &img );  // 绘制目标
+        draw_bitmap( 16, Dino_y, DINO, Dino_width, Dino_height, NOINVERT, 0 );  // 绘制目标
+
 
         // 碰撞
         if ( !hited ) {
-            if ( cactus_x < Dino_width + 16 ) {  // 障碍物到达检测位置
-                byte myCarY = y + yVel * 3;      // 下一时刻到达的高度位置
+            if ( cactus_x < Dino_width + 16 ) {   // 障碍物到达检测位置
+                byte myCarY = Dino_y + yVel * 3;  // 下一时刻到达的高度位置
+                switch ( cactus_category ) {
+                case 0:
+                    cactus_height = 8;
+                    break;
+                case 1:
+                    cactus_height = 16;
+                    break;
+                case 2:
+                    cactus_height = 16;
+                    break;
+                case 3:
+                    cactus_height = 16;
+                    break;
+                default:
+                    cactus_height = 8;
+                    break;
+                }
 
-                if ( FRAME_HEIGHT - 24 >= myCarY && FRAME_HEIGHT - 24 <= myCarY + Dino_height ) {  // 左右两边的碰撞情况
-                    hited   = true;                                                                // 碰撞上
-                    hitTime = millis();                                                            // 碰撞时刻
-                    lives--;                                                                       // 降低血量
-                    if ( lives == 255 ) {                                                          // 血量减为0
+                if ( FRAME_HEIGHT - 8 - cactus_height >= myCarY && FRAME_HEIGHT - 8 - cactus_height <= myCarY + Dino_height ) {  // 碰撞情况
+                    hited   = true;
+                    hitTime = millis();    // 碰撞时刻
+                    lives--;               // 降低血量
+                    if ( lives == 255 ) {  // 血量减为-1
                         // Check for new highscore
-                        if ( score > highscore ) {
-                            newHighscore = true;
-                            highscore    = score;
-                            //	eeprom_update_block(&highscore, (uint*)&eepHighscore, sizeof(uint));
+                        if ( score > highest_score ) {
+                            newHighscore  = true;
+                            highest_score = score;
                         }
                         else
                             newHighscore = false;
-                        // LED0 = !LED0;
-                        // led_flash(LED_RED, 250, 255);
-                        // buzzer_buzz(250, TONE_2KHZ, VOL_UI, PRIO_UI, NULL);
-                    }
-                    else {
-                        // LED0 = !LED0;
-                        // led_flash(LED_RED, 30, 255);
-                        // buzzer_buzz(100, TONE_2KHZ, VOL_UI, PRIO_UI, NULL);
                     }
                 }
             }
@@ -242,27 +228,41 @@ static display_t draw() {
 
 
     if ( lives != 255 ) {  // 还有生命值
-        img.width  = 16;
-        img.height = 16;
-
-        img.x = cactus_x;
-        img.y = FRAME_HEIGHT - 16 - 3;  // 障碍物呈现高度
-
-        img.bitmap = CACTUS_2;
-        draw_bitmap_s2( &img );  // 绘制障碍物
-        if ( gameState )
-            cactus_x -= cur_speed;
+        switch ( cactus_category ) {
+        case 0:
+            draw_bitmap( cactus_x, FRAME_HEIGHT - 8 - 3, CACTUS_1, 16, 8, NOINVERT, 0 );
+            break;
+        case 1:
+            draw_bitmap( cactus_x, FRAME_HEIGHT - 16 - 3, CACTUS_2, 16, 16, NOINVERT, 0 );
+            break;
+        case 2:
+            draw_bitmap( cactus_x, FRAME_HEIGHT - 16 - 3, CACTUS_3, 24, 16, NOINVERT, 0 );
+            break;
+        case 3:
+            draw_bitmap( cactus_x, FRAME_HEIGHT - 16 - 3, CACTUS_4, 24, 16, NOINVERT, 0 );
+            break;
+        default:
+            draw_bitmap( cactus_x, FRAME_HEIGHT - 8 - 3, CACTUS_1, 16, 8, NOINVERT, 0 );
+            break;
+        }
+        draw_bitmap( cloud_x, cloud_y, CLOUD, 24, 8, NOINVERT, 0 );
+        if ( gameState ) {
+            cactus_x -= ground_speed;
+            cloud_x -= cloud_speed;
+        }
         if ( cactus_x < 240 && cactus_x > 200 ) {
-            // cactus_type = rand() % 4;
-            cactus_x = FRAME_WIDTH + 16;
+            cactus_category = rand() % 4;
+            cactus_x        = FRAME_WIDTH + 16;
+        }
+
+        if ( cloud_x < 240 && cloud_x > 200 ) {
+            cloud_y = rand() % 8;
+            cloud_x = FRAME_WIDTH + 16;
         }
     }
     else {
         draw_bitmap( 0, 0, dinoCover, FRAME_WIDTH, FRAME_HEIGHT, NOINVERT, 0 );  // 绘制DinoRun游戏封面
     }
-
-
-    // draw_bitmap( 0, 0, dinoCover, FRAME_WIDTH, FRAME_HEIGHT, NOINVERT, 0 );  // 绘制DinoRun游戏封面
 
 
     return DISPLAY_BUSY;

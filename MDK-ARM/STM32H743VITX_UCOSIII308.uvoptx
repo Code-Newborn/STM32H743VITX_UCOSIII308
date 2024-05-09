@@ -265,6 +265,11 @@
           <WinNumber>1</WinNumber>
           <ItemText>drawFunc</ItemText>
         </Ww>
+        <Ww>
+          <count>22</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>cactus_x,0x0A</ItemText>
+        </Ww>
       </WatchWindow1>
       <MemoryWindow1>
         <Mm>
