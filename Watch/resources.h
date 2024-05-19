@@ -59,8 +59,10 @@ extern const byte menu_anim[][ 128 ];
 extern const byte menu_setfps[];
 // 三级菜单 LED
 extern const byte menu_LEDs[][ 128 ];
-// 二级菜单 分析
+// 二级菜单 分析 32×32
 extern const byte menu_diagnostic[];
+// 二级菜单 信息 32×32
+extern const byte menu_info[];
 
 // 一级菜单 退出
 extern const byte menu_exit[];

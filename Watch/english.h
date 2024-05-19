@@ -69,8 +69,9 @@
 #define STR_GAMES       "Games"
 #define STR_SETTINGS    "Settings"
 #define STR_DIAGNOSTICS "Diagnostics"
+#define STR_INFO        "Info"
 // #define STR_BTRCCAR		"BT RC Car"
-#define STR_TUNEMAKER "Tune maker"
+#define STR_TUNEMAKER   "Tune maker"
 
 #define STR_TEMPHUMI "Temp Humi"
 // #define STR_CALCULATORS	"Calculators"
@@ -80,6 +81,8 @@
 #define STR_TIMEDATEMENU "< TIME & DATE >"
 #define STR_SAVE         "Save"
 #define STR_SAVED        "Saved"
+
+#define STR_INFOSMENU "< INFOS >"
 
 #define STR_DIAGNOSTICSMENU "< DIAGNOSTICS >"
 #define STR_TEMPERATURE     "Temperature %hhd.%hhuC"

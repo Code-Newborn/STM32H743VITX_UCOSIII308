@@ -8,7 +8,7 @@
 
 #include "common.h"
 
-#define OPTION_COUNT 5  // 当前选项数
+#define OPTION_COUNT 6  // 当前选项数
 
 static prev_menu_s prevMenuData;  // 上一次菜单数据
 
@@ -41,6 +41,7 @@ static void itemLoader( byte num ) {
     setMenuOption_P( 2, PSTR( STR_SOUND ), menu_sound, mSoundOpen );            // 打开音量
     setMenuOption_P( 3, PSTR( STR_DISPLAY ), menu_display, mDisplayOpen );      // 打开显示
     setMenuOption_P( 4, PSTR( STR_DIAGNOSTICS ), menu_diagnostic, mDiagOpen );  // 打开分析
+    setMenuOption_P( 5, PSTR( STR_INFO ), menu_info, mInfoOpen );               // 打开信息
 
     setMenuOption_P( menuData.optionCount - 1, menuBack, menu_exit, back );  // 最后项添加返回
 

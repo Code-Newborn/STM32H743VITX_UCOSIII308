@@ -87,10 +87,10 @@ static bool down() {
     if ( idx == 255 )
         idx = 1;
 
-    iAng--;
-    if ( iAng == 0 )
-        iAng = 180;
-    return true;
+    // iAng--;
+    // if ( iAng == 0 )
+    //     iAng = 180;
+    // return true;
 }
 
 static bool up() {
@@ -98,10 +98,10 @@ static bool up() {
     if ( idx == IDX_MAX )
         idx = 0;
 
-    iAng++;
-    if ( iAng == 180 )
-        iAng = 0;
-    return true;
+    // iAng++;
+    // if ( iAng == 180 )
+    //     iAng = 0;
+    // return true;
 }
 
 static bool select() {
