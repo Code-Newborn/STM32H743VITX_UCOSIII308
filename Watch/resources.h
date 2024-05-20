@@ -11,58 +11,29 @@
 #include "english.h"
 #include "typedefs.h"
 
-// 默认
-extern const byte menu_default[];
-
-// 一级菜单 闹钟
-extern const byte menu_alarm[];
-
-// 一级菜单 手电筒
-extern const byte menu_torch[];
-
-// 一级菜单 秒表
-extern const byte menu_stopwatch[];
-
-// 一级菜单 音乐
-extern const byte menu_tunemaker[];
-
-// 一级菜单 游戏
-extern const byte menu_games[];
-// 二级菜单 游戏1
-extern const byte menu_game1[];
-// 二级菜单 游戏2
-extern const byte menu_game2[];
-// 二级菜单 游戏3
-extern const byte menu_game3[];
-// 二级菜单 游戏4
-extern const byte menu_game4[];
-
-// 一级菜单 设置
-extern const byte menu_settings[];
-// 二级菜单 时间日期
-extern const byte menu_timedate[];
-// 二级菜单 睡眠
-extern const byte menu_sleep[];
-// 二级菜单 音量
-extern const byte menu_sound[];
-// 二级菜单 显示
-extern const byte menu_display[];
-// 三级菜单 亮度
-extern const byte menu_brightness[][ 128 ];
-// 三级菜单 翻转
-extern const byte menu_invert[];
-// 三级菜单 旋转
-extern const byte menu_rotate[];
-// 三级菜单 动画
-extern const byte menu_anim[][ 128 ];
-// 三级菜单 帧率
-extern const byte menu_setfps[];
-// 三级菜单 LED
-extern const byte menu_LEDs[][ 128 ];
-// 二级菜单 分析 32×32
-extern const byte menu_diagnostic[];
-// 二级菜单 信息 32×32
-extern const byte menu_info[];
+extern const byte menu_default[];            // 默认
+extern const byte menu_alarm[];              // 一级菜单 闹钟
+extern const byte menu_torch[];              // 一级菜单 手电筒
+extern const byte menu_stopwatch[];          // 一级菜单 秒表
+extern const byte menu_tunemaker[];          // 一级菜单 音乐
+extern const byte menu_games[];              // 一级菜单 游戏
+extern const byte menu_game1[];              // 二级菜单 游戏1
+extern const byte menu_game2[];              // 二级菜单 游戏2
+extern const byte menu_game3[];              // 二级菜单 游戏3
+extern const byte menu_game4[];              // 二级菜单 游戏4
+extern const byte menu_settings[];           // 一级菜单 设置
+extern const byte menu_timedate[];           // 二级菜单 时间日期
+extern const byte menu_sleep[];              // 二级菜单 睡眠
+extern const byte menu_sound[];              // 二级菜单 音量
+extern const byte menu_display[];            // 二级菜单 显示
+extern const byte menu_brightness[][ 128 ];  // 三级菜单 亮度
+extern const byte menu_invert[];             // 三级菜单 翻转
+extern const byte menu_rotate[];             // 三级菜单 旋转
+extern const byte menu_anim[][ 128 ];        // 三级菜单 动画
+extern const byte menu_setfps[];             // 三级菜单 帧率
+extern const byte menu_LEDs[][ 128 ];        // 三级菜单 LED
+extern const byte menu_diagnostic[];         // 二级菜单 分析
+extern const byte menu_info[];               // 二级菜单 信息
 
 // 一级菜单 退出
 extern const byte menu_exit[];
@@ -100,22 +71,27 @@ extern const byte battIconFull[];
 // Alarm icon
 // extern const byte smallFontAlarm[];
 
+// 小号字体
 #define SMALLFONT_WIDTH  5
 #define SMALLFONT_HEIGHT 8
 extern const byte smallFont[][ 5 ];
 
+// 中号字体
 #define MIDFONT_WIDTH  19
 #define MIDFONT_HEIGHT 24
 extern const byte midFont[][ 57 ];
 
+// 段码字体
 #define SEGFONT_WIDTH  19
 #define SEGFONT_HEIGHT 24
 extern const byte segFont[][ 57 ];
 
+//
 #define FONT_SMALL2_WIDTH  11
 #define FONT_SMALL2_HEIGHT 16
 extern const byte small2Font[][ 22 ];
 
+// 冒号：
 #define FONT_COLON_WIDTH  6
 #define FONT_COLON_HEIGHT 24
 extern const byte colon[];
@@ -140,6 +116,6 @@ extern const byte open32x16[];
 #define FONT_DOT_HEIGHT 16
 extern const byte dot_11x16[];
 
-extern const byte dinoCover[];  // 谷歌恐龙游戏封面
+extern const byte dinoCover[];
 
 #endif /* RESOURCES_H_ */
