@@ -21,7 +21,9 @@ static void itemLoader( byte );
  * @return     {*}
  */
 void mSettingsOpen() {
-    display_setDrawFunc( menu_draw );                                       // 注册绘制函数 menu_draw
+    display_setDrawFunc( menu_draw );                     // 注册绘制函数 menu_draw
+    buttons_setFuncs( menu_up, menu_select, menu_down );  // 注册按键功能函数
+
     setMenuInfo( OPTION_COUNT, MENU_TYPE_ICON, PSTR( STR_SETTINGSMENU ) );  // 设置当前菜单界面信息
     setMenuFuncs( MENUFUNC_NEXT, mSelect, MENUFUNC_PREV, itemLoader );      // 设定按键切换，当前界面加载项
     setPrevMenuOpen( &prevMenuData, mSettingsOpen );                        // 保存上一层菜单的打开功能函数

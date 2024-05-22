@@ -193,90 +193,85 @@
         <Ww>
           <count>7</count>
           <WinNumber>1</WinNumber>
-          <ItemText>menuData</ItemText>
+          <ItemText>Task_Delay</ItemText>
         </Ww>
         <Ww>
           <count>8</count>
           <WinNumber>1</WinNumber>
-          <ItemText>Task_Delay</ItemText>
+          <ItemText>DHT11_update,0x0A</ItemText>
         </Ww>
         <Ww>
           <count>9</count>
           <WinNumber>1</WinNumber>
-          <ItemText>DHT11_update,0x0A</ItemText>
+          <ItemText>DHT11_run</ItemText>
         </Ww>
         <Ww>
           <count>10</count>
           <WinNumber>1</WinNumber>
-          <ItemText>DHT11_run</ItemText>
+          <ItemText>setting</ItemText>
         </Ww>
         <Ww>
           <count>11</count>
           <WinNumber>1</WinNumber>
-          <ItemText>setting</ItemText>
+          <ItemText>menu_draw</ItemText>
         </Ww>
         <Ww>
           <count>12</count>
           <WinNumber>1</WinNumber>
-          <ItemText>menu_draw</ItemText>
+          <ItemText>menuData.prevMenu</ItemText>
         </Ww>
         <Ww>
           <count>13</count>
           <WinNumber>1</WinNumber>
-          <ItemText>menuData.prevMenu</ItemText>
+          <ItemText>display_setDrawFunc</ItemText>
         </Ww>
         <Ww>
           <count>14</count>
           <WinNumber>1</WinNumber>
-          <ItemText>display_setDrawFunc</ItemText>
+          <ItemText>operation</ItemText>
         </Ww>
         <Ww>
           <count>15</count>
           <WinNumber>1</WinNumber>
-          <ItemText>operation</ItemText>
+          <ItemText>prevMenuData</ItemText>
         </Ww>
         <Ww>
           <count>16</count>
           <WinNumber>1</WinNumber>
-          <ItemText>prevMenuData</ItemText>
+          <ItemText>isPressed</ItemText>
         </Ww>
         <Ww>
           <count>17</count>
           <WinNumber>1</WinNumber>
-          <ItemText>isPressed</ItemText>
+          <ItemText>buttons</ItemText>
         </Ww>
         <Ww>
           <count>18</count>
           <WinNumber>1</WinNumber>
-          <ItemText>buttons</ItemText>
+          <ItemText>appConfig,0x0A</ItemText>
         </Ww>
         <Ww>
           <count>19</count>
           <WinNumber>1</WinNumber>
-          <ItemText>appConfig,0x0A</ItemText>
+          <ItemText>animationStatus,0x0A</ItemText>
         </Ww>
         <Ww>
           <count>20</count>
           <WinNumber>1</WinNumber>
-          <ItemText>animationStatus,0x0A</ItemText>
+          <ItemText>drawFunc</ItemText>
         </Ww>
         <Ww>
           <count>21</count>
           <WinNumber>1</WinNumber>
-          <ItemText>drawFunc</ItemText>
+          <ItemText>cactus_x,0x0A</ItemText>
         </Ww>
         <Ww>
           <count>22</count>
           <WinNumber>1</WinNumber>
-          <ItemText>cactus_x,0x0A</ItemText>
-        </Ww>
-        <Ww>
-          <count>23</count>
-          <WinNumber>1</WinNumber>
           <ItemText>prevMenuData</ItemText>
         </Ww>
         <Ww>
-          <count>24</count>
+          <count>23</count>
           <WinNumber>1</WinNumber>
           <ItemText>menuData</ItemText>
         </Ww>

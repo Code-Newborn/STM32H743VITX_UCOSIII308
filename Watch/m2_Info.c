@@ -1,8 +1,5 @@
 #include "common.h"
 
-#define OPTION_COUNT 10
-
-#define IDX_MAX 20  // 文本行数量
 
 static byte idx = 0;
 
@@ -12,46 +9,58 @@ static bool      down( void );
 static bool      up( void );
 static bool      select( void );
 static display_t draw( void );
-// static void      itemLoader( byte );
+
+// 信息文本行数
+uint16_t rows = 0;
+// 信息文本内容
+char*    infos_str[] = {
+    "version1.0", "User: ChenZ Zhao", "version3.0",  "version4.0",  "version5.0",  "version6.0",  "version7.0",  "version8.0",
+    "version9.0", "version10.0",      "version11.0", "version12.0", "version13.0", "version14.0", "version15.0", "version16.0",
+};
 
 
 void mInfoOpen() {
-    // menuData.func.draw = draw;
-    display_setDrawFunc( draw );           // 设置绘图功能函数
-    buttons_setFuncs( down, select, up );  // 绑定按键功能，重置、启停、退出
 
-    setPrevMenuOpen( &prevMenuData, mInfoOpen );
+    rows = sizeof( infos_str ) / sizeof( infos_str[ 0 ] );
 
-    animation_start( NULL, ANIM_MOVE_ON );  // 打开动画动画过度
+    menuData.scroll      = 0;
+    menuData.selected    = MAX_MENU_ITEMS - 1;
+    menuData.optionCount = rows;
+    menuData.title       = STR_INFOSMENU;
+
+    display_setDrawFunc( draw );           // 屏幕绘制
+    buttons_setFuncs( down, select, up );  // 按键函数注册
 }
 
-// static void itemLoader( byte num ) {
-//     UNUSED( num );
-//     showAlarmStr( num, &alarm2 );  // 遍历打印
-//     addBackOption();
-// }
-
 static bool down() {
-    idx--;
-    if ( idx == 255 )
-        idx = 1;
+    menuData.selected++;
+    if ( menuData.selected >= menuData.optionCount )
+        menuData.selected = MAX_MENU_ITEMS - 1;
 }
 
 static bool up() {
-    idx++;
-    if ( idx == IDX_MAX )
-        idx = 0;
+    menuData.selected--;
+    if ( menuData.selected <= MAX_MENU_ITEMS - 2 )
+        menuData.selected = menuData.optionCount - 1;
 }
 
 static display_t draw() {
-    draw_bitmap( 48, 20, close32x16, FONT_CLOSE_WIDTH, FONT_CLOSE_HEIGHT, NOINVERT, 0 );
 
-    return DISPLAY_DONE;
+    // 绘制标题
+    char buff[ BUFFSIZE_STR_MENU ];
+    memset( buff, ' ', sizeof( buff ) );
+    strcpy( ( buff + ( 9 - ( strlen( STR_INFOSMENU ) / 2 ) ) ), STR_INFOSMENU );
+    draw_string( buff, false, 0, 0 );
+
+
+    // 绘制显示的文本行
+    for ( size_t i = 0; i < MAX_MENU_ITEMS; i++ ) {
+        draw_string( infos_str[ menuData.selected - i ], false, 0, 8 + ( MAX_MENU_ITEMS - 1 - i ) * 8 );  // 当前选择光标
+    }
+
+    return DISPLAY_BUSY;  // 返回屏幕刷新忙
 }
 
 static bool select() {
-    animation_start( back, ANIM_MOVE_OFF );
-    prevMenuData.lastSelected = 0;                  // Reset selected item
-    menuData.prevMenu         = prevMenuData.last;  //
-    return true;
+    animation_start( back, ANIM_MOVE_OFF );  // 返回
 }
