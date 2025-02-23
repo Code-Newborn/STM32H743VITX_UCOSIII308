@@ -26,10 +26,13 @@ static display_t thisDraw( void );
 
 void mDisplayOpen() {
     // setMenuOptions();//找到动画移除bug了
-    menuData.func.draw = thisDraw;
+
 
     setMenuInfo( OPTION_COUNT, MENU_TYPE_ICON, PSTR( STR_DISPLAYMENU ) );
+
+    menuData.func.draw = thisDraw;  // 必须放在setMenuInfo后，因为其对按键功能进行了清除
     setMenuFuncs( MENUFUNC_NEXT, mSelect, MENUFUNC_PREV, itemLoader );
+
 
     setPrevMenuOpen( &prevMenuData, mDisplayOpen );
     animation_start( NULL, ANIM_MOVE_ON );
@@ -76,7 +79,8 @@ static void setRotate() {
     if ( rotate ) {
         WriteCmd( 0xA1 );
         WriteCmd( 0XC8 );
-    } else {
+    }
+    else {
         WriteCmd( 0xA0 );
         WriteCmd( 0xC0 );
     }
@@ -95,7 +99,7 @@ static void setAnimations() {
 extern byte MY_FPS;
 
 static void setFPS() {
-    byte fps = MY_FPS / 2;
+    byte fps = MY_FPS / 2;  // 增量2
     fps++;
     if ( fps > 30 )
         fps = 10;
@@ -105,8 +109,8 @@ static void setFPS() {
 static display_t thisDraw() {
     if ( menuData.selected == 4 ) {
         char buff[ 4 ];
-        sprintf_P( buff, PSTR( "%hhuS" ), ( unsigned char )MY_FPS );  // 菜单项上绘制字符串
-        draw_string( buff, NOINVERT, 56, 40 );
+        sprintf_P( buff, PSTR( "%hhu" ), ( unsigned char )MY_FPS );  // 菜单项上绘制字符串
+        draw_string( buff, NOINVERT, 58, 36 );
     }
     return DISPLAY_DONE;
 }

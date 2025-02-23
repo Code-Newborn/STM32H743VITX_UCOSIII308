@@ -599,6 +599,11 @@
           <GroupName>NWatch</GroupName>
           <Files>
             <File>
+              <FileName>m_main.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Watch\m_main.c</FilePath>
+            </File>
+            <File>
               <FileName>m1_alarms.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Watch\m1_alarms.c</FilePath>
@@ -679,14 +684,14 @@
               <FilePath>..\Watch\m2_display.c</FilePath>
             </File>
             <File>
+              <FileName>m2_Info.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Watch\m2_Info.c</FilePath>
+            </File>
+            <File>
               <FileName>ui.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Watch\ui.c</FilePath>
-            </File>
-            <File>
-              <FileName>m_main.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Watch\m_main.c</FilePath>
             </File>
             <File>
               <FileName>menu.c</FileName>
@@ -762,11 +767,6 @@
               <FileName>tunes.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Watch\tunes.c</FilePath>
-            </File>
-            <File>
-              <FileName>m2_Info.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Watch\m2_Info.c</FilePath>
             </File>
           </Files>
         </Group>
