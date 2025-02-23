@@ -7,8 +7,8 @@
  */
 
 #include "common.h"
-#include "delay.h"
-#include "sys.h"
+#include "delay/delay.h"
+#include "sys/sys.h"
 #include "usart.h"
 
 static const int faces[ 6 ][ 4 ] = { { 0, 1, 2, 3 }, { 1, 5, 6, 2 }, { 5, 4, 7, 6 }, { 4, 0, 3, 7 }, { 0, 4, 5, 1 }, { 3, 2, 6, 7 } };

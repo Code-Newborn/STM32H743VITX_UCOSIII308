@@ -1,5 +1,5 @@
 #include "DHT11.h"
-#include "delay.h"
+#include "delay/delay.h"
 #include "gpio.h"
 #include "main.h"
 

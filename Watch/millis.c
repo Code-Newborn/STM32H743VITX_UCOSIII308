@@ -7,7 +7,7 @@
  */
 
 #include "common.h"
-#include "sys.h"
+#include "sys/sys.h"
 // #include "misc.h"
 
 // 时基心跳获取

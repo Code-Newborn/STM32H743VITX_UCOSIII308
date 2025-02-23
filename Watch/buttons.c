@@ -8,7 +8,7 @@
 #include "buttons.h"
 
 #include "common.h"
-#include "sys.h"
+#include "sys/sys.h"
 // #include "yaogan.h"
 
 #define BTN_IS_PRESSED  4

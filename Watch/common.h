@@ -73,14 +73,7 @@
 // #include "discos.h"
 #include "DHT11/DHT11.h"
 #include "LED/led.h"
-#include "OLED/OLED_SSD1306.h"
-#include "mpu/eMPL/inv_mpu.h"
-#include "mpu/eMPL/inv_mpu_dmp_motion_driver.h"
-#include "mpu/mpu6050.h"
-#include "mpu/mpu_task.h"
-#include "mpu/mpuiic.h"
-#include "oledlib/draw_api.h"
-#include "oledlib/oled_driver.h"
+#include "OLED096/OLED.h"
 #include "resources.h"
 
 extern byte OLED_GRAM[ 512 ];

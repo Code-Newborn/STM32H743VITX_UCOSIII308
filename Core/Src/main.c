@@ -26,8 +26,8 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "delay.h"
-#include "sys.h"
+#include "delay/delay.h"
+#include "sys/sys.h"
 // #include "OLED_SSD1306_BMP.h"
 #include "common.h"
 
@@ -271,6 +271,7 @@ void c_setup() {
 
     appconfig_init();  // 初始化配置
     loadFlip();        // 屏幕是否翻转
+
 
     // led_init();  // 初始化LED
     // buzzer_init(); // 初始化蜂鸣器

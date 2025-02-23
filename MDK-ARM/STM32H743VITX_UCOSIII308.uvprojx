@@ -339,7 +339,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32H743xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../SYSTEM/sys;../SYSTEM/delay;../Drivers/STM32H7xx_HAL_Driver/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32H7xx/Include;../Drivers/CMSIS/Include;../Watch;..\HARDWARE</IncludePath>
+              <IncludePath>../Core/Inc;../SYSTEM;../Drivers/STM32H7xx_HAL_Driver/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32H7xx/Include;../Drivers/CMSIS/Include;../Watch;..\HARDWARE</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -449,11 +449,6 @@
           <GroupName>HARDWARE</GroupName>
           <Files>
             <File>
-              <FileName>OLED_SSD1306.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\HARDWARE\OLED\OLED_SSD1306.c</FilePath>
-            </File>
-            <File>
               <FileName>DHT11.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\HARDWARE\DHT11\DHT11.c</FilePath>
@@ -464,9 +459,14 @@
               <FilePath>..\HARDWARE\BEEP\beep.c</FilePath>
             </File>
             <File>
-              <FileName>ESP8266.c</FileName>
+              <FileName>OLED.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\HARDWARE\WIFI\ESP8266.c</FilePath>
+              <FilePath>..\HARDWARE\OLED096\OLED.c</FilePath>
+            </File>
+            <File>
+              <FileName>SSD1306_Driver.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\OLED096\SSD1306_Driver.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -767,66 +767,6 @@
               <FileName>m2_Info.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Watch\m2_Info.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>OLEDLib</GroupName>
-          <Files>
-            <File>
-              <FileName>oled_basic.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\HARDWARE\oledlib\oled_basic.c</FilePath>
-            </File>
-            <File>
-              <FileName>oled_bmp.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\HARDWARE\oledlib\oled_bmp.c</FilePath>
-            </File>
-            <File>
-              <FileName>oled_buffer.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\HARDWARE\oledlib\oled_buffer.c</FilePath>
-            </File>
-            <File>
-              <FileName>oled_color.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\HARDWARE\oledlib\oled_color.c</FilePath>
-            </File>
-            <File>
-              <FileName>oled_config.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\HARDWARE\oledlib\oled_config.c</FilePath>
-            </File>
-            <File>
-              <FileName>oled_debug.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\HARDWARE\oledlib\oled_debug.c</FilePath>
-            </File>
-            <File>
-              <FileName>oled_draw.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\HARDWARE\oledlib\oled_draw.c</FilePath>
-            </File>
-            <File>
-              <FileName>oled_draw_ex_example.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\HARDWARE\oledlib\oled_draw_ex_example.c</FilePath>
-            </File>
-            <File>
-              <FileName>oled_driver.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\HARDWARE\oledlib\oled_driver.c</FilePath>
-            </File>
-            <File>
-              <FileName>oled_font.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\HARDWARE\oledlib\oled_font.c</FilePath>
-            </File>
-            <File>
-              <FileName>test.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\HARDWARE\oledlib\test.c</FilePath>
             </File>
           </Files>
         </Group>

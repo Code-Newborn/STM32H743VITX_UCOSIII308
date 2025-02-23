@@ -29,7 +29,7 @@ extern void eeprom_write_word (uint16_t *addr, uint16_t val);//向指定地址�
 
 #define EEPROM_CHECK_NUM 0xFF  // Any 8 bit number that isn't 0 or 255
 
-#define eepCheck_SAVE_ADDR 0X080E0000  // 设置FLASH 保存地址(必须为偶数，且所在扇区,要大于本代码所占用到的扇区.
+#define eepCheck_SAVE_ADDR  0X080E0000  // 设置FLASH 保存地址(必须为偶数，且所在扇区,要大于本代码所占用到的扇区.
 // 否则,写操作的时候,可能会导致擦除整个扇区,从而引起部分程序丢失.引起死机.
 #define appConfig_SAVE_ADDR eepCheck_SAVE_ADDR + 16  // 设置FLASH 保存地址(必须为偶数，且所在扇区,要大于本代码所占用到的扇区.
 // 否则,写操作的时候,可能会导致擦除整个扇区,从而引起部分程序丢失.引起死机.
@@ -54,25 +54,9 @@ appconfig_s appConfig;  // appconfig_s的长度为8
 
 void appconfig_init() {
 
-    //	 STMFLASH_Read(eepCheck_SAVE_ADDR,(u32*)(&eepCheck),LENTH(byte));
-    ////   appConfig = (appconfig_s *) malloc(sizeof(appconfig_s));
-    //	     memset(&appConfig, 0x00, LENTH(appconfig_s));
-
-    //
-    //
-    //	 if(eepCheck == EEPROM_CHECK_NUM)
-    //
-    //		 STMFLASH_Read(appConfig_SAVE_ADDR,(u32*)(&appConfig),LENTH(appconfig_s));
-    //	else
-    //	{
-    //    eepCheck = EEPROM_CHECK_NUM;
-    //		STMFLASH_Write(eepCheck_SAVE_ADDR,(u32*)(&eepCheck),LENTH(byte));
+    // 或者读取EEPROM中的配置
 
     appconfig_reset();
-    //	}
-
-    //	if(appConfig.sleepTimeout > 12)
-    //		appConfig.sleepTimeout = 0;
 }
 
 void appconfig_save() {
@@ -86,7 +70,7 @@ void appconfig_reset() {
 #if COMPILE_ANIMATIONS
     appConfig.animations = true;
 #endif
-    appConfig.display180 = false;
+    appConfig.display180 = false;  // 顺时针旋转180°
     appConfig.CTRL_LEDs  = false;
     appConfig.showFPS    = false;
     appConfig.timeMode   = TIMEMODE_24HR;
