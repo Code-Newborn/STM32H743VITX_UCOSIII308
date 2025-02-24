@@ -45,6 +45,7 @@ static bool btnExit( void ) {
 
 #define SHOW_POS_X 25
 #define SHOW_POS_Y 20
+
 static display_t thisdraw() {
 
     if ( DHT11_run )  // 状态指示

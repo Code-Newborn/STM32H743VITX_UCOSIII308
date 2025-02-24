@@ -41,8 +41,8 @@ Type_color GetDrawColor( void );
 void SetPointBuffer( int x, int y, int value );
 
 void loadFlip( void );                 // 屏幕是否翻转
-void LCD_FillAll( Type_color color );  // 清屏(指定颜色)
-void LCD_Flush( void );                // 屏幕刷新
+void OLED_FillAll( Type_color color );  // 清屏(指定颜色)
+void OLED_Flush( void );                // 屏幕刷新
 
 
 #endif

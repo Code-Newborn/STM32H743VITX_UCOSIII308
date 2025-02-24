@@ -156,5 +156,5 @@ void draw_clearArea( byte x, byte y, byte w ) {
 }
 
 void draw_end() {
-    LCD_Flush();  // 刷新屏幕的意思
+    OLED_Flush();  // 刷新屏幕的意思
 }

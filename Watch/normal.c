@@ -24,15 +24,28 @@ typedef struct {
     bool        moving;
 } tickerData_t;
 
+// ==================== 1【表盘界面】专用函数 ====================
 static display_t draw( void );
 static void      drawDate( void );
+static display_t ticker( void );
+static void      drawTickerNum( tickerData_t* );
+static bool mpu_show( void );
+static bool wifi_show( void );
+
+// ==================== 2【表盘界面】可选功能 ====================
 #if COMPILE_ANIMATIONS
 static bool animateIcon( bool, byte* );
 #endif
-static display_t ticker( void );
-static void      drawTickerNum( tickerData_t* );
 
-// 在主界面进入mpu界面
+
+
+// ==================== 3【表盘界面】加载 ====================
+void watchface_normal() {
+    display_setDrawFunc( draw );                           // 注册绘制函数
+    buttons_setFuncs( mpu_show, menu_select, wifi_show );  // 注册进入菜单函数 不同按键进入不同主菜单，已注释其中两个
+    animation_start( NULL, ANIM_MOVE_ON );                 // 设置打开过渡动画，（不执行函数）
+}
+
 static bool mpu_show( void ) {
     // beginAnimation(mpu_open);
     return true;
@@ -42,13 +55,7 @@ static bool wifi_show( void ) {
     return true;
 }
 
-// 表盘界面
-void watchface_normal() {
-    display_setDrawFunc( draw );                           // 注册绘制函数
-    buttons_setFuncs( mpu_show, menu_select, wifi_show );  // 注册进入菜单函数 不同按键进入不同主菜单，已注释其中两个
-    animation_start( NULL, ANIM_MOVE_ON );                 // 设置打开过渡动画，（不执行函数）
-}
-
+// ==================== 4【表盘界面】绘制 ====================
 static display_t draw() {
 #if COMPILE_ANIMATIONS
     static byte usbImagePos_y    = FRAME_HEIGHT;
@@ -105,29 +112,6 @@ static display_t draw() {
     }
 #endif
 
-    // Draw next alarm
-    //	alarm_s nextAlarm;
-    //	if(alarm_getNext(&nextAlarm))
-    //	{
-    //		time_s alarmTime;
-    //		alarmTime.hour = nextAlarm.hour;
-    //		alarmTime.mins = nextAlarm.min;
-    //		alarmTime.ampm = CHAR_24;
-    ////		time_timeMode(&alarmTime, appConfig.timeMode);TIMEMODE_24HR
-    //		time_timeMode(&alarmTime, TIMEMODE_24HR);
-
-    //
-    //		char buff[9];
-    //		sprintf_P(buff, PSTR("%02hhu:%02hhu%c"), alarmTime.hour, alarmTime.mins, alarmTime.ampm);
-    //		draw_string(buff, false, x, FRAME_HEIGHT - 8);
-
-    //		x += (alarmTime.ampm == CHAR_24) ? 35 : 42;
-    //	//	draw_bitmap(x, FRAME_HEIGHT - 8, dowImg[alarm_getNextDay()], 8, 8, NOINVERT, 0);
-    //				draw_bitmap(x, FRAME_HEIGHT - 8, dowImg[1], 8, 8, NOINVERT, 0);
-
-    ////		x += 9;
-    //	}
-
     return busy;
 }
 
@@ -146,6 +130,7 @@ static void drawDate() {
     draw_string( buff, false, 12, 0 );
 }
 
+// 【表盘界面】中小图标绘制
 #if COMPILE_ANIMATIONS
 static bool animateIcon( bool active, byte* pos ) {
     byte y = *pos;
@@ -161,7 +146,7 @@ static bool animateIcon( bool active, byte* pos ) {
 }
 #endif
 
-// 手表滴答显示
+// 时间显示
 static display_t ticker() {
     static byte yPos;       // 时、分数字刷新相对位置
     static byte yPos_secs;  // 秒数字刷新相对位置
@@ -226,7 +211,8 @@ static display_t ticker() {
                 memset( moving2, 0x00, sizeof( moving2 ) );  // 清空时分秒变化记录
             }
         }
-    } else
+    }
+    else
 #endif
     {
         yPos      = 0;
@@ -324,30 +310,3 @@ static void drawTickerNum( tickerData_t* data ) {
         draw_bitmap( x, y, &data->bitmap[ prev * arraySize ], data->w, data->h, NOINVERT, yPos );
     }
 }
-/*
-static void drawTickerNum(byte x, byte y, byte val, byte maxValue, bool moving, const byte* font, byte w, byte h, byte yPos)
-{
-    byte arraySize = (w * h) / 8;
-    if(yPos == 255)
-        yPos = 0;
-
-    s_image img = newImage(x, y, &font[val * arraySize], w, h, WHITE, false, 0);
-    draw_bitmap_set(&img);
-
-    if(!moving || yPos == 0)
-    {
-        draw_bitmap_s2(&img);
-        return;
-    }
-
-    byte prev = val - 1;
-    if(prev == 255)
-        prev = maxValue;
-
-    img.offsetY = yPos - h - TICKER_GAP;
-    draw_bitmap_s2(&img);
-
-    img.offsetY = yPos;
-    img.bitmap = &font[prev * arraySize];
-    draw_bitmap_s2(&img);
-}*/

@@ -133,7 +133,7 @@ void SetPointBuffer( int x, int y, int value ) {
 
 // 清屏函数
 // color:要清屏的填充色
-void LCD_FillAll( Type_color color ) {
+void OLED_FillAll( Type_color color ) {
     if ( color == pix_black ) {
         memset( ScreenBuffer, 0x00, sizeof( ScreenBuffer ) );
     }
@@ -142,7 +142,7 @@ void LCD_FillAll( Type_color color ) {
     }
 }
 
-void LCD_Flush( void ) {
+void OLED_Flush( void ) {
     uint8_t* p;
     p = oledBuffer;
 

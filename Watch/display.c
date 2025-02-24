@@ -78,9 +78,9 @@ void display_update() {
     // Update animations
     animation_update();  // 动画更新
 
-    // 界面绘制
+
     if ( drawFunc != NULL && ( crt_anim.active || ( !crt_anim.active && !crt_anim.closing ) ) )
-        busy = drawFunc();
+        busy = drawFunc(); // 界面内容绘制
 
     // 关屏动画
     if ( crt_anim.active )
@@ -101,8 +101,8 @@ void display_update() {
         sprintf_P( buff, PSTR( "%u" ), ( uint )( 1000 / fpsms ) );  // 帧率显示
         draw_string( buff, false, 100, 56 );
     }
-    // 结束绘制，发送至OLED
-    draw_end();
+
+    draw_end(); // 结束绘制，发送至OLED
 
     // Decide framerate
     if ( busy == DISPLAY_DONE ) {

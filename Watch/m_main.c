@@ -12,7 +12,7 @@
 
 static prev_menu_s prevMenuData;
 
-// 主菜单配置函数
+// ==================== 1【主菜单界面】专用函数 ====================
 static void mOpen( void );
 static void mSelect( void );
 static void itemLoader( byte );
@@ -41,15 +41,16 @@ static uint8_t getItemCount() {
     return cnt;
 }
 
+// ==================== 3【主菜单界面】加载 ====================
 void mMainOpen() {                                // INFO 打开主菜单
-    buttons_setFuncs( NULL, menu_select, NULL );  // 为按键注册函数
+    // buttons_setFuncs( NULL, menu_select, NULL );  // 为按键注册函数
     animation_start( mOpen, ANIM_MOVE_OFF );      // 设置动画初始状态，并执行注册的函数
 }
 
-// 打开主菜单界面
+// ==================== 【主菜单界面】设置，切换动画执行完后执行 ====================
 static void mOpen() {
-    display_setDrawFunc( menu_draw );                     // 注册绘制函数 menu_draw
-    buttons_setFuncs( menu_up, menu_select, menu_down );  // 注册按键功能函数
+    display_setDrawFunc( menu_draw );                     // NOTE 主菜单绘制函数menu_draw （注册绘制函数）
+    buttons_setFuncs( menu_up, menu_select, menu_down );  // NOTE 按键功能函数 （注册功能函数）
 
     setMenuInfo( OPTION_COUNT, MENU_TYPE_ICON, PSTR( STR_MAINMENU ) );  // 获取当前菜单项的信息（选项个数，菜单显示模式是文字还是图标）
     setMenuFuncs( MENUFUNC_NEXT, mSelect, MENUFUNC_PREV, itemLoader );  // 绑定当前菜单项的函数，如前进、后退、选择确认

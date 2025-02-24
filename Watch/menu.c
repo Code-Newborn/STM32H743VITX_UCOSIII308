@@ -6,9 +6,10 @@
  * Web: http://blog.zakkemble.co.uk/diy-digital-wristwatch/
  */
 
-#include "stdio.h"
+#include <stdio.h>
 #include "string.h"
 #include "common.h"
+#include <math.h>
 
 typedef enum {
     OPERATION_DRAWICON,       // 画图标操作
@@ -38,16 +39,14 @@ static void      clear( void );
 
 // 主菜单选择界面
 bool menu_select() {
-    if ( !animation_active() || animation_movingOn() ) {
-        // 第一次进入主菜单函数，执行mMainOpen();打开主菜单
-        if ( !menuData.isOpen ) {
-            menuData.isOpen = true;
-            mMainOpen();
-        } else if ( menuData.func.btn2 != NULL )  // 打开后再次按下确认功能
-        {
-            menuData.func.btn2();
-        }
+
+    if ( !menuData.isOpen ) {  // 进入主菜单
+        menuData.isOpen = true;
+        mMainOpen();  // 打开主菜单
     }
+    else  // 进入二级菜单或更深层菜单时
+        doBtn( menuData.func.btn2 );
+
     return true;
 }
 
@@ -133,7 +132,8 @@ static display_t menu_drawIcon() {
                 animX = x;
             else
                 busy = DISPLAY_BUSY;
-        } else if ( x < animX ) {
+        }
+        else if ( x < animX ) {
             speed = ( ( animX - x ) / 4 ) + 1;
             if ( speed > 16 )
                 speed = 16;
@@ -143,7 +143,8 @@ static display_t menu_drawIcon() {
             else
                 busy = DISPLAY_BUSY;
         }
-    } else
+    }
+    else
 #endif
         animX = x;
 
@@ -175,14 +176,15 @@ void setMenuOption_P( byte num, const char* name, const byte* icon, menu_f actio
     setMenuOption( num, buff, icon, actionFunc );  // 设置菜单内选项信息
 }
 
-#include <math.h>
+
 void setMenuOption( byte num, const char* name, const byte* icon, menu_f actionFunc ) {
     if ( num != operation.id )
         return;
 
     switch ( operation.op ) {
-    case OPERATION_DRAWICON: {
-        byte a = operation.data;
+    case OPERATION_DRAWICON:
+    {
+        byte  a = operation.data;
         // if(a > FRAME_WIDTH)
         //	a -= (FRAME_WIDTH+32);
         float x = ( ( a / ( float )( FRAME_WIDTH - 32 ) ) * ( M_PI / 2 ) ) + ( M_PI / 4 );

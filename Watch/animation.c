@@ -19,9 +19,9 @@ void animation_init() {
     animationStatus.animOnComplete = NULL;
 }
 
-// 与菜单切换动画状态相关
+// 菜单切换动画过程
 void animation_update() {
-    if ( animationStatus.active ) {  // 切换动画被激活
+    if ( animationStatus.active ) {  // 切换动画已激活
         byte offsetY = animationStatus.offsetY;
 
         // 由上往下↓↓↓
@@ -36,10 +36,11 @@ void animation_update() {
                 offsetY += 8;
 
             if ( offsetY >= FRAME_HEIGHT ) {
-                animationStatus.active = false;
+                animationStatus.active = false;  // 切换动画结束
                 offsetY                = 0;
             }
-        } else {
+        }
+        else {
             if ( offsetY > 255 - 4 )
                 offsetY += 1;
             else if ( offsetY > 255 - 8 )
@@ -49,15 +50,15 @@ void animation_update() {
             else
                 offsetY += 8;
 
-            if ( offsetY < 10 ) {  // 超限循环 256==0
-                animationStatus.active = false;
+            if ( offsetY < 10 ) {
+                animationStatus.active = false;  // 切换动画结束
                 offsetY                = 0;
             }
         }
 
         animationStatus.offsetY = offsetY;
         if ( !animationStatus.active && animationStatus.animOnComplete != NULL ) {
-            animationStatus.animOnComplete();  // 执行结尾函数后清除
+            animationStatus.animOnComplete();  // 切换动画执行完
             animationStatus.animOnComplete = NULL;
         }
     }
@@ -67,12 +68,13 @@ void animation_update() {
 // 参数：animOnComplete ，函数指针指向函数，动画过程中要执行的函数
 // goingOffScreen  未知？？？？
 void animation_start( void ( *animOnComplete )( void ), bool goingOffScreen ) {
-    if ( appConfig.animations ) {                                   // 设置有动画
-        animationStatus.active         = true;                      // 动画状态
+    if ( appConfig.animations ) {                                   // 若启用动画
+        animationStatus.active         = true;                      // 设置动画激活
         animationStatus.offsetY        = goingOffScreen ? 0 : 192;  // 竖直偏移 64*3=192
         animationStatus.animOnComplete = animOnComplete;            // 结束后显示函数
         animationStatus.goingOffScreen = goingOffScreen;            // 移出画面
-    } else {
+    }
+    else {
         if ( animOnComplete != NULL )
             animOnComplete();
     }

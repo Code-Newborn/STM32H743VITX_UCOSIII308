@@ -238,16 +238,3 @@ static void getRtcTime() {
     // Convert to correct time mode
     time_timeMode( &timeDate.time, appConfig.timeMode );
 }
-
-// #if RTC_SRC == RTC_SRC_INTERNAL
-// ISR(TIMER2_OVF_vect)
-// #else
-// #ifdef __AVR_ATmega32U4__
-// ISR(INT3_vect)
-// #else
-// ISR(INT0_vect)
-// #endif
-// #endif
-//{
-//	update = true;
-// }

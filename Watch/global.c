@@ -11,39 +11,7 @@
 // static time_s chargeFinishTime;
 
 void global_init() {
-    // 初始化引脚之类的，暂且认为是做一些初始化过程
 
-    //	pinPullup(CHRG_P, PU_EN);
-
-    //	// Pin change interrupt on USB power sense pin
-    // #ifdef __AVR_ATmega32U4__
-    //// none ?
-    // #elif HW_VERSION == 1
-    //	PCICR |= _BV(PCIE0);
-    //	PCMSK0 |= _BV(PCINT6);
-    // #elif HW_VERSION == 2
-    //	PCICR |= _BV(PCIE0);
-    //	PCMSK0 |= _BV(PCINT7);
-    // #else
-    //	PCICR |= _BV(PCIE2);
-    //	PCMSK2 |= _BV(PCINT19);
-    // #endif
-
-    ////#warning "remove me!"
-    ////	pinPullup(USB_SENSE_P, PU_EN);
-
-    //	// Unused pins
-    // #ifdef __AVR_ATmega32U4__
-    ////  pinPullup(D5, PU_EN);
-    ////  pinPullup(E2, PU_EN);
-    ////  pinPullup(F7, PU_EN);
-    // #elif HW_VERSION == 3
-    //	pinPullup(B6, PU_EN);
-    //	pinPullup(B7, PU_EN);
-    // #else
-    //	pinPullup(D3, PU_EN);
-    //	pinPullup(D4, PU_EN);
-    // #endif
 }
 
 void global_update() {
