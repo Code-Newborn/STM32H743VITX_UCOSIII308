@@ -29,8 +29,6 @@
 static prev_menu_s prevMenuData;
 static alarm_s     alarm;  // Data for the alarm we are currently editing
 
-static void      mSelect( void );
-static void      itemLoader( byte );
 static void      selectAlarm( void );
 static display_t alarmsDraw( void );
 static void      alarmsDown( void );
@@ -39,6 +37,13 @@ static byte      getMaxValForSetting( void );
 static void      showAlarmStr( byte, alarm_s* );
 static void      makeAlarmStr( char*, alarm_s* );
 
+// ==================== 1 【闹钟界面】 按键函数 ====================
+static void mSelect( void );
+
+// ==================== 2 【闹钟界面】 内容构建 ====================
+static void itemLoader( byte );
+
+// ==================== 3 【闹钟界面】 打开加载 ====================
 void mAlarmsOpen() {
     setMenuInfo( OPTION_COUNT, MENU_TYPE_STR, PSTR( STR_ALARMSMENU ) );
     setMenuFuncs( MENUFUNC_NEXT, mSelect, MENUFUNC_PREV, itemLoader );
@@ -93,7 +98,8 @@ static void selectAlarm() {
         wasPM = ( alarm.hour >= 12 );
 
         break;
-    case SETTING_NOW_HOUR: {
+    case SETTING_NOW_HOUR:
+    {
         byte hour = setting.val;
         byte max  = appConfig.timeMode == TIMEMODE_12HR ? 12 : 23;
         if ( hour > max )
@@ -117,13 +123,15 @@ static void selectAlarm() {
         if ( appConfig.timeMode == TIMEMODE_12HR ) {
             setting.now = SETTING_NOW_AMPM;
             setting.val = wasPM;
-        } else {
+        }
+        else {
             setting.now = SETTING_NOW_DAY_MON;
             setting.val = alarm.mon;
         }
         dayBit = 0;
         break;
-    case SETTING_NOW_AMPM: {
+    case SETTING_NOW_AMPM:
+    {
         time_s time;
         time.hour = alarm.hour;
         time.ampm = setting.val ? CHAR_PM : CHAR_AM;
@@ -187,7 +195,8 @@ static display_t alarmsDraw() {
     case SETTING_NOW_DAY_THUR:
     case SETTING_NOW_DAY_FRI:
     case SETTING_NOW_DAY_SAT:
-    case SETTING_NOW_DAY_SUN: {
+    case SETTING_NOW_DAY_SUN:
+    {
         byte dow  = setting.now - SETTING_NOW_DAY_MON;
         x         = 70 + ( 7 * dow );
         buff[ 0 ] = setting.val ? dowChars[ dow ] : '-';

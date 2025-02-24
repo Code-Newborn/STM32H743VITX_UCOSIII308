@@ -10,11 +10,15 @@
 #if COMPILE_TORCH
 
 static uint strobe;
+static bool btnFlashRate( void );
 
-static bool      btnExit( void );
-static bool      btnFlashRate( void );
+// ==================== 1 【手电筒菜单界面】 按键函数 ====================
+static bool btnExit( void );
+
+// ==================== 2 【手电筒菜单界面】 绘制 ====================
 static display_t draw( void );
 
+// ==================== 3 【手电筒菜单界面】 打开加载 ====================
 void torch_open() {
     // menu_close();  里面有打开动画，需要在下面再添加一下
 
@@ -40,6 +44,7 @@ static bool btnFlashRate() {
     return true;
 }
 
+// ==================== 2 【音乐菜单界面】 直接绘制 ====================
 static display_t draw() {
     static bool     invert;
     static millis_t lastStrobe;

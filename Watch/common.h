@@ -14,23 +14,18 @@
 #include <stdlib.h>
 #include <string.h>
 
+// ==================== 基础设置 ====================
 #include "config.h"
 #include "debug.h"
 #include "typedefs.h"
 #include "util.h"
-
-// #include "wdt.h"
-// #include "spi.h"
-// #include "i2c.h"
-// #include "m_rtc.h"
-// #include "adc.h"
-// #include "oled.h"
 #include "buttons.h"
-// #include "battery.h"
-// #include "buzzer.h"
-// #include "led.h"
-// #include "ds3231.h"
-#include "functions.h"
+
+// ==================== 表盘 ====================
+#include "normal.h"
+
+// ==================== 菜单页 ====================
+#include "m_main.h"
 #include "m1_alarms.h"
 #include "m1_games.h"
 #include "m1_settings.h"
@@ -47,22 +42,20 @@
 #include "m2_sleep.h"
 #include "m2_sound.h"
 #include "m2_timedate.h"
-#include "m_main.h"
-#include "millis.h"
-#include "normal.h"
-// #include "lowbatt.h"
 #include "m1_tunemaker.h"
 #include "ui.h"
-// #include "screenshot.h"    //输出oledbuff里面的数据
 
-// #include "system.h"
+// ==================== 功能配置 ====================
 #include "time.h"
 #include "alarm.h"
 #include "appconfig.h"
 #include "display.h"
 #include "global.h"
 #include "pwrmgr.h"
-// #include "disco.h"
+#include "millis.h"
+#include "functions.h"
+
+// ==================== 界面元素 ====================
 #include "animation.h"
 #include "draw.h"
 #include "english.h"
@@ -70,7 +63,8 @@
 #include "menu.h"
 #include "tune.h"
 #include "tunes.h"
-// #include "discos.h"
+
+// ==================== 外设控制 ====================
 #include "DHT11/DHT11.h"
 #include "LED/led.h"
 #include "OLED096/OLED.h"

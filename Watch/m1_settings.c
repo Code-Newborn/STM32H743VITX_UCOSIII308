@@ -12,14 +12,13 @@
 
 static prev_menu_s prevMenuData;  // 上一次菜单数据
 
+// ==================== 1 【设置菜单界面】 按键功能函数 ====================
 static void mSelect( void );
+
+// ==================== 2 【设置菜单界面】 内容构建 ====================
 static void itemLoader( byte );
 
-/**
- * @brief     : 设置菜单打开
- * @msg       : 一级菜单
- * @return     {*}
- */
+// ==================== 3 【设置菜单界面】 加载 ====================
 void mSettingsOpen() {
     display_setDrawFunc( menu_draw );                     // 注册绘制函数 menu_draw
     buttons_setFuncs( menu_up, menu_select, menu_down );  // 注册按键功能函数

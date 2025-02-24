@@ -6,16 +6,17 @@
 typedef enum { STATE_STOPPED = 0, STATE_RUNING } temphumi_state_t;  // 温湿度采集状态
 static temphumi_state_t state;
 
-// 3个按键对应的功能
+// ==================== 1 【温湿度菜单界面】 按键函数 ====================
 static bool btnReset( void );      // 重置
 static bool btnStartStop( void );  // 开启/关闭测量
 static bool btnExit( void );       // 退出
 
-// 当前页面绘制函数
-static display_t thisdraw( void );
+// ==================== 2 【温湿度菜单界面】 直接绘制 ====================
+static display_t draw( void );
 
+// ==================== 3 【温湿度菜单界面】 打开加载 ====================
 void temphumi_open( void ) {
-    display_setDrawFunc( thisdraw );                      // 设置绘图功能函数
+    display_setDrawFunc( draw );                          // 设置绘图功能函数
     buttons_setFuncs( btnReset, btnStartStop, btnExit );  // 绑定按键功能，重置、启停、退出
 
     animation_start( NULL, ANIM_MOVE_ON );  // 打开动画动画过度
@@ -32,7 +33,8 @@ static bool btnStartStop( void ) {
     // 切换开启/关闭状态
     if ( DHT11_run == STATE_RUNING ) {
         DHT11_run = STATE_STOPPED;
-    } else if ( state == STATE_STOPPED ) {
+    }
+    else if ( state == STATE_STOPPED ) {
         DHT11_run = STATE_RUNING;
     }
     return true;
@@ -46,7 +48,7 @@ static bool btnExit( void ) {
 #define SHOW_POS_X 25
 #define SHOW_POS_Y 20
 
-static display_t thisdraw() {
+static display_t draw() {
 
     if ( DHT11_run )  // 状态指示
         draw_bitmap( 48, 0, close32x16, FONT_CLOSE_WIDTH, FONT_CLOSE_HEIGHT, NOINVERT, 0 );

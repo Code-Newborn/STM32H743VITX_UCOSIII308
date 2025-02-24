@@ -34,10 +34,15 @@ uint8_t x1 = 0, x2 = 0, y1 = 0, y2 = 0;  //,statu=0;
 //[7]0 1 2 3 ... 127
 byte OLED_GRAM[ 512 ];
 
-static bool      down( void );
-static bool      up( void );
-static bool      select( void );
+// ==================== 1 【音乐菜单界面】 按键功能函数 ====================
+static bool down( void );
+static bool up( void );
+static bool select( void );
+
+// ==================== 2 【音乐菜单界面】 直接绘制 ====================
 static display_t draw( void );
+
+static void chose_tone( byte en );
 
 void __SysTick( void );
 
@@ -48,35 +53,16 @@ extern const uint32_t STAY[];
 
 static byte idx = 0;
 
-static void chose_tone( byte en ) {
-    static byte _idx = 1;
-    if ( idx != _idx || en ) {
-        _idx = idx;
 
-        switch ( idx ) {
-        case 0:
-            tune_play( TUNE, VOL_ALARM, PRIO_ALARM );
-            break;
-        case 1:
-            tune_play( STAY, VOL_ALARM, PRIO_ALARM );
-            break;
-        }
-    }
-
-    switch ( idx ) {
-    case 0:
-        draw_string( PSTR( ">SUMMER" ), false, 64, 14 );
-        break;
-    case 1:
-        draw_string( PSTR( ">STAY  " ), false, 64, 14 );
-        break;
-    }
-}
-
+// ==================== 3 【音乐菜单界面】 打开加载 ====================
 void tunemakerOpen() {
 
     display_setDrawFunc( draw );
     buttons_setFuncs( up, select, down );
+
+    // setMenuInfo( OPTION_COUNT, MENU_TYPE_ICON, PSTR( STR_GAMESMENU ) );
+    // setMenuFuncs( MENUFUNC_NEXT, mSelect, MENUFUNC_PREV, itemLoader );
+    // setPrevMenuOpen( &prevMenuData, mGamesOpen );  // 保存当前菜单打开函数
 
     chose_tone( 1 );
     animation_start( NULL, ANIM_MOVE_ON );
@@ -90,7 +76,7 @@ static bool down() {
     // iAng--;
     // if ( iAng == 0 )
     //     iAng = 180;
-    // return true;
+    return true;
 }
 
 static bool up() {
@@ -101,7 +87,7 @@ static bool up() {
     // iAng++;
     // if ( iAng == 180 )
     //     iAng = 0;
-    // return true;
+    return true;
 }
 
 static bool select() {
@@ -166,6 +152,31 @@ static display_t draw() {
     // LED0 = !LED0;
 
     return DISPLAY_DONE;
+}
+
+static void chose_tone( byte en ) {
+    static byte _idx = 1;
+    if ( idx != _idx || en ) {
+        _idx = idx;
+
+        switch ( idx ) {
+        case 0:
+            tune_play( TUNE, VOL_ALARM, PRIO_ALARM );
+            break;
+        case 1:
+            tune_play( STAY, VOL_ALARM, PRIO_ALARM );
+            break;
+        }
+    }
+
+    switch ( idx ) {
+    case 0:
+        draw_string( PSTR( ">SUMMER" ), false, 64, 14 );
+        break;
+    case 1:
+        draw_string( PSTR( ">STAY  " ), false, 64, 14 );
+        break;
+    }
 }
 
 void __SysTick( void ) {

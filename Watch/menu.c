@@ -37,6 +37,7 @@ static display_t menu_drawIcon( void );
 static void      checkScroll( void );
 static void      clear( void );
 
+
 // 主菜单选择界面
 bool menu_select() {
 

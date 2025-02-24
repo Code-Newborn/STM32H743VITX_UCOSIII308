@@ -13,21 +13,20 @@
 static prev_menu_s prevMenuData;
 
 static void mSelect( void );
+
 static void itemLoader( byte );
+
 static void updateTemperature( void );
 static void updateVoltage( void );
 static void updateFPS( void );
 static void setShowFPS( void );
 static void batteryUpdate( void );
 
-/**
- * @brief     : 打开诊断菜单
- * @msg       : 二级菜单 Setting -> Diagnostics
- * @return     {*}
- */
+// ==================== 3 【诊断菜单界面】 打开加载 ====================
 void mDiagOpen() {
     // rtc_tempUpdate();  // 读取内部温度传感器
     //	battery_update();
+    display_setDrawFunc( menu_draw );  // 注册绘制函数 menu_draw
 
     setMenuInfo( OPTION_COUNT, MENU_TYPE_STR, PSTR( STR_DIAGNOSTICSMENU ) );
     setMenuFuncs( MENUFUNC_NEXT, mSelect, MENUFUNC_PREV, itemLoader );

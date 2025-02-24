@@ -8,35 +8,21 @@
 
 #include "common.h"
 
-#define OPTION_COUNT getItemCount()
-
+#define GAMES_COUNT 4
 static prev_menu_s prevMenuData;
 
+// ==================== 1 【游戏菜单界面】 按键函数 ====================
 static void mSelect( void );
+
+// ==================== 2 【游戏菜单界面】 内容构建 ====================
 static void itemLoader( byte );
 
-static uint8_t getItemCount() {
-    uint8_t cnt = 0;
-#if COMPILE_GAME1
-    ++cnt;
-#endif
-#if COMPILE_GAME2
-    ++cnt;
-#endif
-#if COMPILE_GAME3
-    ++cnt;
-#endif
-#if COMPILE_GAME4
-    ++cnt;
-#endif
-    return cnt;
-}
-
+// ==================== 3 【游戏菜单界面】 打开加载 ====================
 void mGamesOpen() {
     display_setDrawFunc( menu_draw );                     // 注册绘制函数 menu_draw
     buttons_setFuncs( menu_up, menu_select, menu_down );  // 注册按键功能函数
 
-    setMenuInfo( OPTION_COUNT, MENU_TYPE_ICON, PSTR( STR_GAMESMENU ) );
+    setMenuInfo( GAMES_COUNT, MENU_TYPE_ICON, PSTR( STR_GAMESMENU ) );
     setMenuFuncs( MENUFUNC_NEXT, mSelect, MENUFUNC_PREV, itemLoader );
     setPrevMenuOpen( &prevMenuData, mGamesOpen );  // 保存当前菜单打开函数
 

@@ -36,12 +36,14 @@ static bool down() {
     menuData.selected++;
     if ( menuData.selected >= menuData.optionCount )
         menuData.selected = MAX_MENU_ITEMS - 1;
+    return true;
 }
 
 static bool up() {
     menuData.selected--;
     if ( menuData.selected <= MAX_MENU_ITEMS - 2 )
         menuData.selected = menuData.optionCount - 1;
+    return true;
 }
 
 static display_t draw() {
@@ -63,4 +65,5 @@ static display_t draw() {
 
 static bool select() {
     animation_start( back, ANIM_MOVE_OFF );  // 返回
+    return true;
 }

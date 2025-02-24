@@ -183,8 +183,8 @@ typedef struct {
     byte        width;
     byte        height;
     //	byte foreColour;
-    bool invert;
-    byte offsetY;
+    bool        invert;
+    byte        offsetY;
 } image_s;
 
 #endif /* TYPEDEFS_H_ */

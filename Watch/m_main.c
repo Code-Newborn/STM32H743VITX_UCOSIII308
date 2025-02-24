@@ -8,16 +8,18 @@
 
 #include "common.h"
 
-#define OPTION_COUNT getItemCount()
 
 static prev_menu_s prevMenuData;
 
-// ==================== 1【主菜单界面】专用函数 ====================
-static void mOpen( void );
+// ==================== 1 【主菜单界面】 按键函数 ====================
 static void mSelect( void );
+
+// ==================== 2 【主菜单界面】 内容构建 ====================
 static void itemLoader( byte );
 
-static uint8_t getItemCount() {
+// ==================== 获取菜单项数 ====================
+#define OPTION_COUNT getMainMenuItemsCount()
+static uint8_t getMainMenuItemsCount() {
     uint8_t cnt = 2;  // 两个菜单基本项不变（菜单和退出）
 #if COMPILE_GAME1 || COMPILE_GAME2 || COMPILE_GAME3
     ++cnt;
@@ -41,25 +43,19 @@ static uint8_t getItemCount() {
     return cnt;
 }
 
-// ==================== 3【主菜单界面】加载 ====================
-void mMainOpen() {                                // INFO 打开主菜单
-    // buttons_setFuncs( NULL, menu_select, NULL );  // 为按键注册函数
-    animation_start( mOpen, ANIM_MOVE_OFF );      // 设置动画初始状态，并执行注册的函数
-}
-
-// ==================== 【主菜单界面】设置，切换动画执行完后执行 ====================
-static void mOpen() {
+// ==================== 3 【主菜单界面】 打开加载 ====================
+void mMainOpen() {                                        // INFO 打开主菜单
     display_setDrawFunc( menu_draw );                     // NOTE 主菜单绘制函数menu_draw （注册绘制函数）
     buttons_setFuncs( menu_up, menu_select, menu_down );  // NOTE 按键功能函数 （注册功能函数）
 
     setMenuInfo( OPTION_COUNT, MENU_TYPE_ICON, PSTR( STR_MAINMENU ) );  // 获取当前菜单项的信息（选项个数，菜单显示模式是文字还是图标）
     setMenuFuncs( MENUFUNC_NEXT, mSelect, MENUFUNC_PREV, itemLoader );  // 绑定当前菜单项的函数，如前进、后退、选择确认
 
-    setPrevMenuOpen( &prevMenuData, mOpen );  // 储存当前的打开函数
+    setPrevMenuOpen( &prevMenuData, mMainOpen );  // 储存当前的打开函数
     animation_start( NULL, ANIM_MOVE_ON );
 }
 
-// 选择确认函数
+// “确认”按键功能
 static void mSelect() {
     setPrevMenuExit( &prevMenuData );  // 储存当前菜单的选择
     doAction( true );

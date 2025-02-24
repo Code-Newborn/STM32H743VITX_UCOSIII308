@@ -11,10 +11,10 @@
 #define OPTION_COUNT 3
 
 static prev_menu_s prevMenuData;
-
-static void      mSelect( void );
-static void      itemLoader( byte );
-static display_t thisdraw( void );
+// ==================== 1 【音量菜单界面】 按键函数 ====================
+static void        mSelect( void );
+// ==================== 2 【音量菜单界面】 内容构建 ====================
+static void        itemLoader( byte );
 
 static void        setVolumeUI( void );
 static void        setVolumeAlarm( void );
@@ -25,11 +25,14 @@ static void        setMenuOptions( void );
 //	static int volAlarm=0;
 //	static int volHour=0;
 
+// ==================== 3 【音量菜单界面】 打开加载 ====================
 void mSoundOpen() {
+    display_setDrawFunc( menu_draw );  // 注册绘制函数 menu_draw
+
     setMenuInfo( OPTION_COUNT, MENU_TYPE_ICON, PSTR( STR_SOUNDMENU ) );
     setMenuFuncs( MENUFUNC_NEXT, mSelect, MENUFUNC_PREV, itemLoader );
     setPrevMenuOpen( &prevMenuData, mSoundOpen );
-    
+
     animation_start( NULL, ANIM_MOVE_ON );
 }
 
@@ -70,25 +73,6 @@ static byte setVolume( byte vol ) {
     if ( vol > 3 )
         vol = 0;
     return vol;
-}
-
-static display_t thisdraw() {
-    char name[ 3 ];
-
-    switch ( menuData.selected ) {
-    case 0:
-        sprintf( name, "%d", 1 );
-        break;
-    case 1:
-        sprintf( name, "%d", 2 );
-        break;
-    case 2:
-        sprintf( name, "%d", 3 );
-        break;
-    }
-
-    draw_string( ( char* )name, false, 122, 0 );  // 右上角绘制
-    return DISPLAY_DONE;
 }
 
 static void setMenuOptions() {
