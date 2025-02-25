@@ -6,11 +6,6 @@
 #define UPT_MOVE_UP   1
 #define UPT_MOVE_DOWN 2
 
-static bool      btnExit( void );
-static bool      btnJump( void );
-static bool      btnPause( void );
-static display_t draw( void );
-
 // 厚度为8pix的地面
 #define Ground_height 8
 static const byte GROUND[] = {
@@ -89,6 +84,32 @@ static uint8_t  cloud_speed  = 4;
 
 static double Dino_y = FRAME_HEIGHT - Dino_height - Ground_height;  // 目标高度
 
+// ==================== 1 【游戏界面】 按键功能函数 ====================
+static bool btnExit( void );
+static bool btnJump( void );
+static bool btnPause( void );
+
+// ==================== 2 【游戏界面】 直接绘制(无子菜单) ====================
+static display_t draw( void );
+
+// ==================== 3 【游戏界面】 打开加载 ====================
+void game4_start( void ) {
+    srand( millis() );  // 随机种子
+
+    display_setDrawFunc( draw );                     // 设置绘制函数
+    buttons_setFuncs( btnPause, btnJump, btnExit );  // 设置按键功能
+
+    // 初始化
+    cloud_x      = 128 + 16;
+    cactus_x     = 128;
+    bounce       = false;
+    hited        = false;
+    score        = 0;
+    newHighscore = false;
+    gameState    = true;
+    lives        = 4;
+}
+
 // 退出
 static bool btnExit() {
     if ( lives == 255 )
@@ -110,31 +131,11 @@ static bool btnPause() {
     return true;
 }
 
-void game4_start( void ) {
-    srand( millis() );  // 随机种子
-
-    display_setDrawFunc( draw );                     // 设置绘制函数
-    buttons_setFuncs( btnPause, btnJump, btnExit );  // 设置按键功能
-
-    // 初始化
-    cloud_x      = 128 + 16;
-    cactus_x     = 128;
-    bounce       = false;
-    hited        = false;
-    score        = 0;
-    newHighscore = false;
-    gameState    = true;
-    lives        = 4;
-}
-
 
 static display_t draw() {
-
-
     static double yVel;  // 跳跃速度
 
     static millis_t hitTime;
-
 
     if ( lives != 255 ) {
         byte ground_slice[ FRAME_WIDTH ];

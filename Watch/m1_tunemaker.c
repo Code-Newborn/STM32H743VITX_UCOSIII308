@@ -34,12 +34,12 @@ uint8_t x1 = 0, x2 = 0, y1 = 0, y2 = 0;  //,statu=0;
 //[7]0 1 2 3 ... 127
 byte OLED_GRAM[ 512 ];
 
-// ==================== 1 【音乐菜单界面】 按键功能函数 ====================
+// ==================== 1 【音乐界面】 按键功能函数 ====================
 static bool down( void );
 static bool up( void );
 static bool select( void );
 
-// ==================== 2 【音乐菜单界面】 直接绘制 ====================
+// ==================== 2 【音乐界面】 直接绘制(无子菜单) ====================
 static display_t draw( void );
 
 static void chose_tone( byte en );
@@ -54,7 +54,7 @@ extern const uint32_t STAY[];
 static byte idx = 0;
 
 
-// ==================== 3 【音乐菜单界面】 打开加载 ====================
+// ==================== 3 【音乐界面】 打开加载 ====================
 void tunemakerOpen() {
 
     display_setDrawFunc( draw );

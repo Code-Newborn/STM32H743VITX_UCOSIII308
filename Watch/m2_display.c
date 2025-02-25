@@ -11,9 +11,6 @@
 #define OPTION_COUNT 6
 
 static prev_menu_s prevMenuData;
-
-static void mSelect( void );
-static void itemLoader( byte );
 static void setBrightness( void );
 static void setInvert( void );
 static void setRotate( void );
@@ -22,15 +19,19 @@ static void setAnimations( void );
 #endif
 static void setMenuOptions( void );
 
+// ==================== 1 【显示设置菜单界面】 按键函数 ====================
+static void mSelect( void );
+
+// ==================== 2 【显示设置菜单界面】 内容构建 ====================
+static void itemLoader( byte );
 static display_t thisDraw( void );
 
+// ==================== 3 【显示设置菜单界面】 打开加载 ====================
 void mDisplayOpen() {
-    // setMenuOptions();//找到动画移除bug了
-
 
     setMenuInfo( OPTION_COUNT, MENU_TYPE_ICON, PSTR( STR_DISPLAYMENU ) );
 
-    menuData.func.draw = thisDraw;  // 必须放在setMenuInfo后，因为其对按键功能进行了清除
+    menuData.func.draw = thisDraw;
     setMenuFuncs( MENUFUNC_NEXT, mSelect, MENUFUNC_PREV, itemLoader );
 
 
@@ -118,14 +119,6 @@ static display_t thisDraw() {
 #endif
 
 static void setMenuOptions() {
-    //	setMenuOption_P(0, PSTR(STR_BRIGHTNESS), menu_brightness[appConfig.brightness], setBrightness);
-    //	setMenuOption_P(1, PSTR(STR_INVERT), menu_invert, setInvert);
-    //	setMenuOption_P(2, PSTR(STR_ROTATE), menu_rotate, setRotate);
-    // #if COMPILE_ANIMATIONS
-    //	setMenuOption_P(3, PSTR(STR_ANIMATIONS), menu_anim[appConfig.animations], setAnimations);
-    // #endif
-    //  setMenuOption_P(4, PSTR(STR_LEDS), menu_LEDs[appConfig.CTRL_LEDs], setLEDs);
-    //
 
     setMenuOption_P( 0, PSTR( STR_BRIGHTNESS ), menu_brightness[ appConfig.brightness ], setBrightness );
     setMenuOption_P( 1, PSTR( STR_INVERT ), menu_invert, setInvert );

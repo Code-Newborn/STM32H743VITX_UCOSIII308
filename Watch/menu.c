@@ -47,7 +47,6 @@ bool menu_select() {
     }
     else  // 进入二级菜单或更深层菜单时
         doBtn( menuData.func.btn2 );
-
     return true;
 }
 

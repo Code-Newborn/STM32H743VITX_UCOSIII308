@@ -6,15 +6,15 @@
 typedef enum { STATE_STOPPED = 0, STATE_RUNING } temphumi_state_t;  // 温湿度采集状态
 static temphumi_state_t state;
 
-// ==================== 1 【温湿度菜单界面】 按键函数 ====================
+// ==================== 1 【温湿度界面】 按键函数 ====================
 static bool btnReset( void );      // 重置
 static bool btnStartStop( void );  // 开启/关闭测量
 static bool btnExit( void );       // 退出
 
-// ==================== 2 【温湿度菜单界面】 直接绘制 ====================
+// ==================== 2 【温湿度界面】 直接绘制（无子菜单） ====================
 static display_t draw( void );
 
-// ==================== 3 【温湿度菜单界面】 打开加载 ====================
+// ==================== 3 【温湿度界面】 打开加载 ====================
 void temphumi_open( void ) {
     display_setDrawFunc( draw );                          // 设置绘图功能函数
     buttons_setFuncs( btnReset, btnStartStop, btnExit );  // 绑定按键功能，重置、启停、退出

@@ -25,10 +25,6 @@ static timeDate_s  timeDateSet;
 static timemode_t  timeMode;
 static bool        saved;
 
-static void      mDown( void );
-static void      mUp( void );
-static void      mSelect( void );
-static void      itemLoader( byte );
 static void      beginSelect( void );
 static void      endSelect( void );
 static void      selectDate( void );
@@ -43,6 +39,15 @@ static void      makeTimeStr( char* );
 static void      makeDateStr( char* );
 static void      saveTimeDate( void );
 
+// ==================== 1 【日历菜单界面】 按键函数 ====================
+static void      mDown( void );
+static void      mUp( void );
+static void      mSelect( void );
+
+// ==================== 2 【日历菜单界面】 内容构建 ====================
+static void      itemLoader( byte );
+
+// ==================== 3 【日历菜单界面】 打开加载 ====================
 void mTimeDateOpen() {
     // Create copy of current time & date
     memcpy( &timeDateSet, &timeDate, sizeof( timeDate_s ) );

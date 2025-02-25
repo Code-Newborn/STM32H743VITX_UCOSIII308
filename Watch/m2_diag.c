@@ -11,22 +11,21 @@
 #define OPTION_COUNT 5  // 当前菜单界面选项数
 
 static prev_menu_s prevMenuData;
-
-static void mSelect( void );
-
-static void itemLoader( byte );
-
 static void updateTemperature( void );
 static void updateVoltage( void );
 static void updateFPS( void );
 static void setShowFPS( void );
 static void batteryUpdate( void );
 
-// ==================== 3 【诊断菜单界面】 打开加载 ====================
+// ==================== 1 【版本信息菜单界面】 按键函数 ====================
+static void mSelect( void );
+
+// ==================== 2 【版本信息菜单界面】 内容构建 ====================
+static void itemLoader( byte );
+
+// ==================== 3 【版本信息菜单界面】 打开加载 ====================
 void mDiagOpen() {
-    // rtc_tempUpdate();  // 读取内部温度传感器
-    //	battery_update();
-    display_setDrawFunc( menu_draw );  // 注册绘制函数 menu_draw
+    display_setDrawFunc( menu_draw );  // 菜单样式绘制
 
     setMenuInfo( OPTION_COUNT, MENU_TYPE_STR, PSTR( STR_DIAGNOSTICSMENU ) );
     setMenuFuncs( MENUFUNC_NEXT, mSelect, MENUFUNC_PREV, itemLoader );

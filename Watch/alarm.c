@@ -95,7 +95,8 @@ void alarm_update() {
             // 	ledFlash = (ledFlash == LED_GREEN) ? LED_RED : LED_GREEN;
             // 	led_flash(ledFlash, 150, 255);
             // }
-        } else if ( !alarmNow )
+        }
+        else if ( !alarmNow )
             stopAlarm();
     }
 }

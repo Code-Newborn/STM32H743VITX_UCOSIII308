@@ -11,11 +11,6 @@
 #define OPTION_COUNT 3
 
 static prev_menu_s prevMenuData;
-// ==================== 1 【音量菜单界面】 按键函数 ====================
-static void        mSelect( void );
-// ==================== 2 【音量菜单界面】 内容构建 ====================
-static void        itemLoader( byte );
-
 static void        setVolumeUI( void );
 static void        setVolumeAlarm( void );
 static void        setVolumeHour( void );
@@ -25,9 +20,15 @@ static void        setMenuOptions( void );
 //	static int volAlarm=0;
 //	static int volHour=0;
 
-// ==================== 3 【音量菜单界面】 打开加载 ====================
+// ==================== 1 【音量设置菜单界面】 按键函数 ====================
+static void        mSelect( void );
+
+// ==================== 2 【音量设置菜单界面】 内容构建 ====================
+static void        itemLoader( byte );
+
+// ==================== 3 【音量设置菜单界面】 打开加载 ====================
 void mSoundOpen() {
-    display_setDrawFunc( menu_draw );  // 注册绘制函数 menu_draw
+    display_setDrawFunc( menu_draw );  // 菜单界面绘制函数
 
     setMenuInfo( OPTION_COUNT, MENU_TYPE_ICON, PSTR( STR_SOUNDMENU ) );
     setMenuFuncs( MENUFUNC_NEXT, mSelect, MENUFUNC_PREV, itemLoader );

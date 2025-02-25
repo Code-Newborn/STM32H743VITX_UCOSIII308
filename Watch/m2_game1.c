@@ -41,11 +41,6 @@ static const byte ballImg[] = {
     0x03,
 };
 
-static bool btnExit( void );
-static bool btnRight( void );
-static bool btnLeft( void );
-display_t   game1_draw( void );
-
 static byte   uptMove;  // 移动状态
 static s_ball ball;
 static bool*  blocks;
@@ -53,12 +48,20 @@ static byte   lives;  // 生命值
 static uint   score;  // 得分
 static byte   platformX;
 
-// 游戏开始
+// ==================== 1 【游戏界面】 按键功能函数 ====================
+static bool btnExit( void );
+static bool btnRight( void );
+static bool btnLeft( void );
+
+// ==================== 2 【游戏界面】 直接绘制(无子菜单) ====================
+static display_t draw( void );
+
+// ==================== 3 【游戏界面】 打开加载 ====================
 void game1_start() {
 
     srand( millis() );  // 随机数发生器的初始化
 
-    display_setDrawFunc( game1_draw );               // 屏幕绘制
+    display_setDrawFunc( draw );                     // 屏幕绘制
     buttons_setFuncs( btnRight, btnExit, btnLeft );  // 按键函数注册
 
     uptMove = UPT_MOVE_NONE;
@@ -96,7 +99,7 @@ static bool btnLeft() {
     return false;
 }
 // 游戏绘图
-display_t game1_draw() {
+static display_t draw() {
     bool gameEnded = ( ( score >= BLOCK_COUNT ) || ( lives == 255 ) );  // 游戏结束标志，当得分大于砖块数或者生命值溢出
 
     byte platformXtmp = platformX;  // 缓存变量平台X坐标

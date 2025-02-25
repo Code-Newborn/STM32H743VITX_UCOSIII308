@@ -53,7 +53,6 @@ appconfig_s appConfig;  // appconfig_s的长度为8
 // };
 
 void appconfig_init() {
-
     // 或者读取EEPROM中的配置
 
     appconfig_reset();

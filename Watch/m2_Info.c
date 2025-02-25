@@ -1,15 +1,6 @@
 #include "common.h"
 
-
-static byte idx = 0;
-
 static prev_menu_s prevMenuData;
-
-static bool      down( void );
-static bool      up( void );
-static bool      select( void );
-static display_t draw( void );
-
 // 信息文本行数
 uint16_t rows = 0;
 // 信息文本内容
@@ -18,7 +9,15 @@ char*    infos_str[] = {
     "version9.0", "version10.0",      "version11.0", "version12.0", "version13.0", "version14.0", "version15.0", "version16.0",
 };
 
+// ==================== 1 【信息界面】 按键函数 ====================
+static bool      down( void );
+static bool      up( void );
+static bool      select( void );
 
+// ==================== 2 【信息界面】 绘制 ====================
+static display_t draw( void );
+
+// ==================== 3 【信息界面】 打开加载 ====================
 void mInfoOpen() {
 
     rows = sizeof( infos_str ) / sizeof( infos_str[ 0 ] );

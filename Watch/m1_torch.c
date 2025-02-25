@@ -12,16 +12,14 @@
 static uint strobe;
 static bool btnFlashRate( void );
 
-// ==================== 1 【手电筒菜单界面】 按键函数 ====================
+// ==================== 1 【手电筒界面】 按键函数 ====================
 static bool btnExit( void );
 
-// ==================== 2 【手电筒菜单界面】 绘制 ====================
+// ==================== 2 【手电筒界面】 绘制 ====================
 static display_t draw( void );
 
-// ==================== 3 【手电筒菜单界面】 打开加载 ====================
+// ==================== 3 【手电筒界面】 打开加载 ====================
 void torch_open() {
-    // menu_close();  里面有打开动画，需要在下面再添加一下
-
     strobe = 0;  // 频闪
     display_setDrawFunc( draw );
     buttons_setFuncs( btnExit, btnFlashRate, btnExit );

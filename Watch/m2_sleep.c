@@ -12,13 +12,19 @@
 
 static prev_menu_s prevMenuData;
 
+
+// ==================== 1 【休眠设置菜单界面】 按键函数 ====================
 static void mSelect( void );
+
+// ==================== 2 【休眠设置菜单界面】 内容构建 ====================
 static void itemLoader( byte );
-static void setTimeout( void );
-static void setMenuOptions( void );
 
 static display_t mDraw( void );
 
+static void setTimeout( void );
+static void setMenuOptions( void );
+
+// ==================== 3 【休眠设置菜单界面】 打开加载 ====================
 void mSleepOpen() {
     setMenuInfo( OPTION_COUNT, MENU_TYPE_ICON, PSTR( STR_SLEEPMENU ) );
     setMenuFuncs( MENUFUNC_NEXT, mSelect, MENUFUNC_PREV, itemLoader );

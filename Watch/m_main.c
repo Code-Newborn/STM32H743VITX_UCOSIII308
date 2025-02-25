@@ -44,13 +44,12 @@ static uint8_t getMainMenuItemsCount() {
 }
 
 // ==================== 3 【主菜单界面】 打开加载 ====================
-void mMainOpen() {                                        // INFO 打开主菜单
-    display_setDrawFunc( menu_draw );                     // NOTE 主菜单绘制函数menu_draw （注册绘制函数）
-    buttons_setFuncs( menu_up, menu_select, menu_down );  // NOTE 按键功能函数 （注册功能函数）
+void mMainOpen() {
 
     setMenuInfo( OPTION_COUNT, MENU_TYPE_ICON, PSTR( STR_MAINMENU ) );  // 获取当前菜单项的信息（选项个数，菜单显示模式是文字还是图标）
-    setMenuFuncs( MENUFUNC_NEXT, mSelect, MENUFUNC_PREV, itemLoader );  // 绑定当前菜单项的函数，如前进、后退、选择确认
-
+    setMenuFuncs( MENUFUNC_NEXT, mSelect, MENUFUNC_PREV, itemLoader );  // 按键功能具体函数注册
+    buttons_setFuncs( menu_up, menu_select, menu_down );                // NOTE 菜单操作函数 （注册到按键上）
+    display_setDrawFunc( menu_draw );                                   // NOTE 主菜单绘制函数menu_draw （注册绘制函数）
     setPrevMenuOpen( &prevMenuData, mMainOpen );  // 储存当前的打开函数
     animation_start( NULL, ANIM_MOVE_ON );
 }
@@ -76,11 +75,11 @@ static void itemLoader( byte num ) {
 #endif
 // 音乐选项
 #if COMPILE_TUNEMAKER
-    setMenuOption_P( num++, PSTR( STR_TUNEMAKER ), menu_tunemaker, tunemakerOpen );  // INFO 打开音乐
+    setMenuOption_P( num++, PSTR( STR_TUNEMAKER ), menu_tunemaker, tunemakerOpen );  // INFO Open Music
 #endif
 // 游戏选项
 #if COMPILE_GAME1 || COMPILE_GAME2 || COMPILE_GAME3
-    setMenuOption_P( num++, PSTR( STR_GAMES ), menu_games, mGamesOpen );  // INFO 打开游戏
+    setMenuOption_P( num++, PSTR( STR_GAMES ), menu_games, mGamesOpen );  // INFO Open Games
 #endif
 // 温湿度选项
 #if COMPILE_TEMPHUMI

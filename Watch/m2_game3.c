@@ -20,13 +20,6 @@ typedef struct {
     byte y;
 } tube_s;
 
-static bool      btnExit( void );
-static bool      btnBounce( void );
-static bool      btnPause( void );
-static display_t draw( void );
-void             _DrawPoint( u8 x, u8 y, u8 t );
-static void      judgeOverlap( void );  // 判断是否重叠并且绘制人物
-// static const uint eepHighscore EEMEM;
 
 int  lives       = 4;
 byte _GRAM[ 64 ] = { 0 };  // 64x1bit  宽8 高度64
@@ -57,14 +50,22 @@ static const byte thingImg[] = {
     0x02, 0x1F, 0x37, 0x34, 0x34, 0x1C, 0x0F, 0x08, 0x0B, 0x0C, 0x17, 0x32, 0x32, 0x39, 0x0F,  //
 };
 
-void draw_bitmap_set( image_s* img ) {
-    draw_bitmap( img->x, img->y, img->bitmap, img->width, img->height, img->invert, img->offsetY );
-}
+static void _DrawPoint( u8 x, u8 y, u8 t );
+static void judgeOverlap( void );  // 判断是否重叠并且绘制人物
+// static const uint eepHighscore EEMEM;
 
-void draw_bitmap_s2( image_s* img ) {
-    draw_bitmap( img->x, img->y, img->bitmap, img->width, img->height, img->invert, img->offsetY );
-}
+static void draw_bitmap_set( image_s* img );
+void        draw_bitmap_s2( image_s* img );
 
+// ==================== 1 【游戏界面】 按键功能函数 ====================
+static bool      btnExit( void );
+static bool      btnBounce( void );
+static bool      btnPause( void );
+
+// ==================== 2 【游戏界面】 直接绘制(无子菜单) ====================
+static display_t draw( void );
+
+// ==================== 3 【游戏界面】 打开加载 ====================
 void game3_start() {
     srand( millis() );
 
@@ -263,6 +264,14 @@ static void judgeOverlap( void ) {
             //							buzzer_buzz(100, TONE_2KHZ, VOL_UI, PRIO_UI, NULL);
         }
     }
+}
+
+static void draw_bitmap_set( image_s* img ) {
+    draw_bitmap( img->x, img->y, img->bitmap, img->width, img->height, img->invert, img->offsetY );
+}
+
+void draw_bitmap_s2( image_s* img ) {
+    draw_bitmap( img->x, img->y, img->bitmap, img->width, img->height, img->invert, img->offsetY );
 }
 
 #endif

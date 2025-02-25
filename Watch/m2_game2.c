@@ -39,35 +39,21 @@ static const byte roadMarking[] = {
     0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01,
 };
 
-static bool      btnExit( void );
-static bool      btnDown( void );
-static bool      btnUp( void );
-static display_t draw( void );
-
-// static const uint eepHighscore EEMEM;
-
 static uint        highscore;
 static uint        score;
 static byte        uptMove;
 static byte        lives;
 static s_otherCars cars[ CAR_COUNT ];
 
-// static const tune_t tune[] TUNEMEM = {
-//	TONE_2KHZ<<8 | 200,
-//	TONE_2_5KHZ<<8 | 200,
-//	TONE_3KHZ<<8 | 200,
-//	TONE_3KHZ<<8 | 200,
-//	TONE_3KHZ<<8 | 200,
-//	TONE_2_5KHZ<<8 | 200,
-//	TONE_2_5KHZ<<8 | 200,
-//	TONE_2_5KHZ<<8 | 200,
-//	TONE_3KHZ<<8 | 200,
-//	TONE_4KHZ<<8 | 200,
-//	TONE_3KHZ<<8 | 200,
-//	TONE_4KHZ<<8 | 200,
-//	TONE_REPEAT
-// };
+// ==================== 1 【游戏界面】 按键功能函数 ====================
+static bool btnExit( void );
+static bool btnDown( void );
+static bool btnUp( void );
 
+// ==================== 2 【游戏界面】 直接绘制(无子菜单) ====================
+static display_t draw( void );
+
+// ==================== 3 【游戏界面】 打开加载 ====================
 void game2_start() {
     srand( millis() );
 
@@ -153,7 +139,7 @@ static display_t draw() {
             }
         }
 
-        // 碰撞
+        // 碰撞collision
         if ( !myCar.hit ) {
             LOOP( CAR_COUNT, i ) {
                 if ( cars[ i ].x < CAR_LENGTH ) {  // 赛车不可移动，位于底线
