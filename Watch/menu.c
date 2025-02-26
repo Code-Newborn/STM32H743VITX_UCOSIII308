@@ -114,16 +114,16 @@ static void menu_drawStr() {
  * @return     {*} 绘制忙标志
  */
 static display_t menu_drawIcon() {
-    static int animX = 64;
+    static int animX = 64;  // 背景中心在移动过程中的位置
 
-    int x = 64 - ( 48 * menuData.selected );
+    int x = 64 - ( IconSpacing * menuData.selected );  // 计算背景中心预计到达
 
     display_t busy = DISPLAY_DONE;
 
 #if COMPILE_ANIMATIONS
     if ( appConfig.animations ) {
         byte speed;
-        if ( x > animX ) {
+        if ( x > animX ) {  // 视角左移
             speed = ( ( x - animX ) / 4 ) + 1;
             if ( speed > 16 )
                 speed = 16;
@@ -133,7 +133,7 @@ static display_t menu_drawIcon() {
             else
                 busy = DISPLAY_BUSY;
         }
-        else if ( x < animX ) {
+        else if ( x < animX ) {  // 视角右移
             speed = ( ( animX - x ) / 4 ) + 1;
             if ( speed > 16 )
                 speed = 16;
@@ -150,16 +150,15 @@ static display_t menu_drawIcon() {
 
     x = animX - 16;
 
+    // 固定不动的元素部分
     drawTitle();
-
     draw_bitmap( 46, 14, selectbar_top, 36, 8, NOINVERT, 0 );     // 选中框上部分
     draw_bitmap( 46, 42, selectbar_bottom, 36, 8, NOINVERT, 0 );  // 选中框下部分
 
-    LOOP( menuData.optionCount, i )  // 遍历所有图标
-    {
-        if ( x < FRAME_WIDTH && x > -32 )  // 满足在屏幕范围内打印图标
+    LOOP( menuData.optionCount, i ) {
+        if ( x < FRAME_WIDTH && x > -32 )
             loader( OPERATION_DRAWICON, i, x );
-        x += 48;
+        x += IconSpacing;
     }
 
     loader( OPERATION_DRAWNAME_ICON, menuData.selected, 0 );
@@ -217,6 +216,8 @@ void menu_close() {
     memset( &menuData.func, 0, sizeof( menuFuncs_t ) );
     menuData.isOpen   = false;
     menuData.prevMenu = NULL;
+    menuData.scroll   = 0;
+    menuData.selected = 0;
     display_load();  // Move somewhere else, sometimes we don't want to load the watch face when closing the menu
 }
 // 保存上一次菜单的打开功能函数

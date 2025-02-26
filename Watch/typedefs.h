@@ -154,7 +154,7 @@ typedef struct {
 } menuFuncs_t;  // 菜单功能
 
 typedef struct {
-    byte        selected;     // 当前菜单是否被选中
+    byte        selected;     // 选中菜单索引
     byte        scroll;       //
     byte        optionCount;  // 当前菜单内选项计数
     bool        isOpen;       // 当前菜单是否处于被打开状态

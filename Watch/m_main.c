@@ -10,13 +10,6 @@
 
 
 static prev_menu_s prevMenuData;
-
-// ==================== 1 【主菜单界面】 按键函数 ====================
-static void mSelect( void );
-
-// ==================== 2 【主菜单界面】 内容构建 ====================
-static void itemLoader( byte );
-
 // ==================== 获取菜单项数 ====================
 #define OPTION_COUNT getMainMenuItemsCount()
 static uint8_t getMainMenuItemsCount() {
@@ -43,13 +36,21 @@ static uint8_t getMainMenuItemsCount() {
     return cnt;
 }
 
+// ==================== 1 【主菜单界面】 按键函数 ====================
+static void mSelect( void );
+
+// ==================== 2 【主菜单界面】 内容构建 ====================
+static void itemLoader( byte );
+
 // ==================== 3 【主菜单界面】 打开加载 ====================
 void mMainOpen() {
-
     setMenuInfo( OPTION_COUNT, MENU_TYPE_ICON, PSTR( STR_MAINMENU ) );  // 获取当前菜单项的信息（选项个数，菜单显示模式是文字还是图标）
     setMenuFuncs( MENUFUNC_NEXT, mSelect, MENUFUNC_PREV, itemLoader );  // 按键功能具体函数注册
-    buttons_setFuncs( menu_up, menu_select, menu_down );                // NOTE 菜单操作函数 （注册到按键上）
-    display_setDrawFunc( menu_draw );                                   // NOTE 主菜单绘制函数menu_draw （注册绘制函数）
+
+    buttons_setFuncs( menu_up, menu_select, menu_down );  // NOTE 菜单操作函数 （注册到按键上）
+
+    display_setDrawFunc( menu_draw );  // NOTE 主菜单绘制函数menu_draw （注册绘制函数）
+
     setPrevMenuOpen( &prevMenuData, mMainOpen );  // 储存当前的打开函数
     animation_start( NULL, ANIM_MOVE_ON );
 }
@@ -57,7 +58,7 @@ void mMainOpen() {
 // “确认”按键功能
 static void mSelect() {
     setPrevMenuExit( &prevMenuData );  // 储存当前菜单的选择
-    doAction( true );
+    doAction( true );                  // 动画
 }
 
 // 主菜单加载项

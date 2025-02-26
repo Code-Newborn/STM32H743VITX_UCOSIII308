@@ -80,6 +80,8 @@ void Error_Handler( void );
 #define NumOfTask 2
 extern unsigned int Task_Delay[ NumOfTask ];
 
+#define IconSpacing 40
+
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

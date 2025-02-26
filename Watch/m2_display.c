@@ -11,9 +11,9 @@
 #define OPTION_COUNT 6
 
 static prev_menu_s prevMenuData;
-static void setBrightness( void );
-static void setInvert( void );
-static void setRotate( void );
+static void        setBrightness( void );
+static void        setInvert( void );
+static void        setRotate( void );
 #if COMPILE_ANIMATIONS
 static void setAnimations( void );
 #endif
@@ -23,17 +23,18 @@ static void setMenuOptions( void );
 static void mSelect( void );
 
 // ==================== 2 【显示设置菜单界面】 内容构建 ====================
-static void itemLoader( byte );
+static void      itemLoader( byte );
 static display_t thisDraw( void );
 
 // ==================== 3 【显示设置菜单界面】 打开加载 ====================
 void mDisplayOpen() {
-
     setMenuInfo( OPTION_COUNT, MENU_TYPE_ICON, PSTR( STR_DISPLAYMENU ) );
-
-    menuData.func.draw = thisDraw;
     setMenuFuncs( MENUFUNC_NEXT, mSelect, MENUFUNC_PREV, itemLoader );
 
+    buttons_setFuncs( menu_up, menu_select, menu_down );  // NOTE 菜单操作函数 （注册到按键上）
+
+    display_setDrawFunc( menu_draw );  // 注册绘制函数 menu_draw
+    menuData.func.draw = thisDraw;     // 额外绘制
 
     setPrevMenuOpen( &prevMenuData, mDisplayOpen );
     animation_start( NULL, ANIM_MOVE_ON );
