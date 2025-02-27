@@ -1,5 +1,22 @@
-# A .gitignore for Keil projects. 20230411
+# A .gitignore for Vscode插件 Embedded IDE projects. 20250226
 # Taken mostly from http://www.keil.com/support/man/docs/uv4/uv4_b_filetypes.htm
+# https://em-ide.com/zh-cn/docs/getting-started/project_struct/#git-ignore
+
+# dot files
+/.vscode/launch.json
+/.eide/log
+/.eide.usr.ctx.json
+/.settings
+
+# project out
+/build
+/out
+/bin
+/obj
+
+# eide template
+*.ept
+*.eide-template
 
 # customized_file
 keil-assistant.log
