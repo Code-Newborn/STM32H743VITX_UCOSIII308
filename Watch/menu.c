@@ -78,6 +78,20 @@ display_t menu_draw() {
     return busy;
 }
 
+static void menu_drawStr() {
+    drawTitle();
+
+    byte scroll = menuData.scroll;
+    byte count  = ( ( MAX_MENU_ITEMS < menuData.optionCount ) ? MAX_MENU_ITEMS : menuData.optionCount ) + scroll;
+    for ( byte i = scroll; i < count; i++ )  // 从滚动的行数scroll到count遍历8行要显示的字符串
+    {
+        byte y = 8 + ( 8 * ( i - scroll ) );
+        if ( i == menuData.selected )
+            draw_string( ">", false, 0, y );     // 当前选择光标
+        loader( OPERATION_DRAWNAME_STR, i, y );  // 加载其他选项名称
+    }
+}
+
 static void drawTitle() {
     char buff[ BUFFSIZE_STR_MENU ];
     memset( buff, ' ', sizeof( buff ) );
@@ -94,19 +108,6 @@ static void loader( operation_t op, byte num, byte data ) {
         menuData.func.loader( num );  // 指向itemLoader函数
 }
 
-static void menu_drawStr() {
-    drawTitle();
-
-    byte scroll = menuData.scroll;
-    byte count  = ( ( MAX_MENU_ITEMS < menuData.optionCount ) ? MAX_MENU_ITEMS : menuData.optionCount ) + scroll;
-    for ( byte i = scroll; i < count; i++ )  // 从滚动的行数scroll到count遍历8行要显示的字符串
-    {
-        byte y = 8 + ( 8 * ( i - scroll ) );
-        if ( i == menuData.selected )
-            draw_string( ">", false, 0, y );     // 当前选择光标
-        loader( OPERATION_DRAWNAME_STR, i, y );  // 加载其他选项名称
-    }
-}
 
 /**
  * @brief     : 绘制图标
@@ -148,12 +149,12 @@ static display_t menu_drawIcon() {
 #endif
         animX = x;
 
-    x = animX - 16;
+    x = animX - 16;  // 获取图标绘制起始 x
 
     // 固定不动的元素部分
-    drawTitle();
-    draw_bitmap( 46, 14, selectbar_top, 36, 8, NOINVERT, 0 );     // 选中框上部分
-    draw_bitmap( 46, 42, selectbar_bottom, 36, 8, NOINVERT, 0 );  // 选中框下部分
+    drawTitle();                                                  // 菜单页 标题
+    draw_bitmap( 46, 14, selectbar_top, 36, 8, NOINVERT, 0 );     // 菜单页 选中框上部分
+    draw_bitmap( 46, 42, selectbar_bottom, 36, 8, NOINVERT, 0 );  // 菜单页 选中框下部分
 
     LOOP( menuData.optionCount, i ) {
         if ( x < FRAME_WIDTH && x > -32 )
@@ -181,7 +182,7 @@ void setMenuOption( byte num, const char* name, const byte* icon, menu_f actionF
         return;
 
     switch ( operation.op ) {
-    case OPERATION_DRAWICON:
+    case OPERATION_DRAWICON:  // 绘制菜单图标
     {
         byte  a = operation.data;
         // if(a > FRAME_WIDTH)
@@ -194,10 +195,10 @@ void setMenuOption( byte num, const char* name, const byte* icon, menu_f actionF
         draw_bitmap( operation.data, y + 4 - 16, icon != NULL ? icon : menu_default, 32, 32, NOINVERT, 0 );
     } break;
     case OPERATION_DRAWNAME_ICON:
-        draw_string( ( char* )name, false, 0, FRAME_HEIGHT - 8 );
+        draw_string( ( char* )name, false, 0, FRAME_HEIGHT - 8 );  // 绘制底栏小图标
         break;
     case OPERATION_DRAWNAME_STR:
-        draw_string( ( char* )name, false, 6, operation.data );
+        draw_string( ( char* )name, false, 6, operation.data );  // 绘制图标名称
         break;
     case OPERATION_ACTION:
         if ( actionFunc != NULL )
@@ -220,6 +221,7 @@ void menu_close() {
     menuData.selected = 0;
     display_load();  // Move somewhere else, sometimes we don't want to load the watch face when closing the menu
 }
+
 // 保存上一次菜单的打开功能函数
 void setPrevMenuOpen( prev_menu_s* prevMenu, menu_f newPrevMenu ) {
     if ( menuData.prevMenu != newPrevMenu )      // 确保新旧菜单功能不一样，否则会陷入菜单循环
@@ -240,31 +242,7 @@ void setPrevMenuExit( prev_menu_s* prevMenu ) {
 bool exitSelected() {
     return menuData.selected == menuData.optionCount - 1;
 }
-/*
-void do10sStuff(byte* val, byte now)
-{
-        byte mod = mod10(*val);
-        *val = (setting.val * 10) + mod;
 
-        setting.val = mod;
-        setting.now = now;
-}
-
-void do1sStuff(byte* val, byte max, byte now, byte newVal)
-{
-    if(val != NULL)
-    {
-        byte temp = *val;
-        temp = ((temp / 10) * 10) + setting.val;
-        if(temp > max)
-            temp = max;
-        *val = temp;
-    }
-
-    setting.val = newVal;
-    setting.now = now;
-}
-*/
 static void clear() {
     memset( &menuData.func, 0, sizeof( menuFuncs_t ) );
 }
